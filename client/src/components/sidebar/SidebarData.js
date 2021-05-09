@@ -17,7 +17,7 @@ export const SidebarData = [
     icon: <RiIcons.RiAdminLine />,
     iconClosed: <RiIcons.RiArrowDownSFill />,
     iconOpened: <RiIcons.RiArrowUpSFill />,
-
+    role: ["Admin"],
     subNav: [
       {
         title: "Tài khoản",
@@ -39,7 +39,7 @@ export const SidebarData = [
     icon: <AiIcons.AiFillHome />,
     iconClosed: <RiIcons.RiArrowDownSFill />,
     iconOpened: <RiIcons.RiArrowUpSFill />,
-
+    role: ["Admin", "NVLT"],
     subNav: [
       {
         title: "Tình trạng phòng",
@@ -78,7 +78,7 @@ export const SidebarData = [
   {
     title: "Danh mục",
     icon: <FaIcons.FaListUl />,
-
+    role: ["Admin", "QL"],
     iconClosed: <RiIcons.RiArrowDownSFill />,
     iconOpened: <RiIcons.RiArrowUpSFill />,
 
@@ -116,7 +116,7 @@ export const SidebarData = [
   {
     title: "QL Khách hàng",
     icon: <FaIcons.FaPeopleCarry />,
-
+    role: ["Admin"],
     iconClosed: <RiIcons.RiArrowDownSFill />,
     iconOpened: <RiIcons.RiArrowUpSFill />,
 
@@ -142,7 +142,7 @@ export const SidebarData = [
     icon: <MdIcons.MdWebAsset />,
     iconClosed: <RiIcons.RiArrowDownSFill />,
     iconOpened: <RiIcons.RiArrowUpSFill />,
-
+    role: ["Admin", "NVK"],
     subNav: [
       {
         title: "Tài sản",
@@ -162,6 +162,7 @@ export const SidebarData = [
   // QL Hàng hóa
   {
     title: "QL Hàng hóa",
+    role: ["Admin"],
     icon: <RiIcons.RiRedPacketLine />,
     iconClosed: <RiIcons.RiArrowDownSFill />,
     iconOpened: <RiIcons.RiArrowUpSFill />,
@@ -186,7 +187,7 @@ export const SidebarData = [
   {
     title: "QL Nhân viên",
     icon: <FaIcons.FaPeopleCarry />,
-
+    role: ["Admin"],
     iconClosed: <RiIcons.RiArrowDownSFill />,
     iconOpened: <RiIcons.RiArrowUpSFill />,
 
@@ -216,7 +217,7 @@ export const SidebarData = [
   {
     title: "NV Quản lý",
     icon: <MdIcons.MdPeople />,
-
+    role: ["Admin"],
     iconClosed: <RiIcons.RiArrowDownSFill />,
     iconOpened: <RiIcons.RiArrowUpSFill />,
 

@@ -100,7 +100,7 @@ const UserDisplayName = styled.span`
 const Sidebar = () => {
   let history = useHistory();
   const [sidebar, setSidebar] = useState(false);
-
+  const userrole = window.localStorage.getItem("user_role");
   const showSidebar = () => setSidebar(!sidebar);
 
   const { userDisplayName, userAvatar } = useContext(AccountContext);
@@ -137,7 +137,11 @@ const Sidebar = () => {
               <AiIcons.AiOutlineClose onClick={showSidebar} />
             </NavIcon>
             {SidebarData.map((item, index) => {
-              return <SubMenu item={item} key={index} />;
+              return item.role.includes(userrole) ? (
+                <SubMenu item={item} key={index} />
+              ) : (
+                <div></div>
+              );
             })}
           </SidebarWrap>
         </SidebarNav>
