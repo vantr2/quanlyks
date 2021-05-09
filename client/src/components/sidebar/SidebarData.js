@@ -11,6 +11,13 @@ import * as TiIcons from "react-icons/ti";
 import * as ImIcons from "react-icons/im";
 import * as MdIcons from "react-icons/md";
 export const SidebarData = [
+  //lich su hoat dong
+  {
+    title: "Lịch sử hoạt động",
+    icon: <FaIcons.FaHistory />,
+    role: ["Admin", "NVLT", "NVK", "QL", "NVDP"],
+    path: "/quan-ly/",
+  },
   // Admin
   {
     title: "Admin",
@@ -24,12 +31,6 @@ export const SidebarData = [
         path: "/quan-ly/admin/tai-khoan",
         icon: <RiIcons.RiAccountPinCircleLine />,
       },
-
-      {
-        title: "Đổi mật khẩu",
-        path: "/quan-ly/admin/doi-mat-khau",
-        icon: <RiIcons.RiLockPasswordFill />,
-      },
     ],
   },
 
@@ -39,11 +40,11 @@ export const SidebarData = [
     icon: <AiIcons.AiFillHome />,
     iconClosed: <RiIcons.RiArrowDownSFill />,
     iconOpened: <RiIcons.RiArrowUpSFill />,
-    role: ["Admin", "NVLT"],
+    role: ["Admin", "NVLT", "QL"],
     subNav: [
       {
         title: "Tình trạng phòng",
-        path: "/quan-ly/",
+        path: "/quan-ly/phong/tinh-trang",
         icon: <FaIcons.FaList />,
         cName: "sub-nav",
       },
@@ -116,7 +117,7 @@ export const SidebarData = [
   {
     title: "QL Khách hàng",
     icon: <FaIcons.FaPeopleCarry />,
-    role: ["Admin"],
+    role: ["Admin", "QL", "NVLT"],
     iconClosed: <RiIcons.RiArrowDownSFill />,
     iconOpened: <RiIcons.RiArrowUpSFill />,
 
@@ -142,7 +143,7 @@ export const SidebarData = [
     icon: <MdIcons.MdWebAsset />,
     iconClosed: <RiIcons.RiArrowDownSFill />,
     iconOpened: <RiIcons.RiArrowUpSFill />,
-    role: ["Admin", "NVK"],
+    role: ["Admin", "NVK", "QL"],
     subNav: [
       {
         title: "Tài sản",
@@ -162,7 +163,7 @@ export const SidebarData = [
   // QL Hàng hóa
   {
     title: "QL Hàng hóa",
-    role: ["Admin"],
+    role: ["Admin", "NVK", "QL"],
     icon: <RiIcons.RiRedPacketLine />,
     iconClosed: <RiIcons.RiArrowDownSFill />,
     iconOpened: <RiIcons.RiArrowUpSFill />,
@@ -187,7 +188,7 @@ export const SidebarData = [
   {
     title: "QL Nhân viên",
     icon: <FaIcons.FaPeopleCarry />,
-    role: ["Admin"],
+    role: ["NVLT", "NVDP", "NVK"],
     iconClosed: <RiIcons.RiArrowDownSFill />,
     iconOpened: <RiIcons.RiArrowUpSFill />,
 
@@ -217,7 +218,7 @@ export const SidebarData = [
   {
     title: "NV Quản lý",
     icon: <MdIcons.MdPeople />,
-    role: ["Admin"],
+    role: ["Admin", "QL"],
     iconClosed: <RiIcons.RiArrowDownSFill />,
     iconOpened: <RiIcons.RiArrowUpSFill />,
 

@@ -41,6 +41,7 @@ import ChiTietDichVuPage from "./danhmuc/dichvu/ChiTietDichVuPage";
 import SuaDichVuPage from "./danhmuc/dichvu/SuaDichVuPage";
 import ChiTietTaiSanPage from "./qltaisan/thongtintaisan/ChiTietTaiSanPage";
 import SuaTaiSanPage from "./qltaisan/thongtintaisan/SuaTaiSanPage";
+import LichSuHoatDongPage from "./LichSuHoatDongPage";
 
 const MenuQuanLy = () => {
   return (
@@ -48,6 +49,9 @@ const MenuQuanLy = () => {
       <Sidebar />
       <div className="container pt-5">
         <Switch>
+          {/* lich su hoat dong */}
+          <Route path="/quan-ly/" exact component={LichSuHoatDongPage} />
+
           {/* Admin */}
           <Route
             path="/quan-ly/admin/tai-khoan"
@@ -61,7 +65,11 @@ const MenuQuanLy = () => {
           />
 
           {/* Phong */}
-          <Route path="/quan-ly/" exact component={TinhTrangPhongPage} />
+          <Route
+            path="/quan-ly/phong/tinh-trang"
+            exact
+            component={TinhTrangPhongPage}
+          />
           <Route
             path="/quan-ly/phong/doi-phong"
             exact
