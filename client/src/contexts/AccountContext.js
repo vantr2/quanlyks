@@ -87,6 +87,15 @@ export const AccountContextProvider = (props) => {
 
   const [msgNccActionSuccess, setMsgNccActionSuccess] = useState("");
 
+  // nhan vien xin nghi
+
+  const [dsDon, setDsDon] = useState([]);
+  const themDon = (don) => {
+    setDsDon([...dsDon, don]);
+  };
+
+  const [msgDonActionSuccess, setMsgDonActionSuccess] = useState("");
+
   return (
     <AccountContext.Provider
       value={{
@@ -157,6 +166,13 @@ export const AccountContextProvider = (props) => {
         dsNcc,
         setDsNcc,
         themNcc,
+
+        // nhan vien xin nghi
+        msgDonActionSuccess,
+        setMsgDonActionSuccess,
+        dsDon,
+        setDsDon,
+        themDon,
       }}
     >
       {props.children}

@@ -30,11 +30,14 @@ import LoaiHangHoaPage from "./qlhanghoa/LoaiHangHoaPage";
 import PhieuMuaPage from "./qlhanghoa/PhieuMuaPage";
 
 import XinNghiPage from "./qlnhanvien/XinNghiPage";
+import ChiTietDonXinNghiPage from "./qlnhanvien/xinnghi/ChiTietDonXinNghiPage";
+import SuaDonXinNghiPage from "./qlnhanvien/xinnghi/SuaDonXinNghiPage";
 import BangLuongPage from "./qlnhanvien/BangLuongPage";
 import ProfileNhanVienPage from "./qlnhanvien/ProfileNhanVienPage";
 
 import ChamCongPage from "./nvquanly/ChamCongPage";
 import DuyetDonPage from "./nvquanly/DonXinNghiPage";
+import DuyetDonChiTietPage from "./nvquanly/duyetdon/DuyetDonChiTietPage";
 import ChiTietPhongPage from "./danhmuc/phong/ChiTietPhongPage";
 import SuaPhongPage from "./danhmuc/phong/SuaPhongPage";
 import ChiTietDichVuPage from "./danhmuc/dichvu/ChiTietDichVuPage";
@@ -208,6 +211,16 @@ const MenuQuanLy = () => {
             component={XinNghiPage}
           />
           <Route
+            path="/quan-ly/nhan-vien/xin-nghi/:id"
+            exact
+            component={ChiTietDonXinNghiPage}
+          />
+          <Route
+            path="/quan-ly/nhan-vien/xin-nghi/:id/sua"
+            exact
+            component={SuaDonXinNghiPage}
+          />
+          <Route
             path="/quan-ly/nhan-vien/bang-luong"
             exact
             component={BangLuongPage}
@@ -218,6 +231,12 @@ const MenuQuanLy = () => {
             path="/quan-ly/nv-quan-ly/duyet-don"
             exact
             component={DuyetDonPage}
+          />
+
+          <Route
+            path="/quan-ly/nv-quan-ly/duyet-don/:id"
+            exact
+            component={DuyetDonChiTietPage}
           />
           <Route
             path="/quan-ly/nv-quan-ly/cham-cong-nv"

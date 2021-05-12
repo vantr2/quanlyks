@@ -140,7 +140,7 @@ const Sidebar = () => {
               return item.role.includes(userrole) ? (
                 <SubMenu item={item} key={index} />
               ) : (
-                <div></div>
+                <div key={index}></div>
               );
             })}
           </SidebarWrap>

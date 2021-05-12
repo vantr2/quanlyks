@@ -1,5 +1,25 @@
+// const NormalizeDate = (date) => {
+//   return (date + "").substring(0, 10).split("-").reverse().join("-");
+// };
+
 const NormalizeDate = (date) => {
-  return (date + "").substring(0, 10).split("-").reverse().join("-");
+  let d = new Date(date);
+  return d.toLocaleDateString("vi-VN");
+};
+
+const convertTime = (dt) => {
+  let d = new Date(dt);
+  return d.toLocaleTimeString("vi-VN");
+};
+
+const convertDate = (date) => {
+  let d = NormalizeDate(date);
+  const arr = d.split("/");
+  let result = arr[2] + "-";
+  arr[1] < 10 ? (result += "0" + arr[1]) : (result += arr[1]);
+  result += "-";
+  arr[0] < 10 ? (result += "0" + arr[0]) : (result += arr[0]);
+  return result;
 };
 
 const RenderGioiTinh = (i) => {
@@ -34,7 +54,8 @@ const checkSpecialCharacter = (str) => {
 };
 
 const validateEmail = (email) => {
-  const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  const re =
+    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(String(email).toLowerCase());
 };
 
@@ -53,6 +74,9 @@ const convertDataTocreatableSelect = (arr) => {
   return result;
 };
 
+const dateInPast = (firstDate, secondDate) =>
+  firstDate.setHours(0, 0, 0, 0) <= secondDate.setHours(0, 0, 0, 0);
+
 module.exports = {
   NormalizeDate,
   RenderGioiTinh,
@@ -62,4 +86,7 @@ module.exports = {
   validateEmail,
   dontSignEmail,
   convertDataTocreatableSelect,
+  dateInPast,
+  convertDate,
+  convertTime,
 };
