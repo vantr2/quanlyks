@@ -4,6 +4,7 @@ import NhanVienFinder from "../../../apis/NhanVienFinder";
 import { useHistory, useParams } from "react-router";
 import NormalizeString from "../../../utils/NormalizeString";
 import { AccountContext } from "../../../contexts/AccountContext";
+import { convertDate } from "../../../utils/DataHandler";
 
 const SuaBaoDuong = () => {
   let hi = useHistory();
@@ -38,7 +39,7 @@ const SuaBaoDuong = () => {
         setNguoiBd(baoduongSelected.nguoibd);
         setSdt(baoduongSelected.sdt);
         setGhiChu(baoduongSelected.ghichu);
-        setNgayBd((baoduongSelected.ngaybd + "").substring(0, 10));
+        setNgayBd(convertDate(baoduongSelected.ngaybd));
         setIDNV(baoduongSelected.idnv);
       } catch (err) {
         console.log(err.message);
@@ -80,20 +81,24 @@ const SuaBaoDuong = () => {
         setMsgError("");
       }, 3000);
     } else {
-      const res = await BaoDuongFinder.put("/sua", {
-        id: id,
-        nguoibd: NormalizeString(nguoiBd),
-        sdt: sdt,
-        ngaybd: ngaybd,
-        ghichu: ghichu,
-        nvtiepnhan: idNV,
-      });
-      if (res.data.status === "ok") {
-        setMsgBaoDuongActionSuccess("Sửa thành công.");
-        setTimeout(() => {
-          setMsgBaoDuongActionSuccess("");
-        }, 2500);
-        hi.push(`/quan-ly/ql-tai-san/bao-duong/${id}`);
+      try {
+        const res = await BaoDuongFinder.put("/sua", {
+          id: id,
+          nguoibd: NormalizeString(nguoiBd),
+          sdt: sdt,
+          ngaybd: ngaybd,
+          ghichu: ghichu,
+          nvtiepnhan: idNV,
+        });
+        if (res.data.status === "ok") {
+          setMsgBaoDuongActionSuccess("Sửa thành công.");
+          setTimeout(() => {
+            setMsgBaoDuongActionSuccess("");
+          }, 2500);
+          hi.push(`/quan-ly/ql-tai-san/bao-duong/${id}`);
+        }
+      } catch (err) {
+        console.log(err.message);
       }
     }
   };

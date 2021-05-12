@@ -79,6 +79,18 @@ export const AccountContextProvider = (props) => {
   const [msgErrorBDCT, setMsgErrorBDCT] = useState("");
   const [msgBaoDuongActionSuccess, setMsgBaoDuongActionSuccess] = useState("");
 
+  //phieu mua
+  const [dsPhieuMua, setDsPhieuMua] = useState([]);
+  const themPhieuMua = (phieumua) => {
+    setDsPhieuMua([...dsPhieuMua, phieumua]);
+  };
+  const [dsPhieuMuaChiTiet, setDsPhieuMuaChiTiet] = useState([]);
+  const themPhieuMuaChiTiet = (phieumuaChiTiet) => {
+    setDsPhieuMuaChiTiet([...dsPhieuMuaChiTiet, phieumuaChiTiet]);
+  };
+  const [msgErrorPMCT, setMsgErrorPMCT] = useState("");
+  const [msgPhieuMuaActionSuccess, setMsgPhieuMuaActionSuccess] = useState("");
+
   // nha cung cap
   const [dsNcc, setDsNcc] = useState([]);
   const themNcc = (ncc) => {
@@ -173,6 +185,18 @@ export const AccountContextProvider = (props) => {
         dsDon,
         setDsDon,
         themDon,
+
+        // phieu mua
+        dsPhieuMua,
+        setDsPhieuMua,
+        themPhieuMua,
+        dsPhieuMuaChiTiet,
+        setDsPhieuMuaChiTiet,
+        themPhieuMuaChiTiet,
+        msgPhieuMuaActionSuccess,
+        setMsgPhieuMuaActionSuccess,
+        msgErrorPMCT,
+        setMsgErrorPMCT,
       }}
     >
       {props.children}

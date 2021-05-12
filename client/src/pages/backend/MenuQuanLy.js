@@ -45,6 +45,8 @@ import SuaDichVuPage from "./danhmuc/dichvu/SuaDichVuPage";
 import ChiTietTaiSanPage from "./qltaisan/thongtintaisan/ChiTietTaiSanPage";
 import SuaTaiSanPage from "./qltaisan/thongtintaisan/SuaTaiSanPage";
 import LichSuHoatDongPage from "./LichSuHoatDongPage";
+import SuaPhieuMuaPage from "./qlhanghoa/phieumua/SuaPhieuMuaPage";
+import ChiTietPhieuMuaPage from "./qlhanghoa/phieumua/ChiTietPhieuMuaPage";
 
 const MenuQuanLy = () => {
   return (
@@ -197,6 +199,16 @@ const MenuQuanLy = () => {
             path="/quan-ly/ql-hang-hoa/phieu-mua"
             exact
             component={PhieuMuaPage}
+          />
+          <Route
+            path="/quan-ly/ql-hang-hoa/phieu-mua/:id"
+            exact
+            component={ChiTietPhieuMuaPage}
+          />
+          <Route
+            path="/quan-ly/ql-hang-hoa/phieu-mua/:id/sua"
+            exact
+            component={SuaPhieuMuaPage}
           />
 
           {/* Ql nhan vien */}

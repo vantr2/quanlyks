@@ -1492,3 +1492,93 @@ app.post("/api/v1/don-vi-tinh/them-don-vi-tinh", async (req, res) => {
   }
 });
 //#endregion
+
+//#region Phieu mua
+
+// danh sach phieu mua
+app.get("/api/v1/phieu-mua/danh-sach", async (req, res) => {
+  try {
+    const result = await db.query("select * from v_phieumua order by id asc");
+
+    res.status(200).json({
+      status: "ok",
+      data: {
+        phieumua: result.rows,
+      },
+    });
+  } catch (err) {
+    console.error("Lay danh sach phieu mua: " + err.message);
+  }
+});
+
+// lay 1 phieu mua theo id (su dung view)
+app.get("/api/v1/phieu-mua/danh-sach/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await db.query("select * from v_phieumua where id = $1", [
+      id,
+    ]);
+
+    res.status(200).json({
+      status: "ok",
+      data: {
+        phieumua: result.rows[0],
+      },
+    });
+  } catch (err) {
+    console.error("Lay 1 phieu mua theo id co view: " + err.message);
+  }
+});
+
+//them phieu mua
+app.post("/api/v1/phieu-mua/them", async (req, res) => {
+  try {
+    const { ngaymua, ghichu, nvtiepnhan } = req.body;
+    const result = await db.query(
+      "insert into tbl_phieumua (ngaymua, ghichu, nvtiepnhan) values($1,$2,$3) returning *",
+      [ngaymua, ghichu, nvtiepnhan]
+    );
+
+    res.status(201).json({
+      status: "ok",
+      data: {
+        phieumua: result.rows[0],
+      },
+    });
+  } catch (err) {
+    console.error("Them ngay mua", err.message);
+  }
+});
+
+//sua phieu mua
+app.put("/api/v1/phieu-mua/sua", async (req, res) => {
+  try {
+    const { id, ngaymua, ghichu, nvtiepnhan } = req.body;
+
+    const result = await db.query(
+      "update tbl_phieumua set ngaymua=$2, ghichu=$3, nvtiepnhan=$4 where id=$1",
+      [id, ngaymua, ghichu, nvtiepnhan]
+    );
+    res.status(200).json({
+      status: "ok",
+    });
+  } catch (err) {
+    console.log("Sua phieu mua:  " + err.message);
+  }
+});
+
+//xoa phieu mua
+app.delete("/api/v1/phieu-mua/xoa/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    await db.query("delete from tbl_phieumua where id = $1", [id]);
+    res.status(204).json({
+      status: "ok",
+    });
+  } catch (err) {
+    console.log("Xóa phieu mua:" + err.message);
+  }
+});
+
+//#endregion

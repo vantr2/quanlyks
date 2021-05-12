@@ -1,0 +1,23 @@
+[33mcommit 7965f56e1e850b0fb8762ff819abcf456a310ff9[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author: vantr2 <trongvan.tr@gmail.com>
+Date:   Wed May 12 08:04:23 2021 +0700
+
+    Xin nghi nhan vien va duyet don quan ly
+
+[33mcommit ff96b5e8eb490b2d30d10f4bf1445f468e225871[m
+Author: vantr2 <trongvan.tr@gmail.com>
+Date:   Sun May 9 15:07:49 2021 +0700
+
+    thay doi phan quyen, chinh lai trang Home cho cac vai tro
+
+[33mcommit 42ab89dc120bd5894cf47e135a0ca2a2e56b4f08[m
+Author: vantr2 <trongvan.tr@gmail.com>
+Date:   Sun May 9 14:52:59 2021 +0700
+
+    Lam phan phan quyen
+
+[33mcommit 184981d54d1be7e156cc8dded6af19e1dc647b0e[m
+Author: vantr2 <trongvan.tr@gmail.com>
+Date:   Sun May 9 10:29:26 2021 +0700
+
+    Lan dau commit su dung .gitignore
