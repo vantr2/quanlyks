@@ -1147,7 +1147,7 @@ app.get("/api/v1/tai-san/danh-sach-loai-tai-san", async (req, res) => {
   }
 });
 
-//them tai san
+//them loai tai san
 app.post("/api/v1/tai-san/them-loai-tai-san", async (req, res) => {
   try {
     const { name } = req.body;
@@ -1578,6 +1578,194 @@ app.delete("/api/v1/phieu-mua/xoa/:id", async (req, res) => {
     });
   } catch (err) {
     console.log("Xóa phieu mua:" + err.message);
+  }
+});
+
+//lay danh sach phieu mua chi tiet theo id phieu mua
+app.get(
+  "/api/v1/phieu-mua/danh-sach-chi-tiet/:phieumuaid",
+  async (req, res) => {
+    try {
+      const { phieumuaid } = req.params;
+      const result = await db.query(
+        "select * from v_pmchitiet where phieumua_id=$1 order by id asc",
+        [phieumuaid]
+      );
+
+      res.status(200).json({
+        status: "ok",
+        data: {
+          phieumua_chitiet: result.rows,
+        },
+      });
+    } catch (err) {
+      console.error("Lay danh sach phieu mua chi tiet: " + err.message);
+    }
+  }
+);
+
+// lay 1 phieu mua chi tiet theo id
+app.get("/api/v1/phieu-mua/chi-tiet-theo-id/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await db.query(
+      "select * from v_pmchitiet where id=$1 order by id asc",
+      [id]
+    );
+
+    res.status(200).json({
+      status: "ok",
+      data: {
+        phieumua_chitiet: result.rows[0],
+      },
+    });
+  } catch (err) {
+    console.error("Lay danh sach phieu mua chi tiet theo id: " + err.message);
+  }
+});
+
+//them phieu mua chi tiet
+app.post("/api/v1/phieu-mua/them-chi-tiet", async (req, res) => {
+  try {
+    const {
+      ten,
+      dongia,
+      soluong,
+      thanhtien,
+      ghichu,
+      phieumua_id,
+      donvitinh,
+      loaihang_id,
+      nhacc_id,
+    } = req.body;
+    const result = await db.query(
+      "insert into tbl_phieumua_chitiet (ten,dongia,soluong,thanhtien,ghichu,phieumua_id,donvitinh,loaihang_id,nhacc_id) values($1,$2,$3,$4,$5,$6,$7,$8,$9) returning *",
+      [
+        ten,
+        dongia,
+        soluong,
+        thanhtien,
+        ghichu,
+        phieumua_id,
+        donvitinh,
+        loaihang_id,
+        nhacc_id,
+      ]
+    );
+
+    res.status(201).json({
+      status: "ok",
+      data: {
+        phieumua_chitiet: result.rows[0],
+      },
+    });
+  } catch (err) {
+    console.error("Them phieu mua chi tiet: ", err.message);
+    if (
+      err.message ===
+      'duplicate key value violates unique constraint "u_pmid_tenhh"'
+    ) {
+      res.status(201).json({
+        status: "Mặt hàng này đã có trong danh sách.",
+      });
+    }
+  }
+});
+
+//sua phieu mua chi tiet
+app.put("/api/v1/phieu-mua/sua-chi-tiet", async (req, res) => {
+  try {
+    const {
+      id,
+      ten,
+      dongia,
+      soluong,
+      thanhtien,
+      ghichu,
+      donvitinh,
+      loaihang_id,
+      nhacc_id,
+    } = req.body;
+
+    const result = await db.query(
+      "update tbl_phieumua_chitiet set ten=$2,dongia=$3,soluong=$4,thanhtien=$5,ghichu=$6,donvitinh=$7,loaihang_id=$8,nhacc_id=$9 where id=$1",
+      [
+        id,
+        ten,
+        dongia,
+        soluong,
+        thanhtien,
+        ghichu,
+        donvitinh,
+        loaihang_id,
+        nhacc_id,
+      ]
+    );
+    res.status(200).json({
+      status: "ok",
+    });
+  } catch (err) {
+    console.log("Sua phieu mua chi tiet:  " + err.message);
+    if (
+      err.message ===
+      'duplicate key value violates unique constraint "u_pmid_tenhh"'
+    ) {
+      res.status(201).json({
+        status: "Mặt hàng này đã có trong danh sách.",
+      });
+    }
+  }
+});
+
+//xoa phieu mua chi tiet theo id
+app.delete("/api/v1/phieu-mua/xoa-chi-tiet/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    await db.query("delete from tbl_phieumua_chitiet where id = $1", [id]);
+    res.status(204).json({
+      status: "ok",
+    });
+  } catch (err) {
+    console.log("Xóa phieu mua chi tiet theo id:" + err.message);
+  }
+});
+
+// danh sach loai hang hoa
+app.get("/api/v1/phieu-mua/danh-sach-loai-hang-hoa", async (req, res) => {
+  try {
+    const result = await db.query(
+      "select * from tbl_phieumua_loaihang order by id asc"
+    );
+
+    res.status(200).json({
+      status: "ok",
+      data: {
+        loaihh: result.rows,
+      },
+    });
+  } catch (err) {
+    console.error("Lay danh sach loai hang hoa: " + err.message);
+  }
+});
+
+//them loai hang hoa
+app.post("/api/v1/phieu-mua/them-loai-hang-hoa", async (req, res) => {
+  try {
+    const { name } = req.body;
+    const result = await db.query(
+      "insert into tbl_phieumua_loaihang (name) values($1) returning *",
+      [name]
+    );
+
+    res.status(201).json({
+      status: "ok",
+      data: {
+        loaihh: result.rows[0],
+      },
+    });
+  } catch (err) {
+    console.error("Them loai hanghoa:", err.message);
   }
 });
 
