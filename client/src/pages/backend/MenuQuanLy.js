@@ -47,6 +47,9 @@ import SuaTaiSanPage from "./qltaisan/thongtintaisan/SuaTaiSanPage";
 import LichSuHoatDongPage from "./LichSuHoatDongPage";
 import SuaPhieuMuaPage from "./qlhanghoa/phieumua/SuaPhieuMuaPage";
 import ChiTietPhieuMuaPage from "./qlhanghoa/phieumua/ChiTietPhieuMuaPage";
+import CheckInPage from "./phong/datphong/CheckInPage";
+import DatPhongPage from "./phong/datphong/DatPhongPage";
+import SuDungDichVuPage from "./phong/datphong/SuDungDichVuPage";
 
 const MenuQuanLy = () => {
   return (
@@ -74,6 +77,21 @@ const MenuQuanLy = () => {
             path="/quan-ly/phong/tinh-trang"
             exact
             component={TinhTrangPhongPage}
+          />
+          <Route
+            path="/quan-ly/phong/tinh-trang/:phongid/mophong"
+            exact
+            component={DatPhongPage}
+          />
+          <Route
+            path="/quan-ly/phong/tinh-trang/:phongid/checkin"
+            exact
+            component={CheckInPage}
+          />
+          <Route
+            path="/quan-ly/phong/tinh-trang/:phongid/su-dung-dich-vu"
+            exact
+            component={SuDungDichVuPage}
           />
           <Route
             path="/quan-ly/phong/doi-phong"

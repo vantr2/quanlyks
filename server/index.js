@@ -89,6 +89,34 @@ app.post("/api/v1/tai-khoan/them-tai-khoan", async (req, res) => {
   }
 });
 
+app.post("/api/v1/tai-khoan/them-tai-khoan-khach-hang", async (req, res) => {
+  try {
+    const { ten, mk, ten_hienthi } = req.body;
+    const hashedPassword = encrypt(mk);
+    const result = await db.query(
+      "insert into tbl_nguoidung (ten, mk, ten_hienthi, trangthai, vaitro, iv) values($1,$2,$3,'t','KH',$4) returning *",
+      [ten, hashedPassword.password, ten_hienthi, hashedPassword.iv]
+    );
+
+    res.status(201).json({
+      status: "ok",
+      data: {
+        acc: result.rows[0],
+      },
+    });
+  } catch (err) {
+    console.error("Them nguoi dung:", err.message);
+    if (
+      err.message ===
+      'duplicate key value violates unique constraint "tbl_nguoidung_pkey"'
+    ) {
+      res.json({
+        status: "Tên người dùng đã tồn tại !",
+      });
+    }
+  }
+});
+
 // Lay danh sach nguoi dung
 app.get("/api/v1/tai-khoan/danh-sach-nguoi-dung", async (req, res) => {
   try {
@@ -852,6 +880,23 @@ app.post("/api/v1/phong/uploads", multipartMiddleware, (req, res) => {
   console.log("Upload: " + req.files.upload);
 });
 
+//update trang thai phong
+app.put("/api/v1/phong/update-tt", async (req, res) => {
+  try {
+    const { ten, trangthai } = req.body;
+
+    const result = await db.query(
+      "update tbl_phong set trangthai=$2 where ten=$1",
+      [ten, trangthai]
+    );
+    res.status(200).json({
+      status: "ok",
+    });
+  } catch (err) {
+    console.log("Sua trang thai phong: " + err.message);
+  }
+});
+
 //#endregion
 
 //#region Dich vu
@@ -988,6 +1033,26 @@ app.get("/api/v1/dich-vu/danh-sach-loai-dich-vu/:id", async (req, res) => {
       status: "ok",
       data: {
         loaidichvu: result.rows[0],
+      },
+    });
+  } catch (err) {
+    console.error("Lay 1 loai dichvu: " + err.message);
+  }
+});
+
+// loc danh sach dich vu theo loai
+app.get("/api/v1/dich-vu/loc-theo-loai/:loaidvid", async (req, res) => {
+  try {
+    const { loaidvid } = req.params;
+    const result = await db.query(
+      "select * from tbl_dichvu where loaidichvu_id = $1",
+      [loaidvid]
+    );
+
+    res.status(200).json({
+      status: "ok",
+      data: {
+        loaidv: result.rows,
       },
     });
   } catch (err) {
@@ -1766,6 +1831,385 @@ app.post("/api/v1/phieu-mua/them-loai-hang-hoa", async (req, res) => {
     });
   } catch (err) {
     console.error("Them loai hanghoa:", err.message);
+  }
+});
+
+//#endregion
+
+//#region Khach hang
+//them khach hang
+app.post("/api/v1/khach-hang/them", async (req, res) => {
+  try {
+    const {
+      ten,
+      cmnd,
+      gioitinh,
+      ngaysinh,
+      diachi,
+      sdt,
+      kieukhachhang_id,
+      account,
+    } = req.body;
+    const result = await db.query(
+      "insert into tbl_khachhang (ten,cmnd,gioitinh,ngaysinh,diachi,sdt, kieukhachhang_id,account) values($1,$2,$3,$4,$5,$6,$7,$8) returning *",
+      [ten, cmnd, gioitinh, ngaysinh, diachi, sdt, kieukhachhang_id, account]
+    );
+
+    res.status(201).json({
+      status: "ok",
+      data: {
+        khachhang: result.rows[0],
+      },
+    });
+  } catch (err) {
+    console.error("Them khach hang:", err.message);
+  }
+});
+
+app.get("/api/v1/khach-hang/danh-sach", async (req, res) => {
+  try {
+    const result = await db.query("select * from v_khachhang order by id asc");
+
+    res.status(200).json({
+      status: "ok",
+      data: {
+        khachhang: result.rows,
+      },
+    });
+  } catch (err) {
+    console.error("Lay danh sach : " + err.message);
+  }
+});
+
+//lay 1 kh
+app.get("/api/v1/khach-hang/danh-sach/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await db.query("select * from v_khachhang where id = $1", [
+      id,
+    ]);
+
+    res.status(200).json({
+      status: "ok",
+      data: {
+        khachhang: result.rows[0],
+      },
+    });
+  } catch (err) {
+    console.error("Lay 1 khach hàng: " + err.message);
+  }
+});
+
+//sua kh
+app.put("/api/v1/khach-hang/sua", async (req, res) => {
+  try {
+    const { id, ten, cmnd, gioitinh, ngaysinh, diachi, sdt, kieukhachhang_id } =
+      req.body;
+
+    const result = await db.query(
+      "update tbl_khachhang set ten=$2,cmnd=$3,gioitinh=$4,ngaysinh=$5,diachi=$6,sdt=$7,kieukhachhang_id=$8 where id=$1",
+      [id, ten, cmnd, gioitinh, ngaysinh, diachi, sdt, kieukhachhang_id]
+    );
+    res.status(200).json({
+      status: "ok",
+    });
+  } catch (err) {
+    console.log("Sua khach hang:  " + err.message);
+  }
+});
+
+//sua kh khi check in
+app.put("/api/v1/khach-hang/sua-checkin", async (req, res) => {
+  try {
+    const { id, ten, cmnd, sdt } = req.body;
+
+    const result = await db.query(
+      "update tbl_khachhang set ten=$2,cmnd=$3,sdt=$4 where id=$1",
+      [id, ten, cmnd, sdt]
+    );
+    res.status(200).json({
+      status: "ok",
+    });
+  } catch (err) {
+    console.log("Sua khach hang khi checkins:  " + err.message);
+  }
+});
+
+//danh sách kieu kh
+app.get("/api/v1/khach-hang/danh-sach-kieu", async (req, res) => {
+  try {
+    const result = await db.query(
+      "select * from tbl_khachhang_kieu order by id asc"
+    );
+
+    res.status(200).json({
+      status: "ok",
+      data: {
+        kieukh: result.rows,
+      },
+    });
+  } catch (err) {
+    console.error("Lay danh sach kieu khach hang: " + err.message);
+  }
+});
+
+//them kieu kh
+app.post("/api/v1/khach-hang/them-kieu", async (req, res) => {
+  try {
+    const { name } = req.body;
+    const result = await db.query(
+      "insert into tbl_khachhang_kieu (name) values($1) returning *",
+      [name]
+    );
+
+    res.status(201).json({
+      status: "ok",
+      data: {
+        kieukh: result.rows[0],
+      },
+    });
+  } catch (err) {
+    console.error("Them kieu khach hang:", err.message);
+  }
+});
+//#endregion
+
+//#region Dat phong
+// them dat phong
+app.post("/api/v1/dat-phong/them", async (req, res) => {
+  try {
+    const {
+      khachhang_id,
+      hinhthucdp,
+      checkin,
+      checkout,
+      phong_id,
+      kieuthue,
+      giathue,
+      sotgthue,
+      nv,
+      tongtien,
+      trangthai,
+      tiencoc,
+    } = req.body;
+    const result = await db.query(
+      "insert into tbl_datphong (khachhang_id,hinhthucdp,  checkin, checkout, phong_id, kieuthue,giathue, sotgthue, nv,tongtien,trangthai,tiencoc) values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12) returning *",
+      [
+        khachhang_id,
+        hinhthucdp,
+        checkin,
+        checkout,
+        phong_id,
+        kieuthue,
+        giathue,
+        sotgthue,
+        nv,
+        tongtien,
+        trangthai,
+        tiencoc,
+      ]
+    );
+
+    res.status(201).json({
+      status: "ok",
+      data: {
+        datphong: result.rows[0],
+      },
+    });
+  } catch (err) {
+    console.error("Them dat phong:", err.message);
+  }
+});
+
+//danh sach dat phong theo phong
+app.get("/api/v1/dat-phong/danh-sach/:phongid", async (req, res) => {
+  try {
+    const { phongid } = req.params;
+    const result = await db.query(
+      "select * from v_datphong where phong_id = $1 and trangthai = 1",
+      [phongid]
+    );
+
+    res.status(200).json({
+      status: "ok",
+      data: {
+        datphong: result.rows[0],
+      },
+    });
+  } catch (err) {
+    console.error("Lay 1 phong: " + err.message);
+  }
+});
+
+// check in
+app.put("/api/v1/dat-phong/check-in", async (req, res) => {
+  try {
+    const { id } = req.body;
+
+    const result = await db.query(
+      "update tbl_datphong set kh_checkin = current_timestamp where id=$1",
+      [id]
+    );
+    res.status(200).json({
+      status: "ok",
+    });
+  } catch (err) {
+    console.log("Check In:  " + err.message);
+  }
+});
+
+// check out
+app.put("/api/v1/dat-phong/check-out", async (req, res) => {
+  try {
+    const { id } = req.body;
+
+    const result = await db.query(
+      "update tbl_datphong set kh_checkout = current_timestamp where id=$1",
+      [id]
+    );
+    res.status(200).json({
+      status: "ok",
+    });
+  } catch (err) {
+    console.log("Check Out:  " + err.message);
+  }
+});
+
+//them chi tiet
+app.post("/api/v1/dat-phong/them-chi-tiet", async (req, res) => {
+  try {
+    const { datphong_id, dichvu_id, gia, soluong, thanhtien } = req.body;
+    const result = await db.query(
+      "insert into tbl_datphong_sddichvu (datphong_id,dichvu_id,gia,soluong,thanhtien) values($1,$2,$3,$4,$5) returning *",
+      [datphong_id, dichvu_id, gia, soluong, thanhtien]
+    );
+
+    res.status(201).json({
+      status: "ok",
+      data: {
+        datphong_chitiet: result.rows[0],
+      },
+    });
+  } catch (err) {
+    console.error("Them dat phong chi tiet:", err.message);
+    if (
+      err.message ===
+      'duplicate key value violates unique constraint "u_dichvu"'
+    ) {
+      res.status(201).json({
+        status:
+          "Dịch vụ đã được sử dụng, do đó sẽ tự động tăng số lượng dịch vụ này lên.",
+      });
+    }
+  }
+});
+
+//danh sach dich vu dat phong su dung
+app.get("/api/v1/dat-phong/danh-sach-dich-vu/:dpid", async (req, res) => {
+  try {
+    const { dpid } = req.params;
+    const result = await db.query(
+      "select * from v_dpchitiet where datphong_id = $1 order by id asc",
+      [dpid]
+    );
+
+    res.status(200).json({
+      status: "ok",
+      data: {
+        datphong_chitiet: result.rows,
+      },
+    });
+  } catch (err) {
+    console.error("Lay danh sach dich vu theo datphong id: " + err.message);
+  }
+});
+
+//lay 1 dp chitiet
+app.get("/api/v1/dat-phong/danh-sach-dich-vu-theo-id/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await db.query("select * from v_dpchitiet where id = $1", [
+      id,
+    ]);
+
+    res.status(200).json({
+      status: "ok",
+      data: {
+        datphong_chitiet: result.rows[0],
+      },
+    });
+  } catch (err) {
+    console.error("Lay 1 dpchitet: " + err.message);
+  }
+});
+
+//kiem tra dich vu da dduoc su dung chua
+app.get("/api/v1/dat-phong/kiem-tra-dv/:dvid/:dpid", async (req, res) => {
+  try {
+    const { dvid, dpid } = req.params;
+    const result = await db.query(
+      "select * from tbl_datphong_sddichvu where datphong_id = $1 and dichvu_id = $2",
+      [dpid, dvid]
+    );
+
+    res.status(200).json({
+      status: "ok",
+      data: {
+        datphong_chitiet: result.rows[0],
+      },
+    });
+  } catch (err) {
+    console.error("kiem tra dich vu da su dung chua: " + err.message);
+  }
+});
+
+// Cap nhat so luong
+app.put("/api/v1/dat-phong/tang-so-luong", async (req, res) => {
+  try {
+    const { id } = req.body;
+
+    const result = await db.query(
+      "update tbl_datphong_sddichvu set soluong=soluong+1 where id=$1",
+      [id]
+    );
+    res.status(200).json({
+      status: "ok",
+    });
+  } catch (err) {
+    console.log("tăng so luong:  " + err.message);
+  }
+});
+
+// Cap nhat so luong
+app.put("/api/v1/dat-phong/giam-so-luong", async (req, res) => {
+  try {
+    const { id } = req.body;
+
+    const result = await db.query(
+      "update tbl_datphong_sddichvu set soluong=soluong-1 where id=$1",
+      [id]
+    );
+    res.status(200).json({
+      status: "ok",
+    });
+  } catch (err) {
+    console.log("tăng so luong:  " + err.message);
+  }
+});
+
+// xoa dat phong chi tiet
+app.delete("/api/v1/dat-phong/xoa-chi-tiet/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await db.query(
+      "delete from tbl_datphong_sddichvu where id = $1",
+      [id]
+    );
+    res.status(204).json({
+      status: "ok",
+    });
+  } catch (err) {
+    console.log("Xoa chi tiet dat phong: " + err.message);
   }
 });
 

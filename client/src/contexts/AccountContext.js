@@ -108,6 +108,15 @@ export const AccountContextProvider = (props) => {
 
   const [msgDonActionSuccess, setMsgDonActionSuccess] = useState("");
 
+  // datphong
+  const [khID, setKHID] = useState("");
+
+  //datphong chitiet
+  const [dsDvSuDung, setDsDvSuDung] = useState([]);
+  const themDvSd = (dv) => {
+    setDsDvSuDung([...dsDvSuDung, dv]);
+  };
+
   return (
     <AccountContext.Provider
       value={{
@@ -197,6 +206,15 @@ export const AccountContextProvider = (props) => {
         setMsgPhieuMuaActionSuccess,
         msgErrorPMCT,
         setMsgErrorPMCT,
+
+        //dâtphong
+        khID,
+        setKHID,
+
+        //datphong chi tiet
+        dsDvSuDung,
+        setDsDvSuDung,
+        themDvSd,
       }}
     >
       {props.children}
