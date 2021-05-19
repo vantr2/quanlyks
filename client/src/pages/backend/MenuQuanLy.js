@@ -13,6 +13,9 @@ import DichVuPage from "./danhmuc/DichVuPage";
 import PhongPage from "./danhmuc/PhongPage";
 
 import TinhTrangPhongPage from "./phong/TinhTrangPhongPage";
+import DanhSachDatPhongPage from "./phong/datphong/DanhSachDatPhongPage";
+import ChiTietDatPhongPage from "./phong/datphong/ChiTietDatPhongPage";
+
 import DoiPhongPage from "./phong/DoiPhongPage";
 import HuyPhongPage from "./phong/HuyPhongPage";
 import DatPhongOnlinePage from "./phong/DatPhongOnlinePage";
@@ -77,6 +80,16 @@ const MenuQuanLy = () => {
             path="/quan-ly/phong/tinh-trang"
             exact
             component={TinhTrangPhongPage}
+          />
+          <Route
+            path="/quan-ly/phong/dat-phong"
+            exact
+            component={DanhSachDatPhongPage}
+          />
+          <Route
+            path="/quan-ly/phong/dat-phong/:id"
+            exact
+            component={ChiTietDatPhongPage}
           />
           <Route
             path="/quan-ly/phong/tinh-trang/:phongid/mophong"

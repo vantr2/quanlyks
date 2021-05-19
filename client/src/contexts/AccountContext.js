@@ -110,6 +110,8 @@ export const AccountContextProvider = (props) => {
 
   // datphong
   const [khID, setKHID] = useState("");
+  const [msgDatPhongActionSuccess, setMsgDatPhongActionSuccess] = useState("");
+  const [dsDatPhong, setDsDatPhong] = useState([]);
 
   //datphong chitiet
   const [dsDvSuDung, setDsDvSuDung] = useState([]);
@@ -210,6 +212,10 @@ export const AccountContextProvider = (props) => {
         //dâtphong
         khID,
         setKHID,
+        msgDatPhongActionSuccess,
+        setMsgDatPhongActionSuccess,
+        dsDatPhong,
+        setDsDatPhong,
 
         //datphong chi tiet
         dsDvSuDung,

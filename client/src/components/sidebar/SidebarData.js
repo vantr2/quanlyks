@@ -49,6 +49,12 @@ export const SidebarData = [
         cName: "sub-nav",
       },
       {
+        title: "Đặt phòng",
+        path: "/quan-ly/phong/dat-phong",
+        icon: <FaIcons.FaFirstOrder />,
+        cName: "sub-nav",
+      },
+      {
         title: "Đổi phòng",
         path: "/quan-ly/phong/doi-phong",
         icon: <ImIcons.ImLoop />,

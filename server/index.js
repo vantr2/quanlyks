@@ -1975,6 +1975,41 @@ app.post("/api/v1/khach-hang/them-kieu", async (req, res) => {
 //#endregion
 
 //#region Dat phong
+
+// danh sach dat phong
+//danh sach dat phong theo phong
+app.get("/api/v1/dat-phong/danh-sach-full", async (req, res) => {
+  try {
+    const result = await db.query("select * from v_datphong");
+
+    res.status(200).json({
+      status: "ok",
+      data: {
+        datphong: result.rows,
+      },
+    });
+  } catch (err) {
+    console.error("danh sach dat phong full: " + err.message);
+  }
+});
+
+// danh sach full theo id
+app.get("/api/v1/dat-phong/danh-sach-full/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await db.query("select * from v_datphong where id=$1", [id]);
+
+    res.status(200).json({
+      status: "ok",
+      data: {
+        datphong: result.rows[0],
+      },
+    });
+  } catch (err) {
+    console.error("danh sach full theo id: " + err.message);
+  }
+});
+
 // them dat phong
 app.post("/api/v1/dat-phong/them", async (req, res) => {
   try {
@@ -2163,7 +2198,7 @@ app.get("/api/v1/dat-phong/kiem-tra-dv/:dvid/:dpid", async (req, res) => {
   }
 });
 
-// Cap nhat so luong
+// Cap nhat so luong ++
 app.put("/api/v1/dat-phong/tang-so-luong", async (req, res) => {
   try {
     const { id } = req.body;
@@ -2180,7 +2215,7 @@ app.put("/api/v1/dat-phong/tang-so-luong", async (req, res) => {
   }
 });
 
-// Cap nhat so luong
+// Cap nhat so luong --
 app.put("/api/v1/dat-phong/giam-so-luong", async (req, res) => {
   try {
     const { id } = req.body;
