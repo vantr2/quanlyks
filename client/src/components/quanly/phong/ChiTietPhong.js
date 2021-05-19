@@ -40,7 +40,13 @@ const ChiTietPhong = () => {
         trangthai = "Đang sử dụng";
         break;
       case "3":
-        trangthai = "Đã Checkout, chưa dọn.";
+        trangthai = "Chờ hóa đơn.";
+        break;
+      case "4":
+        trangthai = "Chưa thanh toán.";
+        break;
+      case "5":
+        trangthai = "Chưa dọn.";
         break;
       default:
         break;

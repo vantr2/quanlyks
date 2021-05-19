@@ -119,6 +119,12 @@ export const AccountContextProvider = (props) => {
     setDsDvSuDung([...dsDvSuDung, dv]);
   };
 
+  //hoa don
+  const [dsHoaDon, setDsHoaDon] = useState([]);
+  const themHoaDon = (hoadon) => {
+    setDsHoaDon([...dsHoaDon, hoadon]);
+  };
+
   return (
     <AccountContext.Provider
       value={{
@@ -221,6 +227,11 @@ export const AccountContextProvider = (props) => {
         dsDvSuDung,
         setDsDvSuDung,
         themDvSd,
+
+        //hoa don
+        dsHoaDon,
+        setDsHoaDon,
+        themHoaDon,
       }}
     >
       {props.children}

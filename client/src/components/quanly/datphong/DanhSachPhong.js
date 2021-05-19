@@ -56,6 +56,13 @@ const DanhSachPhong = () => {
           backgroundColor: "#f5c536",
         };
         break;
+      case "5":
+        buttonStyle = {
+          height: "160px",
+          fontSize: "2rem",
+          backgroundColor: "#f09e41",
+        };
+        break;
       default:
         break;
     }
@@ -79,10 +86,14 @@ const DanhSachPhong = () => {
         break;
       case "3":
         // Lap hoa don
-
+        hi.push("/quan-ly/phong/hoa-don");
         break;
       case "4":
-        //Don phong
+        hi.push("/quan-ly/phong/hoa-don");
+        // Cho thanh toán
+        break;
+      case "5":
+        // DOn phong
         break;
       default:
         break;

@@ -1,7 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import { AccountContext } from "../../../contexts/AccountContext";
 import DatPhongFinder from "../../../apis/DatPhongFinder";
-import XoaDatPhong from "./XoaDatPhong";
 import { NumberFormat } from "../../../utils/DataHandler";
 import { useHistory } from "react-router";
 const DanhSachDatPhong = () => {
@@ -39,6 +38,96 @@ const DanhSachDatPhong = () => {
     }
     return result;
   };
+
+  const renderTrangThaiPhong = (tt) => {
+    let trangthai = "";
+    switch (tt + "") {
+      case "0":
+        trangthai = "Sẵn sàng";
+        break;
+      case "1":
+        trangthai = "Đang được đặt";
+        break;
+      case "2":
+        trangthai = "Đang sử dụng";
+        break;
+      case "3":
+        trangthai = "Chờ hóa đơn.";
+        break;
+      case "4":
+        trangthai = "Chưa thanh toán.";
+        break;
+      case "5":
+        trangthai = "Chưa dọn.";
+        break;
+      default:
+        break;
+    }
+    return trangthai;
+  };
+
+  const ttphongStyle = (tt) => {
+    let sty;
+    switch (tt + "") {
+      case "0":
+        sty = {
+          height: "16px",
+          border: "1px solid black",
+          borderRadius: "8px",
+          marginRight: "0.5rem",
+          backgroundColor: "#2640eb",
+        };
+        break;
+      case "1":
+        sty = {
+          height: "16px",
+          border: "1px solid black",
+          borderRadius: "8px",
+          marginRight: "0.5rem",
+          backgroundColor: "#24e3dd",
+        };
+        break;
+      case "2":
+        sty = {
+          height: "16px",
+          border: "1px solid black",
+          borderRadius: "8px",
+          marginRight: "0.5rem",
+          backgroundColor: "#2fed39",
+        };
+        break;
+      case "3":
+        sty = {
+          height: "16px",
+          border: "1px solid black",
+          borderRadius: "8px",
+          marginRight: "0.5rem",
+          backgroundColor: "#b3e33b",
+        };
+        break;
+      case "4":
+        sty = {
+          height: "16px",
+          border: "1px solid black",
+          borderRadius: "8px",
+          marginRight: "0.5rem",
+          backgroundColor: "#f5c536",
+        };
+        break;
+      case "5":
+        sty = {
+          height: "16px",
+          border: "1px solid black",
+          borderRadius: "8px",
+          marginRight: "0.5rem",
+          backgroundColor: "#f09e41",
+        };
+        break;
+      default:
+        break;
+    }
+    return sty;
+  };
   return (
     <div>
       <div className="mt-5 mb-5">
@@ -49,10 +138,10 @@ const DanhSachDatPhong = () => {
               <th>Phòng</th>
               <th>Khách hàng</th>
               <th>SDT</th>
-              <th>Trạng thái</th>
-              <th>Tổng tiền</th>
+              <th>Trạng thái DP</th>
+              <th>Trạng thái phòng</th>
+              <th>Tiền dịch vụ</th>
               <th>Xem</th>
-              <th>Xóa</th>
             </tr>
           </thead>
           <tbody>
@@ -69,6 +158,24 @@ const DanhSachDatPhong = () => {
                   >
                     <u>{renderTrangThaiDP(datphong.trangthai)}</u>
                   </td>
+                  <td className="align-middle">
+                    <button
+                      type="button"
+                      style={
+                        datphong.trangthai === 0
+                          ? {
+                              height: "16px",
+                              border: "1px solid black",
+                              borderRadius: "8px",
+                              marginRight: "0.5rem",
+                            }
+                          : ttphongStyle(datphong.tt_phong)
+                      }
+                    ></button>
+                    {datphong.trangthai === 0
+                      ? "Đã thanh toán"
+                      : renderTrangThaiPhong(datphong.tt_phong)}
+                  </td>
                   <td className="text-right align-middle">
                     {NumberFormat(datphong.tongtien)} <b>VND</b>
                   </td>
@@ -84,16 +191,6 @@ const DanhSachDatPhong = () => {
                     >
                       &nbsp;Xem
                     </i>
-                  </td>
-                  <td
-                    className="align-middle text-center"
-                    style={{ cursor: "pointer" }}
-                  >
-                    {datphong.trangthai === 0 ? (
-                      <XoaDatPhong id={datphong.id} />
-                    ) : (
-                      ""
-                    )}
                   </td>
                 </tr>
               );

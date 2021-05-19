@@ -4,7 +4,7 @@ import DanhSachDatPhong from "../../../../components/quanly/datphong/DanhSachDat
 const DanhSachDatPhongPage = () => {
   return (
     <div className="mt-5">
-      <h1 className="text-center">QUẢN LÝ ĐẶT PHÒNG</h1>
+      <h1 className="text-center">QUẢN LÝ PHIẾU THUÊ</h1>
       <DanhSachDatPhong />
     </div>
   );

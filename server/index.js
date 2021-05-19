@@ -2010,6 +2010,26 @@ app.get("/api/v1/dat-phong/danh-sach-full/:id", async (req, res) => {
   }
 });
 
+//danh sach dat phong theo khach hang
+app.get("/api/v1/dat-phong/danh-sach-theo-kh/:khid", async (req, res) => {
+  try {
+    const { khid } = req.params;
+    const result = await db.query(
+      "select * from v_datphong where trangthai = 1 and kh_id = $1",
+      [khid]
+    );
+
+    res.status(200).json({
+      status: "ok",
+      data: {
+        datphong: result.rows,
+      },
+    });
+  } catch (err) {
+    console.error("danh sach dat phong theo kh: " + err.message);
+  }
+});
+
 // them dat phong
 app.post("/api/v1/dat-phong/them", async (req, res) => {
   try {
@@ -2232,6 +2252,23 @@ app.put("/api/v1/dat-phong/giam-so-luong", async (req, res) => {
   }
 });
 
+//update  tt
+app.put("/api/v1/dat-phong/update-tt", async (req, res) => {
+  try {
+    const { id, trangthai } = req.body;
+
+    const result = await db.query(
+      "update tbl_datphong set trangthai=$2 where id=$1",
+      [id, trangthai]
+    );
+    res.status(200).json({
+      status: "ok",
+    });
+  } catch (err) {
+    console.log("Sua trang thai dat phong: " + err.message);
+  }
+});
+
 // xoa dat phong chi tiet
 app.delete("/api/v1/dat-phong/xoa-chi-tiet/:id", async (req, res) => {
   try {
@@ -2248,4 +2285,122 @@ app.delete("/api/v1/dat-phong/xoa-chi-tiet/:id", async (req, res) => {
   }
 });
 
+//#endregion
+
+//#region Hoa don
+// danh sach hoa don
+app.get("/api/v1/hoa-don/danh-sach", async (req, res) => {
+  try {
+    const result = await db.query("select * from v_hoadon order by id desc");
+
+    res.status(200).json({
+      status: "ok",
+      data: {
+        hoadon: result.rows,
+      },
+    });
+  } catch (err) {
+    console.error("danh sach hoa don: " + err.message);
+  }
+});
+
+// danh sach hoa don theo id
+app.get("/api/v1/hoa-don/danh-sach/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await db.query("select * from v_hoadon where id = $1", [id]);
+
+    res.status(200).json({
+      status: "ok",
+      data: {
+        hoadon: result.rows[0],
+      },
+    });
+  } catch (err) {
+    console.error("danh sach hoa don theo id: " + err.message);
+  }
+});
+
+// them hoa don
+app.post("/api/v1/hoa-don/them", async (req, res) => {
+  try {
+    const { nv, khachhang_id, hinhthuctt, vat } = req.body;
+    const result = await db.query(
+      "insert into tbl_hoadon (nv,khachhang_id,hinhthuctt,vat) values($1,$2,$3,$4) returning *",
+      [nv, khachhang_id, hinhthuctt, vat]
+    );
+
+    res.status(201).json({
+      status: "ok",
+      data: {
+        hoadon: result.rows[0],
+      },
+    });
+  } catch (err) {
+    console.error("Themhoa don:", err.message);
+  }
+});
+
+// sua hoa don
+
+// xoa hoa don
+
+// lay hoa don chi tiet theo hoa don id
+app.get("/api/v1/hoa-don/danh-sach-theo-hoa-don/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await db.query(
+      "select * from v_hoadonct where hoadon_id = $1 order by phong asc",
+      [id]
+    );
+
+    res.status(200).json({
+      status: "ok",
+      data: {
+        hoadon_chitiet: result.rows,
+      },
+    });
+  } catch (err) {
+    console.error(
+      "danh sach hoa don chi tiet theo  hoa don id: " + err.message
+    );
+  }
+});
+
+//update  tt
+app.put("/api/v1/hoa-don/update-tt", async (req, res) => {
+  try {
+    const { id, trangthai } = req.body;
+
+    const result = await db.query(
+      "update tbl_hoadon set trangthai=$2 where id=$1",
+      [id, trangthai]
+    );
+    res.status(200).json({
+      status: "ok",
+    });
+  } catch (err) {
+    console.log("Sua trang thai hoa don: " + err.message);
+  }
+});
+
+//them hoa don chi tiet
+app.post("/api/v1/hoa-don/them-chi-tiet", async (req, res) => {
+  try {
+    const { hoadon_id, datphong_id, tienphat, tongtien, tiencoc } = req.body;
+    const result = await db.query(
+      "insert into tbl_hoadon_chitiet (hoadon_id,datphong_id,tienphat,tongtien,tiencoc) values($1,$2,$3,$4,$5) returning *",
+      [hoadon_id, datphong_id, tienphat, tongtien, tiencoc]
+    );
+
+    res.status(201).json({
+      status: "ok",
+      data: {
+        hoadon_chitiet: result.rows[0],
+      },
+    });
+  } catch (err) {
+    console.error("Themhoa don chi tiet:", err.message);
+  }
+});
 //#endregion

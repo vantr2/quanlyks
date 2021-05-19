@@ -20,6 +20,7 @@ import DoiPhongPage from "./phong/DoiPhongPage";
 import HuyPhongPage from "./phong/HuyPhongPage";
 import DatPhongOnlinePage from "./phong/DatPhongOnlinePage";
 import HoaDonPage from "./phong/HoaDonPage";
+import ChiTietHoaDonPage from "./phong/hoadon/ChiTietHoaDonPage";
 
 import KieuKhachHangPage from "./qlkhachhang/KieuKhachHangPage";
 import ThongTinKHPage from "./qlkhachhang/ThongTinKHPage";
@@ -122,6 +123,11 @@ const MenuQuanLy = () => {
             component={DatPhongOnlinePage}
           />
           <Route path="/quan-ly/phong/hoa-don" exact component={HoaDonPage} />
+          <Route
+            path="/quan-ly/phong/hoa-don/:id"
+            exact
+            component={ChiTietHoaDonPage}
+          />
 
           {/* Danh muc */}
           <Route
