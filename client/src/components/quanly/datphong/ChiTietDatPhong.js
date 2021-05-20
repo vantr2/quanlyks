@@ -36,6 +36,9 @@ const ChiTietDatPhong = () => {
       case "1":
         result = "Đang hoạt động";
         break;
+      case "2":
+        result = "Đã bị hủy";
+        break;
       default:
         break;
     }

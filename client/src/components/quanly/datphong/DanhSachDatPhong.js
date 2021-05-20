@@ -33,6 +33,9 @@ const DanhSachDatPhong = () => {
       case "1":
         result = "Đang hoạt động";
         break;
+      case "2":
+        result = "Đã bị hủy";
+        break;
       default:
         break;
     }
@@ -128,6 +131,7 @@ const DanhSachDatPhong = () => {
     }
     return sty;
   };
+
   return (
     <div>
       <div className="mt-5 mb-5">
@@ -153,7 +157,11 @@ const DanhSachDatPhong = () => {
                   <td className="align-middle">{datphong.kh_sdt}</td>
                   <td
                     className={`align-middle ${
-                      datphong.trangthai === 0 ? "text-success" : "text-info"
+                      datphong.trangthai === 0
+                        ? "text-success"
+                        : datphong.trangthai == 2
+                        ? "text-danger"
+                        : "text-info"
                     }`}
                   >
                     <u>{renderTrangThaiDP(datphong.trangthai)}</u>
@@ -168,12 +176,23 @@ const DanhSachDatPhong = () => {
                               border: "1px solid black",
                               borderRadius: "8px",
                               marginRight: "0.5rem",
+                              background: "green",
+                            }
+                          : datphong.trangthai === 2
+                          ? {
+                              height: "16px",
+                              border: "1px solid black",
+                              borderRadius: "8px",
+                              marginRight: "0.5rem",
+                              background: "red",
                             }
                           : ttphongStyle(datphong.tt_phong)
                       }
                     ></button>
                     {datphong.trangthai === 0
                       ? "Đã thanh toán"
+                      : datphong.trangthai === 2
+                      ? "Đã bị hủy"
                       : renderTrangThaiPhong(datphong.tt_phong)}
                   </td>
                   <td className="text-right align-middle">
@@ -185,12 +204,16 @@ const DanhSachDatPhong = () => {
                     style={{ cursor: "pointer" }}
                   >
                     {" "}
-                    <i
-                      className="far fa-eye text-primary"
-                      onClick={(e) => handleDPSelected(e, datphong.id)}
-                    >
-                      &nbsp;Xem
-                    </i>
+                    {datphong.trangthai !== 2 ? (
+                      <i
+                        className="far fa-eye text-primary"
+                        onClick={(e) => handleDPSelected(e, datphong.id)}
+                      >
+                        &nbsp;Xem
+                      </i>
+                    ) : (
+                      ""
+                    )}
                   </td>
                 </tr>
               );

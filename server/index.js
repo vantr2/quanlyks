@@ -754,6 +754,25 @@ app.get("/api/v1/phong/danh-sach-phong", async (req, res) => {
     console.error("Lay danh sach phong: " + err.message);
   }
 });
+//lay danh sach phong san sang
+app.get("/api/v1/phong/danh-sach-phong-ss/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await db.query(
+      "select * from tbl_phong where ten <> $1 and trangthai = 0 order by ten asc",
+      [id]
+    );
+
+    res.status(200).json({
+      status: "ok",
+      data: {
+        phong: result.rows,
+      },
+    });
+  } catch (err) {
+    console.error("Lay danh sach phong ss: " + err.message);
+  }
+});
 
 // lay 1 phong theo id
 app.get("/api/v1/phong/danh-sach-phong/:ten", async (req, res) => {
@@ -2403,4 +2422,48 @@ app.post("/api/v1/hoa-don/them-chi-tiet", async (req, res) => {
     console.error("Themhoa don chi tiet:", err.message);
   }
 });
+//#endregion
+
+//#region Doi huy
+// them doi phong
+app.post("/api/v1/doi-huy/them-doi-phong", async (req, res) => {
+  try {
+    const { tuphong, denphong, lydodoi, nguoidoi, datphong_id, giathue } =
+      req.body;
+    const result = await db.query(
+      "insert into tbl_doiphong (tuphong,denphong,lydodoi,nguoidoi,datphong_id,giathue) values($1,$2,$3,$4,$5,$6) returning *",
+      [tuphong, denphong, lydodoi, nguoidoi, datphong_id, giathue]
+    );
+
+    res.status(201).json({
+      status: "ok",
+      data: {
+        doiphong: result.rows[0],
+      },
+    });
+  } catch (err) {
+    console.error("Them doi phong:", err.message);
+  }
+});
+
+// them huy phong
+app.post("/api/v1/doi-huy/them-huy-phong", async (req, res) => {
+  try {
+    const { phonghuy, lydohuy, nguoihuy, datphong_id, tiencoc } = req.body;
+    const result = await db.query(
+      "insert into tbl_huyphong ( phonghuy,lydohuy,nguoihuy,datphong_id,tiencoc) values($1,$2,$3,$4,$5) returning *",
+      [phonghuy, lydohuy, nguoihuy, datphong_id, tiencoc]
+    );
+
+    res.status(201).json({
+      status: "ok",
+      data: {
+        huyphong: result.rows[0],
+      },
+    });
+  } catch (err) {
+    console.error("Them doi phong:", err.message);
+  }
+});
+
 //#endregion

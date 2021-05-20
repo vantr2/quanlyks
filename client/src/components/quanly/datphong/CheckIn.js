@@ -8,6 +8,8 @@ import {
   convertTime,
   NumberFormat,
 } from "../../../utils/DataHandler";
+import DoiPhong from "./doihuy/DoiPhong";
+import HuyPhong from "./doihuy/HuyPhong";
 const CheckIn = () => {
   const { phongid } = useParams();
   let hi = useHistory();
@@ -201,6 +203,8 @@ const CheckIn = () => {
         <button className="btn btn-secondary mt-3" onClick={goBack}>
           Quay lại
         </button>
+        <DoiPhong phongid={phongid} dpid={dpId} />
+        <HuyPhong phongid={phongid} dpid={dpId} tiencoc={dpSelected.tiencoc} />
       </div>
 
       <h4 className="mt-3 mb-3">PHÒNG : {dpSelected.phong_id}</h4>
