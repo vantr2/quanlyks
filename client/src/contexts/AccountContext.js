@@ -125,6 +125,9 @@ export const AccountContextProvider = (props) => {
     setDsHoaDon([...dsHoaDon, hoadon]);
   };
 
+  //phieu xac nhan
+  const [controllerPhieuXacNhan, setControllerPhieuXacNhan] = useState("dp");
+
   return (
     <AccountContext.Provider
       value={{
@@ -232,6 +235,10 @@ export const AccountContextProvider = (props) => {
         dsHoaDon,
         setDsHoaDon,
         themHoaDon,
+
+        //phieu xac nhan
+        controllerPhieuXacNhan,
+        setControllerPhieuXacNhan,
       }}
     >
       {props.children}

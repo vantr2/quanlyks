@@ -159,7 +159,7 @@ const DanhSachDatPhong = () => {
                     className={`align-middle ${
                       datphong.trangthai === 0
                         ? "text-success"
-                        : datphong.trangthai == 2
+                        : datphong.trangthai === 2
                         ? "text-danger"
                         : "text-info"
                     }`}

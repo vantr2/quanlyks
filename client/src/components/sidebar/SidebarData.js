@@ -7,7 +7,6 @@ import * as HiIcons from "react-icons/hi";
 import * as DiIcons from "react-icons/di";
 import * as RiIcons from "react-icons/ri";
 import * as GiIcons from "react-icons/gi";
-import * as TiIcons from "react-icons/ti";
 import * as ImIcons from "react-icons/im";
 import * as MdIcons from "react-icons/md";
 export const SidebarData = [
@@ -55,15 +54,9 @@ export const SidebarData = [
         cName: "sub-nav",
       },
       {
-        title: "Đổi phòng",
-        path: "/quan-ly/phong/doi-phong",
-        icon: <ImIcons.ImLoop />,
-        cName: "sub-nav",
-      },
-      {
-        title: "Hủy phòng",
-        path: "/quan-ly/phong/huy-phong",
-        icon: <TiIcons.TiCancel />,
+        title: "Phiếu xác nhận",
+        path: "/quan-ly/phong/phieu-xac-nhan",
+        icon: <BiIcons.BiNotepad />,
         cName: "sub-nav",
       },
       {

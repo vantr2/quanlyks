@@ -16,8 +16,6 @@ import TinhTrangPhongPage from "./phong/TinhTrangPhongPage";
 import DanhSachDatPhongPage from "./phong/datphong/DanhSachDatPhongPage";
 import ChiTietDatPhongPage from "./phong/datphong/ChiTietDatPhongPage";
 
-import DoiPhongPage from "./phong/DoiPhongPage";
-import HuyPhongPage from "./phong/HuyPhongPage";
 import DatPhongOnlinePage from "./phong/DatPhongOnlinePage";
 import HoaDonPage from "./phong/HoaDonPage";
 import ChiTietHoaDonPage from "./phong/hoadon/ChiTietHoaDonPage";
@@ -54,6 +52,7 @@ import ChiTietPhieuMuaPage from "./qlhanghoa/phieumua/ChiTietPhieuMuaPage";
 import CheckInPage from "./phong/datphong/CheckInPage";
 import DatPhongPage from "./phong/datphong/DatPhongPage";
 import SuDungDichVuPage from "./phong/datphong/SuDungDichVuPage";
+import PhieuXacNhanPage from "./phong/PhieuXacNhanPage";
 
 const MenuQuanLy = () => {
   return (
@@ -108,14 +107,9 @@ const MenuQuanLy = () => {
             component={SuDungDichVuPage}
           />
           <Route
-            path="/quan-ly/phong/doi-phong"
+            path="/quan-ly/phong/phieu-xac-nhan"
             exact
-            component={DoiPhongPage}
-          />
-          <Route
-            path="/quan-ly/phong/huy-phong"
-            exact
-            component={HuyPhongPage}
+            component={PhieuXacNhanPage}
           />
           <Route
             path="/quan-ly/phong/dat-phong-online"

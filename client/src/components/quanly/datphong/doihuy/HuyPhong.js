@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import DoiHuyFinder from "../../../../apis/DoiHuyFinder";
-
+import { useHistory } from "react-router";
 const HuyPhong = ({ phongid, dpid, tiencoc }) => {
   const [lydo, setLyDo] = useState("");
-
+  let hi = useHistory();
   const username = window.localStorage.getItem("user_name");
   const handleHuyPhong = async (e) => {
     e.stopPropagation();
@@ -17,6 +17,9 @@ const HuyPhong = ({ phongid, dpid, tiencoc }) => {
           datphong_id: dpid,
           tiencoc: tiencoc,
         });
+        if (res.data.data.huyphong) {
+          hi.push("/quan-ly/phong/tinh-trang");
+        }
       } catch (err) {
         console.log(err.message);
       }

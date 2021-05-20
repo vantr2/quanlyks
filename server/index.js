@@ -2466,4 +2466,136 @@ app.post("/api/v1/doi-huy/them-huy-phong", async (req, res) => {
   }
 });
 
+// danh sach doi phong
+app.get("/api/v1/doi-huy/danh-sach-doi", async (req, res) => {
+  try {
+    const result = await db.query("select * from v_doiphong order by id desc");
+
+    res.status(200).json({
+      status: "ok",
+      data: {
+        doiphong: result.rows,
+      },
+    });
+  } catch (err) {
+    console.error("danh sach doiphong: " + err.message);
+  }
+});
+
+// danh sach doi phong theo id
+app.get("/api/v1/doi-huy/danh-sach-doi/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await db.query(
+      "select * from v_doiphong where id=$1 order by id desc",
+      [id]
+    );
+
+    res.status(200).json({
+      status: "ok",
+      data: {
+        doiphong: result.rows[0],
+      },
+    });
+  } catch (err) {
+    console.error("danh sach doiphong theo id: " + err.message);
+  }
+});
+
+// danh sach huy phong
+app.get("/api/v1/doi-huy/danh-sach-huy", async (req, res) => {
+  try {
+    const result = await db.query("select * from v_huyphong order by id desc");
+
+    res.status(200).json({
+      status: "ok",
+      data: {
+        huyphong: result.rows,
+      },
+    });
+  } catch (err) {
+    console.error("danh sach huy phong: " + err.message);
+  }
+});
+
+// danh sach huy phong theo id
+app.get("/api/v1/doi-huy/danh-sach-huy/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await db.query(
+      "select * from v_huyphong where id=$1 order by id desc",
+      [id]
+    );
+
+    res.status(200).json({
+      status: "ok",
+      data: {
+        huyphong: result.rows[0],
+      },
+    });
+  } catch (err) {
+    console.error("danh sach huy phong theo id: " + err.message);
+  }
+});
+//sua ly do doi phong
+app.put("/api/v1/doi-huy/sua-ly-do-doi", async (req, res) => {
+  const { id, lydodoi } = req.body;
+  try {
+    const result = await db.query(
+      "update tbl_doiphong set lydodoi = $1 where id=$2",
+      [lydodoi, id]
+    );
+
+    res.status(200).json({
+      status: "ok",
+    });
+  } catch (err) {
+    console.error("sua ly do doi phong: " + err.message);
+  }
+});
+
+//sua ly do huy phong
+app.put("/api/v1/doi-huy/sua-ly-do-huy", async (req, res) => {
+  const { id, lydohuy } = req.body;
+  try {
+    const result = await db.query(
+      "update tbl_huyphong set lydohuy = $1 where id=$2",
+      [lydohuy, id]
+    );
+
+    res.status(200).json({
+      status: "ok",
+    });
+  } catch (err) {
+    console.error("sua ly do huy phong: " + err.message);
+  }
+});
+
+//xoa doi phong
+app.delete("/api/v1/doi-huy/xoa-doi-phong/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const result = await db.query("delete from tbl_doiphong where id=$1", [id]);
+
+    res.status(200).json({
+      status: "ok",
+    });
+  } catch (err) {
+    console.error("xoa doi phong: " + err.message);
+  }
+});
+
+//xoa huy phong
+app.delete("/api/v1/doi-huy/xoa-huy-phong/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const result = await db.query("delete from tbl_huyphong where id=$1", [id]);
+
+    res.status(200).json({
+      status: "ok",
+    });
+  } catch (err) {
+    console.error("xoa huy phong: " + err.message);
+  }
+});
 //#endregion

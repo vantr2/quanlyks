@@ -61,14 +61,14 @@ const HoaDonChiTiet = () => {
                   <h5 className="text-center">PHÒNG: {hdct.phong}</h5>
                 </div>
                 <div className="card-body ">
-                  <ul class="list-group list-group-flush">
-                    <li class="list-group-item">
+                  <ul className="list-group list-group-flush">
+                    <li className="list-group-item">
                       Tiền phạt : <strong>{hdct.tienphat}</strong> VND
                     </li>
-                    <li class="list-group-item">
+                    <li className="list-group-item">
                       Tiền cọc &nbsp;&nbsp;: <strong>{hdct.tiencoc}</strong> VND
                     </li>
-                    <li class="list-group-item">
+                    <li className="list-group-item">
                       Tổng tiền : <strong>{hdct.tongtien}</strong> VND
                     </li>
                   </ul>

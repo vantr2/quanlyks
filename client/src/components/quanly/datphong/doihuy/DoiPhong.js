@@ -51,17 +51,15 @@ const DoiPhong = ({ phongid, dpid }) => {
   };
 
   const handleChangePhongDen = async (e) => {
-    {
-      setPhongDen(e.target.value);
+    setPhongDen(e.target.value);
 
-      const res = await PhongFinder.get(`/danh-sach-phong/${e.target.value}`);
-      if (res.data.data.phong) {
-        console.log(res.data.data.phong);
-        if (kieuthue === "Thuê theo ngày") {
-          setGiaThue(res.data.data.phong.giaphongtheongay);
-        } else {
-          setGiaThue(res.data.data.phong.giaphongtheogio);
-        }
+    const res = await PhongFinder.get(`/danh-sach-phong/${e.target.value}`);
+    if (res.data.data.phong) {
+      console.log(res.data.data.phong);
+      if (kieuthue === "Thuê theo ngày") {
+        setGiaThue(res.data.data.phong.giaphongtheongay);
+      } else {
+        setGiaThue(res.data.data.phong.giaphongtheogio);
       }
     }
   };
