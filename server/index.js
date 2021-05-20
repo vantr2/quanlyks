@@ -1999,7 +1999,7 @@ app.post("/api/v1/khach-hang/them-kieu", async (req, res) => {
 //danh sach dat phong theo phong
 app.get("/api/v1/dat-phong/danh-sach-full", async (req, res) => {
   try {
-    const result = await db.query("select * from v_datphong");
+    const result = await db.query("select * from v_datphong order by id desc ");
 
     res.status(200).json({
       status: "ok",
@@ -2304,6 +2304,22 @@ app.delete("/api/v1/dat-phong/xoa-chi-tiet/:id", async (req, res) => {
   }
 });
 
+// xoa dat phong bi huy
+app.delete("/api/v1/dat-phong/xoa-phieu-thue-bi-huy/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await db.query(
+      "delete from tbl_datphong where id = $1 and trangthai =2",
+      [id]
+    );
+    res.status(204).json({
+      status: "ok",
+    });
+  } catch (err) {
+    console.log("Xoa  dat phong bi huy: " + err.message);
+  }
+});
+
 //#endregion
 
 //#region Hoa don
@@ -2361,8 +2377,39 @@ app.post("/api/v1/hoa-don/them", async (req, res) => {
 });
 
 // sua hoa don
+app.put("/api/v1/hoa-don/sua", async (req, res) => {
+  try {
+    const { id, nv, hinhthuctt, vat } = req.body;
+    const result = await db.query(
+      "update tbl_hoadon set nv=$2,hinhthuctt=$3,vat=$4 where id=$1",
+      [id, nv, hinhthuctt, vat]
+    );
+
+    res.status(201).json({
+      status: "ok",
+    });
+  } catch (err) {
+    console.error("Sua hoa don:", err.message);
+  }
+});
 
 // xoa hoa don
+app.delete("/api/v1/hoa-don/xoa/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await db.query(
+      "delete from tbl_hoadon where id = $1",
+
+      [id]
+    );
+
+    res.status(204).json({
+      status: "ok",
+    });
+  } catch (err) {
+    console.error("Xoa hoa don:", err.message);
+  }
+});
 
 // lay hoa don chi tiet theo hoa don id
 app.get("/api/v1/hoa-don/danh-sach-theo-hoa-don/:id", async (req, res) => {

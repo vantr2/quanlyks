@@ -7,6 +7,7 @@ import SuaHoaDon from "./SuaHoaDon";
 
 const DanhSachHoaDon = () => {
   let hi = useHistory();
+  const userrole = window.localStorage.getItem("user_role");
   const [dsHoaDon, setDsHoaDon] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
@@ -27,20 +28,6 @@ const DanhSachHoaDon = () => {
     hi.push(`/quan-ly/phong/hoa-don/${id}`);
   };
 
-  const renderTrangThaiHoaDon = (tt) => {
-    let result = "";
-    switch (tt + "") {
-      case "1":
-        result = "Đã thanh toán";
-        break;
-      case "0":
-        result = "Chưa thanh toán";
-        break;
-      default:
-        break;
-    }
-    return result;
-  };
   return (
     <div>
       <div className="mt-5 mb-5">
@@ -66,7 +53,15 @@ const DanhSachHoaDon = () => {
                     {NormalizeDate(hoadon.ngaylap)}
                   </td>
                   <td className="align-middle">
-                    {renderTrangThaiHoaDon(hoadon.trangthai)}
+                    {hoadon.trangthai === 0 ? (
+                      <i className="fas fa-ban text-danger"></i>
+                    ) : (
+                      <i className="far fa-check-circle text-success"></i>
+                    )}{" "}
+                    &nbsp;
+                    {hoadon.trangthai === 0
+                      ? "Chưa thanh toán"
+                      : "Đã thanh toán"}
                   </td>
 
                   <td className="align-middle">{hoadon.nv_name}</td>
@@ -94,8 +89,10 @@ const DanhSachHoaDon = () => {
                   >
                     {hoadon.trangthai === 0 ? (
                       <SuaHoaDon id={hoadon.id} />
-                    ) : (
+                    ) : userrole === "QL" || userrole === "Admin" ? (
                       <XoaHoaDon id={hoadon.id} />
+                    ) : (
+                      ""
                     )}
                   </td>
                 </tr>

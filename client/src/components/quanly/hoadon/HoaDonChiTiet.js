@@ -63,13 +63,19 @@ const HoaDonChiTiet = () => {
                 <div className="card-body ">
                   <ul className="list-group list-group-flush">
                     <li className="list-group-item">
-                      Tiền phạt : <strong>{hdct.tienphat}</strong> VND
+                      Tiền phạt : <strong>{NumberFormat(hdct.tienphat)}</strong>{" "}
+                      VND
                     </li>
                     <li className="list-group-item">
-                      Tiền cọc &nbsp;&nbsp;: <strong>{hdct.tiencoc}</strong> VND
+                      Tiền cọc &nbsp;&nbsp;:{" "}
+                      <strong>{NumberFormat(hdct.tiencoc)}</strong> VND
                     </li>
                     <li className="list-group-item">
-                      Tổng tiền : <strong>{hdct.tongtien}</strong> VND
+                      Tổng tiền : <strong>{NumberFormat(hdct.tongtien)}</strong>{" "}
+                      VND
+                      <div>
+                        <em> (bao gồm tiền phòng và tiền sử dụng dịch vụ)</em>
+                      </div>
                     </li>
                   </ul>
                 </div>
