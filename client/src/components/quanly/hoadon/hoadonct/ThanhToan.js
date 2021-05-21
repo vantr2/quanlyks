@@ -8,7 +8,7 @@ const ThanhToan = ({ id, dsdp }) => {
   const handleThanhToan = async (e) => {
     e.stopPropagation();
     try {
-      console.log(id);
+      //   console.log(id);
       const res_hd = await HoaDonFinder.put("/update-tt", {
         id: id,
         trangthai: 1,

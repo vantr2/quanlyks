@@ -33,14 +33,14 @@ const SuaThongTinNguoiDung = ({ nguoidung }) => {
   };
   return (
     <div>
-      <button
-        className="btn btn-info"
+      <i
+        className="fas fa-pencil-alt text-info"
         data-toggle="modal"
         data-target={`#id${nguoidung.ten}`}
         onClick={getData}
       >
-        Sửa
-      </button>
+        &nbsp;Sửa
+      </i>
       <div className="modal " id={`id${nguoidung.ten}`}>
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
@@ -77,7 +77,6 @@ const SuaThongTinNguoiDung = ({ nguoidung }) => {
                   <option value="QL">Nhân viên quản lý</option>
                   <option value="NVK">Nhân viên thu chi</option>
                   <option value="NVDP">Nhân viên dọn phòng</option>
-                  <option value="KH">Khách hàng</option>
                 </select>
               </div>
             </div>

@@ -29,26 +29,31 @@ const DanhSachTaiKhoan = () => {
       case "NVLT":
         result = {
           background: "#c6f5d3",
+          borderBottom: "2px solid #515151 ",
         };
         break;
       case "QL":
         result = {
           background: "#f2f2ac",
+          borderBottom: "2px solid #515151 ",
         };
         break;
       case "NVK":
         result = {
           background: "#f0c0a8",
+          borderBottom: "2px solid #515151 ",
         };
         break;
       case "KH":
         result = {
-          background: "#b5a6ed",
+          background: "#c0fab1",
+          borderBottom: "2px solid #515151 ",
         };
         break;
       case "NVDP":
         result = {
-          background: "#ed9de8",
+          background: "#ffe3f0",
+          borderBottom: "2px solid #515151 ",
         };
         break;
       default:
@@ -61,15 +66,18 @@ const DanhSachTaiKhoan = () => {
       <p className="text-center text-success">
         <u>{msgUserActionSuccess}</u>
       </p>
-      <table className="table table-hover table-bordered ">
+      <table
+        className="table table-hover "
+        style={{ border: "2.4px solid black", color: "black" }}
+      >
         <thead className="thead-dark text-center">
           <tr>
-            <th>Tên người dùng</th>
-            <th>Mật khẩu</th>
-            <th>Tên hiển thị</th>
-            <th>Trạng thái</th>
-            <th>Vai trò</th>
-            <th>Sửa</th>
+            <th style={{ borderRight: "0.5px solid white" }}>Tên người dùng</th>
+            <th style={{ borderRight: "0.5px solid white" }}>Mật khẩu</th>
+            <th style={{ borderRight: "0.5px solid white" }}>Tên hiển thị</th>
+            <th style={{ borderRight: "0.5px solid white" }}>Trạng thái</th>
+            <th style={{ borderRight: "0.5px solid white" }}>Vai trò</th>
+            <th style={{ borderRight: "0.5px solid white" }}>Sửa</th>
             {/* <th>Xóa</th> */}
             <th>Reset</th>
           </tr>
@@ -78,23 +86,55 @@ const DanhSachTaiKhoan = () => {
           {nguoiDungList.map((nguoidung) => {
             return (
               <tr key={nguoidung.ten} style={customStyleLine(nguoidung.vaitro)}>
-                <td>{nguoidung.ten}</td>
-                <td>{nguoidung.mk}</td>
-                <td>{nguoidung.ten_hienthi}</td>
-                <td>
+                <td style={{ borderRight: "0.5px solid #515151" }}>
+                  {nguoidung.ten}
+                </td>
+                <td style={{ borderRight: "0.5px solid #515151" }}>
+                  {nguoidung.mk}
+                </td>
+                <td style={{ borderRight: "0.5px solid #515151" }}>
+                  {nguoidung.ten_hienthi}
+                </td>
+                <td style={{ borderRight: "0.5px solid #515151" }}>
                   <ThayDoiTrangThaiTaiKhoan
                     ten={nguoidung.ten}
                     trangthai={nguoidung.trangthai}
                   />
                 </td>
-                <td>{nguoidung.vaitro}</td>
-                <td>
-                  <SuaThongTinNguoiDung nguoidung={nguoidung} />
+                <td style={{ borderRight: "0.5px solid #515151" }}>
+                  {nguoidung.vaitro === "QL"
+                    ? "Quản lý"
+                    : nguoidung.vaitro === "KH"
+                    ? "Khách hàng"
+                    : nguoidung.vaitro === "NVLT"
+                    ? "Nhân viên lễ tân"
+                    : nguoidung.vaitro === "NVK"
+                    ? "Nhân viên kho"
+                    : nguoidung.vaitro === "NVDP"
+                    ? "Nhân viên dọn phòng"
+                    : ""}
+                </td>
+                <td
+                  style={{
+                    cursor: "pointer",
+                    borderRight: "0.5px solid #515151",
+                  }}
+                >
+                  {nguoidung.vaitro === "KH" ? (
+                    ""
+                  ) : (
+                    <SuaThongTinNguoiDung nguoidung={nguoidung} />
+                  )}
                 </td>
                 {/* <td>
                   <XoaNguoiDung ten={nguoidung.ten} tt={nguoidung.trangthai} />
                 </td> */}
-                <td>
+                <td
+                  style={{
+                    cursor: "pointer",
+                    borderRight: "0.5px solid #515151",
+                  }}
+                >
                   <ResetPassword ten={nguoidung.ten} />
                 </td>
               </tr>

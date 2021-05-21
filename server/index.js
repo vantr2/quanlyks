@@ -367,6 +367,28 @@ app.get("/api/v1/nhan-vien/danh-sach-nhan-vien", async (req, res) => {
     console.error("Lay danh sach nhan vien" + err.message);
   }
 });
+
+//lay nhan vien co the lap hoa don
+app.get(
+  "/api/v1/nhan-vien/danh-sach-nhan-vien-lap-hoa-don",
+  async (req, res) => {
+    try {
+      const result = await db.query(
+        "select * from v_nhanvien where vaitro='QL' or vaitro='NVLT' order by vaitro desc"
+      );
+
+      res.status(200).json({
+        status: "ok",
+        data: {
+          nhanvien: result.rows,
+        },
+      });
+    } catch (err) {
+      console.error("Lay danh sach nhan vien lap hoa don" + err.message);
+    }
+  }
+);
+
 // lay 1 nhan vien bthg
 app.get("/api/v1/nhan-vien/danh-sach-nhan-vien-xoa/:id", async (req, res) => {
   try {

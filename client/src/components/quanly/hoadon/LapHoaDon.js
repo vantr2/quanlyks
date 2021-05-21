@@ -40,7 +40,10 @@ const LapHoaDon = () => {
 
     const getListNV = async () => {
       try {
-        const res = await NhanVienFinder.get("/danh-sach-nhan-vien");
+        const res = await NhanVienFinder.get(
+          "/danh-sach-nhan-vien-lap-hoa-don"
+        );
+        // console.log(res.data.data.nhanvien);
         setDsNhanVien(res.data.data.nhanvien);
         //   setKHID("");
       } catch (err) {
@@ -131,9 +134,9 @@ const LapHoaDon = () => {
               setMsgSuccess("Thêm thành công.");
               setTimeout(() => {
                 setMsgSuccess("");
+                hi.push("/quan-ly");
+                hi.push("/quan-ly/phong/hoa-don");
               }, 2000);
-              hi.push("/quan-ly");
-              hi.push("/quan-ly/phong/hoa-don");
             }
           });
         }

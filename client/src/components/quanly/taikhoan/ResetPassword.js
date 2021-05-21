@@ -23,14 +23,13 @@ const ResetPassword = ({ ten }) => {
   };
   return (
     <div>
-      <button
-        type="button"
-        className="btn btn-warning"
+      <i
+        className="fas fa-undo-alt text-danger"
         data-toggle="modal"
         data-target={`#id${ten}resetpw`}
       >
-        Reset
-      </button>
+        &nbsp; Reset
+      </i>
 
       <div className="modal mb-5" id={`id${ten}resetpw`}>
         <div className="modal-dialog modal-dialog-centered">
