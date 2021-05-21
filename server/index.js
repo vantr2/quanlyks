@@ -136,7 +136,7 @@ app.post("/api/v1/tai-khoan/them-tai-khoan-khach-hang", async (req, res) => {
 app.get("/api/v1/tai-khoan/danh-sach-nguoi-dung", async (req, res) => {
   try {
     const result = await db.query(
-      "select ten,mk,ten_hienthi,trangthai,vaitro from tbl_nguoidung where ten <> $1 order by ten asc",
+      "select ten,mk,ten_hienthi,trangthai,vaitro from tbl_nguoidung where ten <> $1 order by vaitro asc",
       ["trongvan"]
     );
 

@@ -3,7 +3,6 @@ import Sidebar from "../../components/sidebar/Sidebar";
 import { BrowserRouter as Switch, Route } from "react-router-dom";
 
 import TaiKhoanPage from "./admin/TaiKhoanPage";
-import DoiMatKhauPage from "./admin/DoiMatKhauPage";
 
 import NhaCungCapPage from "./danhmuc/NhaCungCapPage";
 import NhanVienPage from "./danhmuc/NhanVienPage";
@@ -67,11 +66,6 @@ const MenuQuanLy = () => {
             path="/quan-ly/admin/tai-khoan"
             exact
             component={TaiKhoanPage}
-          />
-          <Route
-            path="/quan-ly/admin/doi-mat-khau"
-            exact
-            component={DoiMatKhauPage}
           />
           {/* Phong */}
           <Route
