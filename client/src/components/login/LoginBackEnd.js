@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import KiemTraDangNhapBackEnd from "../../apis/KiemTraDangNhapBackEnd";
+import ReactIsCapsLockActive from "@matsun/reactiscapslockactive";
 
 const LoginBackEnd = () => {
   const [ten, setTen] = useState("");
@@ -72,6 +73,7 @@ const LoginBackEnd = () => {
     <div className="row d-flex justify-content-center mt-5">
       <div className="col-sm-4 mt-5 border border-5 rounded px-5 pb-5 border-mute  ">
         <h1 className="text-center mt-4 mb-5">Đăng nhập</h1>
+
         <form action="" className="need-validated mx-4">
           <div className="input-group mb-3">
             <div className="input-group-prepend">
@@ -113,7 +115,14 @@ const LoginBackEnd = () => {
           </div>
 
           <p className="text-danger">{messageError}</p>
-
+          <ReactIsCapsLockActive>
+            {(active) => (
+              <p className="text-danger">
+                {" "}
+                {active ? "Caps lock đang bật. Vui lòng tắt" : ""}
+              </p>
+            )}
+          </ReactIsCapsLockActive>
           {/* <div className="form-check mb-3">
             <label className="form-check-label">
               <input

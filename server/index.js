@@ -6,9 +6,9 @@ const fs = require("fs");
 const db = require("./db");
 
 const app = express();
-const accessLogStream = fs.createWriteStream("./log/access.log", {
-  flags: "a",
-});
+// const accessLogStream = fs.createWriteStream("./log/access.log", {
+//   flags: "a",
+// });
 
 // setup the logger
 
@@ -25,11 +25,7 @@ app.listen(port, () => {
 // middle ware
 app.use(express.json());
 
-app.use(
-  morgan(":date[web] :method :url :status :response-time ms", {
-    stream: accessLogStream,
-  })
-);
+// app.use(morgan(":date[web] :method :url :status :response-time ms"));
 app.use(cors());
 
 //#region NguoiDung va DangNhap
@@ -353,7 +349,9 @@ app.post("/api/v1/kiem-tra-dang-nhap-frontend", async (req, res) => {
 //lay danh sách nhan vien
 app.get("/api/v1/nhan-vien/danh-sach-nhan-vien", async (req, res) => {
   try {
-    const result = await db.query("select * from v_nhanvien order by id asc");
+    const result = await db.query(
+      "select * from v_nhanvien order by vaitro desc"
+    );
 
     res.status(200).json({
       status: "ok",
@@ -370,7 +368,7 @@ app.get("/api/v1/nhan-vien/danh-sach-nhan-vien", async (req, res) => {
 app.get("/api/v1/nhan-vien/danh-sach-nhan-vien-thuong", async (req, res) => {
   try {
     const result = await db.query(
-      "select * from v_nhanvien where vaitro <> 'QL' order by id asc"
+      "select * from v_nhanvien where vaitro <> 'QL' order by vaitro desc"
     );
 
     res.status(200).json({

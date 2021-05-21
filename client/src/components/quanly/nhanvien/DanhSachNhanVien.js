@@ -51,9 +51,9 @@ const DanhSachNhanVien = () => {
           <tr>
             <th>Tên nhân viên</th>
             <th>Ngày vào làm</th>
-            <th>Ngày sinh</th>
             <th>SDT</th>
             <th>Tài khoản</th>
+            <th>Chức vụ</th>
             <th>Xem</th>
             <th>Sửa</th>
             <th>Xóa</th>
@@ -65,10 +65,21 @@ const DanhSachNhanVien = () => {
               <tr key={nhanvien.id}>
                 <td>{nhanvien.name}</td>
                 <td>{NormalizeDate(nhanvien.ngayvaolam)}</td>
-                <td>{NormalizeDate(nhanvien.ngaysinh)}</td>
+
                 <td>{nhanvien.sdt}</td>
                 <td>
                   {nhanvien.account === null ? "Đã bị xóa" : nhanvien.account}
+                </td>
+                <td>
+                  {nhanvien.vaitro === "QL"
+                    ? "Quản lý"
+                    : nhanvien.vaitro === "NVLT"
+                    ? "Nhân viên lễ tân"
+                    : nhanvien.vaitro === "NVK"
+                    ? "Nhân viên kho"
+                    : nhanvien.vaitro === "NVDP"
+                    ? "Nhân viên dọn phòng"
+                    : ""}
                 </td>
                 <td style={{ cursor: "pointer" }}>
                   {nhanvien.account === null ? (
