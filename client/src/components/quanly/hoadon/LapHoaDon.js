@@ -131,9 +131,9 @@ const LapHoaDon = () => {
               setMsgSuccess("Thêm thành công.");
               setTimeout(() => {
                 setMsgSuccess("");
-                hi.push("/quan-ly");
-                hi.push("/quan-ly/phong/hoa-don");
-              }, 700);
+              }, 2000);
+              hi.push("/quan-ly");
+              hi.push("/quan-ly/phong/hoa-don");
             }
           });
         }

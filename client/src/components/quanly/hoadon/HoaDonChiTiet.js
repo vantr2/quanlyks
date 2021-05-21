@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router";
 import HoaDonFinder from "../../../apis/HoaDonFinder";
 import {
-  convertDate,
+  NormalizeDate,
   convertTime,
   NumberFormat,
 } from "../../../utils/DataHandler";
@@ -122,7 +122,7 @@ const HoaDonChiTiet = () => {
           <tr className="d-flex">
             <td className="col-3 pl-2 font-weight-bold">Ngày lập hóa đơn</td>
             <td className="col-9 pl-2">
-              Ngày: {convertDate(hoadonSelected.ngaylap)}, lúc{" "}
+              Ngày: {NormalizeDate(hoadonSelected.ngaylap)}, lúc{" "}
               {convertTime(hoadonSelected.ngaylap)}
             </td>
           </tr>

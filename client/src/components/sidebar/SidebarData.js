@@ -109,31 +109,21 @@ export const SidebarData = [
         icon: <FiIcons.FiHome />,
         cName: "sub-nav",
       },
+      {
+        title: "Loại",
+        path: "/quan-ly/danh-muc/loai",
+        icon: <FaIcons.FaListUl />,
+        cName: "sub-nav",
+      },
     ],
   },
 
   //QL khách hàng
   {
-    title: "QL Khách hàng",
+    title: "Khách hàng",
+    path: "/quan-ly/khach-hang",
     icon: <FaIcons.FaPeopleCarry />,
     role: ["Admin", "QL", "NVLT"],
-    iconClosed: <RiIcons.RiArrowDownSFill />,
-    iconOpened: <RiIcons.RiArrowUpSFill />,
-
-    subNav: [
-      {
-        title: "Kiểu khách hàng",
-        path: "/quan-ly/ql-khach-hang/kieu",
-        icon: <MdIcons.MdStyle />,
-        cName: "sub-nav",
-      },
-      {
-        title: "Khách hàng",
-        path: "/quan-ly/ql-khach-hang/thong-tin",
-        icon: <ImIcons.ImInfo />,
-        cName: "sub-nav",
-      },
-    ],
   },
 
   // QL Tài sản
@@ -169,12 +159,6 @@ export const SidebarData = [
 
     subNav: [
       {
-        title: "Loại hàng",
-        path: "/quan-ly/ql-hang-hoa/loai",
-        icon: <MdIcons.MdStyle />,
-        cName: "sub-nav",
-      },
-      {
         title: "Phiếu mua",
         path: "/quan-ly/ql-hang-hoa/phieu-mua",
         icon: <ImIcons.ImCart />,
@@ -185,7 +169,7 @@ export const SidebarData = [
 
   //QL nhân viên
   {
-    title: "QL Nhân viên",
+    title: "Nhân viên",
     icon: <FaIcons.FaPeopleCarry />,
     role: ["NVLT", "NVDP", "NVK"],
     iconClosed: <RiIcons.RiArrowDownSFill />,
@@ -215,7 +199,7 @@ export const SidebarData = [
 
   //NV Quản lý
   {
-    title: "NV Quản lý",
+    title: "Quản lý",
     icon: <MdIcons.MdPeople />,
     role: ["Admin", "QL"],
     iconClosed: <RiIcons.RiArrowDownSFill />,

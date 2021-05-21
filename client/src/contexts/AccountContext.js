@@ -128,6 +128,10 @@ export const AccountContextProvider = (props) => {
   //phieu xac nhan
   const [controllerPhieuXacNhan, setControllerPhieuXacNhan] = useState("dp");
 
+  //khachhang
+  const [msgKHActionSuccess, setMsgKHActionSuccess] = useState("");
+  const [msgKHActionError, setMsgKHActionError] = useState("");
+
   return (
     <AccountContext.Provider
       value={{
@@ -239,6 +243,11 @@ export const AccountContextProvider = (props) => {
         //phieu xac nhan
         controllerPhieuXacNhan,
         setControllerPhieuXacNhan,
+        //khachhang
+        msgKHActionSuccess,
+        setMsgKHActionSuccess,
+        msgKHActionError,
+        setMsgKHActionError,
       }}
     >
       {props.children}

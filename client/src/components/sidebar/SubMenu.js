@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import styled from "styled-components";
 
-const SidebarLink = styled(Link)`
+const SidebarLink = styled.div`
   display: flex;
   color: #e1e9fc;
   justify-content: space-between;
@@ -44,14 +44,27 @@ const DropdownLink = styled(Link)`
   }
 `;
 
-const SubMenu = ({ item }) => {
+const SubMenu = ({ item, sidebar, status }) => {
   const [subnav, setSubnav] = useState(false);
-
   const showSubnav = () => setSubnav(!subnav);
-
+  let hi = useHistory();
   return (
     <>
-      <SidebarLink to={item.path} onClick={item.subNav && showSubnav}>
+      <SidebarLink
+        // onClick={(e) => {
+        //   hi.push(item.path);
+        // }}
+        onClick={(e) => {
+          if (item.subNav) {
+            showSubnav();
+          } else {
+            hi.push(item.path);
+            if (status) {
+              sidebar();
+            }
+          }
+        }}
+      >
         <div>
           {item.icon}
           <SidebarLabel>{item.title}</SidebarLabel>
@@ -67,7 +80,15 @@ const SubMenu = ({ item }) => {
       {subnav &&
         item.subNav.map((item, index) => {
           return (
-            <DropdownLink to={item.path} key={index}>
+            <DropdownLink
+              to={item.path}
+              key={index}
+              onClick={() => {
+                if (status) {
+                  sidebar();
+                }
+              }}
+            >
               {item.icon}
               <SidebarLabel>{item.title}</SidebarLabel>
             </DropdownLink>

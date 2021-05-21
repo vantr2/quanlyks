@@ -14,7 +14,6 @@ const DanhSachDaDuyetChiTiet = () => {
       try {
         const res = await XinNghiFinder.get(`/danh-sach-da-duyet/${id}`);
         setDonDaDuyetSelected(res.data.data.xinnghi);
-        console.log(res.data.data.xinnghi.tennv);
       } catch (err) {
         console.log(err.message);
       }

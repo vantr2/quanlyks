@@ -11,7 +11,8 @@ function App() {
         <Router>
           <Switch>
             <Route exact path="/" component={FrontEnd}></Route>
-            <Route exact path="/quan-ly" component={BackEnd}></Route>
+            {/* <Route exact path="/quan-ly" component={BackEnd}></Route> */}
+            <BackEnd />
           </Switch>
         </Router>
       </div>

@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import NhanVienFinder from "../../../apis/NhanVienFinder";
 import TaiKhoanFinder from "../../../apis/TaiKhoanFinder";
-import Host from "../../../hosts/Host";
 import { storage } from "../../../firebase";
 import FileUploader from "react-firebase-file-uploader";
 import { RenderGioiTinh, NormalizeDate } from "../../../utils/DataHandler";
@@ -22,7 +21,15 @@ const ProfileNhanVien = () => {
   const [isUploading, setIsUploading] = useState(false);
 
   const { setUserAvartar } = useContext(AccountContext);
-
+  const getFileName = async () => {
+    try {
+      const res = await TaiKhoanFinder.get(`/get-avt/${username}`);
+      if (res.data.status === "ok") {
+      }
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -61,6 +68,7 @@ const ProfileNhanVien = () => {
   }, [setNhanVienSelected, username, setAvt, setFileName]);
 
   const handleUpload = (fname) => {
+    console.log(fname);
     setImage(fname);
     setProgress(100);
     setIsUploading(false);
@@ -72,10 +80,11 @@ const ProfileNhanVien = () => {
         setAvt(urlRetrieve);
         setUserAvartar(urlRetrieve);
         handlePutData(fname, urlRetrieve);
+        getFileName();
         console.log(filename);
-        //     if (filename !== "images/no-user.jpg") {
-        //       storage.ref(`images/${filename}`).delete(filename);
-        //     }
+        if (filename !== "no-user.jpg") {
+          storage.ref(`images/${filename}`).delete(filename);
+        }
       });
   };
 
@@ -103,7 +112,7 @@ const ProfileNhanVien = () => {
               width="300"
               height="300"
               className="border border-secondary mb-2"
-              src={avt === "images/no-user.jpg" ? Host + avt : avt}
+              src={avt}
             />
             <label
               style={{

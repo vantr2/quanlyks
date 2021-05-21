@@ -106,8 +106,8 @@ const Sidebar = () => {
   const { userDisplayName, userAvatar } = useContext(AccountContext);
 
   const handleGoHome = () => {
-    // history.push("/quan-ly");
-    window.location.href = "/quan-ly";
+    history.push("/quan-ly");
+    if (sidebar) showSidebar();
   };
 
   const handleLogout = () => {
@@ -121,12 +121,33 @@ const Sidebar = () => {
       <IconContext.Provider value={{ color: "#fff" }}>
         <Nav>
           <NavIcon to="#">
-            <FaIcons.FaBars onClick={showSidebar} />
+            <FaIcons.FaBars
+              onClick={() => {
+                showSidebar();
+              }}
+            />
           </NavIcon>
           <Title onClick={handleGoHome}>QUẢN LÝ KHÁCH SẠN</Title>
           <Account>
-            <Avatar src={userAvatar} alt="avatar" />
-            <UserDisplayName>{userDisplayName}</UserDisplayName>&nbsp;
+            <Avatar
+              onClick={() => {
+                if (userrole !== "Admin" && userrole !== "QL") {
+                  history.push("/quan-ly/nhan-vien/thong-tin");
+                }
+              }}
+              src={userAvatar}
+              alt="avatar"
+            />
+            <UserDisplayName
+              onClick={() => {
+                if (userrole !== "Admin" && userrole !== "QL") {
+                  history.push("/quan-ly/nhan-vien/thong-tin");
+                }
+              }}
+            >
+              {userDisplayName}
+            </UserDisplayName>
+            &nbsp;
             <Logout onClick={handleLogout}>(Đăng xuất)</Logout>
           </Account>
         </Nav>
@@ -138,7 +159,12 @@ const Sidebar = () => {
             </NavIcon>
             {SidebarData.map((item, index) => {
               return item.role.includes(userrole) ? (
-                <SubMenu item={item} key={index} />
+                <SubMenu
+                  sidebar={showSidebar}
+                  status={sidebar}
+                  item={item}
+                  key={index}
+                />
               ) : (
                 <div key={index}></div>
               );

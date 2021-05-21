@@ -47,7 +47,7 @@ const DanhSachDaDuyet = () => {
         result = (
           <u>
             {" "}
-            <i class="fas fa-ban text-danger">&nbsp;Từ chối</i>
+            <i className="fas fa-ban text-danger">&nbsp;Từ chối</i>
           </u>
         );
         break;

@@ -111,73 +111,103 @@ const ThemNguoiDung = () => {
   };
 
   return (
-    <div className="m-4">
-      <form action="">
-        <div className="form-row">
-          <div className="col">
-            <div className="form-group mx-4">
-              <label htmlFor="tennguoidung">Tên người dùng</label>
-              <input
-                type="text"
-                id="tennguoidung"
-                className="form-control"
-                onChange={(e) => setTenND(e.target.value)}
-                value={tenND}
-              />
-            </div>
-          </div>
-
-          <div className="col">
-            <div className="form-group mx-4">
-              <label htmlFor="matkhau">Mật khẩu</label>
-              <input
-                type="password"
-                id="matkhau"
-                className="form-control"
-                onChange={(e) => setMk(e.target.value)}
-                value={mk}
-              />
-            </div>
-          </div>
-        </div>
-        <div className="form-row">
-          <div className="col">
-            <div className="form-group mx-4">
-              <label htmlFor="tenhienthi">Tên hiển thị</label>
-              <input
-                type="text"
-                id="tenhienthi"
-                className="form-control"
-                onChange={(e) => setTenHT(e.target.value)}
-                value={tenHT}
-              />
-            </div>
-          </div>
-
-          <div className="col">
-            <div className="form-group mx-4">
-              <label htmlFor="vaitro">Vai trò</label>
-              <select
-                className="form-control"
-                id="vaitro"
-                onChange={(e) => setVaiTro(e.target.value)}
-                value={vaitro}
+    <div className="mt-5 mb-2 ">
+      <div id="themtaikhoan">
+        <div className="card">
+          <div className="card-header" id="taikhoancard">
+            <h5 className="mb-0">
+              <div
+                className="text-primary collapsed"
+                data-toggle="collapse"
+                data-target="#formthemtaikhoan"
+                aria-expanded="false"
+                aria-controls="formthemtaikhoan"
+                style={{ cursor: "pointer" }}
               >
-                <option value="KH">Khách hàng</option>
-                <option value="NVLT">Nhân viên lễ tân</option>
-                <option value="QL">Nhân viên quản lý</option>
-                <option value="NVK">Nhân viên thu chi</option>
-                <option value="NVDP">Nhân viên dọn phòng</option>
-              </select>
+                Thêm tài khoản
+              </div>
+            </h5>
+          </div>
+          <div
+            id="formthemtaikhoan"
+            className="collapse"
+            aria-labelledby="taikhoancard"
+            data-parent="#themtaikhoan"
+          >
+            <div className="card-body px-5">
+              <form action="">
+                <div className="form-row">
+                  <div className="col">
+                    <div className="form-group mx-4">
+                      <label htmlFor="tennguoidung">Tên người dùng</label>
+                      <input
+                        type="text"
+                        id="tennguoidung"
+                        className="form-control"
+                        onChange={(e) => setTenND(e.target.value)}
+                        value={tenND}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="col">
+                    <div className="form-group mx-4">
+                      <label htmlFor="matkhau">Mật khẩu</label>
+                      <input
+                        type="password"
+                        id="matkhau"
+                        className="form-control"
+                        onChange={(e) => setMk(e.target.value)}
+                        value={mk}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="form-row">
+                  <div className="col">
+                    <div className="form-group mx-4">
+                      <label htmlFor="tenhienthi">Tên hiển thị</label>
+                      <input
+                        type="text"
+                        id="tenhienthi"
+                        className="form-control"
+                        onChange={(e) => setTenHT(e.target.value)}
+                        value={tenHT}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="col">
+                    <div className="form-group mx-4">
+                      <label htmlFor="vaitro">Vai trò</label>
+                      <select
+                        className="form-control"
+                        id="vaitro"
+                        onChange={(e) => setVaiTro(e.target.value)}
+                        value={vaitro}
+                      >
+                        <option value="KH">Khách hàng</option>
+                        <option value="NVLT">Nhân viên lễ tân</option>
+                        <option value="QL">Nhân viên quản lý</option>
+                        <option value="NVK">Nhân viên thu chi</option>
+                        <option value="NVDP">Nhân viên dọn phòng</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <button
+                  className="btn btn-primary px-4 ml-4"
+                  onClick={handleSubmit}
+                >
+                  Thêm
+                </button>
+              </form>
+              <p className="text-danger ml-4 my-2">{msg}</p>
+              <p className="text-success ml-4 my-2">{msgS}</p>
             </div>
           </div>
         </div>
-        <button className="btn btn-primary px-4 ml-4" onClick={handleSubmit}>
-          Thêm
-        </button>
-      </form>
-      <p className="text-danger ml-4 my-2">{msg}</p>
-      <p className="text-success ml-4 my-2">{msgS}</p>
+      </div>
     </div>
   );
 };

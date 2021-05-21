@@ -1,9 +1,75 @@
 import React, { useEffect, useState } from "react";
+import chroma from "chroma-js";
 import { useHistory } from "react-router";
 import PhongFinder from "../../../apis/PhongFinder";
+import Select from "react-select";
 
 const DanhSachPhong = () => {
   const [dsPhong, setDsPhong] = useState([]);
+  const [timkiem, setTimKiem] = useState({
+    value: "%25%25",
+    label: "-- Tất cả --",
+    color: "#191919",
+  });
+
+  const dot = (color = "#ccc") => ({
+    alignItems: "center",
+    display: "flex",
+
+    ":before": {
+      backgroundColor: color,
+      borderRadius: 10,
+      content: '" "',
+      display: "block",
+      marginRight: 8,
+      height: 10,
+      width: 10,
+    },
+  });
+
+  const colourStyles = {
+    control: (styles) => ({ ...styles, backgroundColor: "white" }),
+    option: (styles, { data, isDisabled, isFocused, isSelected }) => {
+      const color = chroma(data.color);
+      return {
+        ...styles,
+        backgroundColor: isDisabled
+          ? null
+          : isSelected
+          ? data.color
+          : isFocused
+          ? color.alpha(0.1).css()
+          : null,
+        color: isDisabled
+          ? "#ccc"
+          : isSelected
+          ? chroma.contrast(color, "white") > 2
+            ? "white"
+            : "black"
+          : data.color,
+        cursor: isDisabled ? "not-allowed" : "default",
+
+        ":active": {
+          ...styles[":active"],
+          backgroundColor:
+            !isDisabled && (isSelected ? data.color : color.alpha(0.3).css()),
+        },
+      };
+    },
+    input: (styles) => ({ ...styles, ...dot() }),
+    placeholder: (styles) => ({ ...styles, ...dot() }),
+    singleValue: (styles, { data }) => ({ ...styles, ...dot(data.color) }),
+  };
+
+  const optionsLocTTP = [
+    { value: "%25%25", label: "-- Tất cả --", color: "#191919" },
+    { value: "0", label: "Sẵn sàng", color: "#2640eb" },
+    { value: "1", label: "Đang được đặt", color: "#24e3dd" },
+    { value: "2", label: "Đang sử dụng", color: "#2fed39" },
+    { value: "3", label: "Chờ hóa đơn", color: "#b3e33b" },
+    { value: "4", label: "Chưa thanh toán", color: "#f5c536" },
+  ];
+
   let hi = useHistory();
   useEffect(() => {
     const fetchData = async () => {
@@ -101,6 +167,23 @@ const DanhSachPhong = () => {
   };
   return (
     <div className="row mt-5">
+      <div className="col-12 mb-4">
+        <Select
+          className="font-werght-bold"
+          options={optionsLocTTP}
+          value={timkiem}
+          onChange={async (value, action) => {
+            if (action.action === "select-option") {
+              setTimKiem(value);
+              const res = await PhongFinder.get(
+                `/loc-theo-trang-thai/${value.value}`
+              );
+              setDsPhong(res.data.data.phong);
+            }
+          }}
+          styles={colourStyles}
+        />
+      </div>
       {dsPhong.map((phong) => {
         return (
           <div className="col-2 mb-4" key={phong.ten}>

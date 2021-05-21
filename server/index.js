@@ -1,10 +1,19 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
+const morgan = require("morgan");
+const fs = require("fs");
 const db = require("./db");
+
 const app = express();
-const multipart = require("connect-multiparty");
-const multipartMiddleware = multipart({ uploadDir: "./images" });
+const accessLogStream = fs.createWriteStream("./log/access.log", {
+  flags: "a",
+});
+
+// setup the logger
+
+// const multipart = require("connect-multiparty");
+// const multipartMiddleware = multipart({ uploadDir: "./images" });
 
 const { encrypt, decrypt } = require("./EncrytionHandle");
 
@@ -15,6 +24,12 @@ app.listen(port, () => {
 
 // middle ware
 app.use(express.json());
+
+app.use(
+  morgan(":date[web] :method :url :status :response-time ms", {
+    stream: accessLogStream,
+  })
+);
 app.use(cors());
 
 //#region NguoiDung va DangNhap
@@ -121,7 +136,7 @@ app.post("/api/v1/tai-khoan/them-tai-khoan-khach-hang", async (req, res) => {
 app.get("/api/v1/tai-khoan/danh-sach-nguoi-dung", async (req, res) => {
   try {
     const result = await db.query(
-      "select ten,mk,ten_hienthi,trangthai,vaitro from tbl_nguoidung where ten <> $1",
+      "select ten,mk,ten_hienthi,trangthai,vaitro from tbl_nguoidung where ten <> $1 order by ten asc",
       ["trongvan"]
     );
 
@@ -160,7 +175,7 @@ app.get("/api/v1/tai-khoan/thong-tin-nguoi-dung/:ten", async (req, res) => {
 app.get("/api/v1/tai-khoan/loc-nguoi-dung-duoc-cap-quyen", async (req, res) => {
   try {
     const result = await db.query(
-      "select ten from tbl_nguoidung where ten <> $1 and trangthai = $2 and vaitro <> $3",
+      "select ten from tbl_nguoidung where ten <> $1 and trangthai = $2 and vaitro <> $3 order by ten asc",
       ["trongvan", "t", "KH"]
     );
 
@@ -774,6 +789,25 @@ app.get("/api/v1/phong/danh-sach-phong-ss/:id", async (req, res) => {
   }
 });
 
+app.get("/api/v1/phong/loc-theo-trang-thai/:tt", async (req, res) => {
+  try {
+    const { tt } = req.params;
+    const result = await db.query(
+      "select * from tbl_phong where cast(trangthai as text) like $1 order by ten asc",
+      [tt]
+    );
+
+    res.status(200).json({
+      status: "ok",
+      data: {
+        phong: result.rows,
+      },
+    });
+  } catch (err) {
+    console.error("Loc phong theo tt: " + err.message);
+  }
+});
+
 // lay 1 phong theo id
 app.get("/api/v1/phong/danh-sach-phong/:ten", async (req, res) => {
   try {
@@ -893,11 +927,11 @@ app.delete("/api/v1/phong/xoa-phong/:ten", async (req, res) => {
 });
 
 //upload
-app.post("/api/v1/phong/uploads", multipartMiddleware, (req, res) => {
-  console.log("Body: " + req.body);
-  console.log("File: " + req.files);
-  console.log("Upload: " + req.files.upload);
-});
+// app.post("/api/v1/phong/uploads", multipartMiddleware, (req, res) => {
+//   console.log("Body: " + req.body);
+//   console.log("File: " + req.files);
+//   console.log("Upload: " + req.files.upload);
+// });
 
 //update trang thai phong
 app.put("/api/v1/phong/update-tt", async (req, res) => {
@@ -1884,7 +1918,7 @@ app.post("/api/v1/khach-hang/them", async (req, res) => {
     console.error("Them khach hang:", err.message);
   }
 });
-
+//danh sach kh
 app.get("/api/v1/khach-hang/danh-sach", async (req, res) => {
   try {
     const result = await db.query("select * from v_khachhang order by id asc");
@@ -1954,6 +1988,46 @@ app.put("/api/v1/khach-hang/sua-checkin", async (req, res) => {
   }
 });
 
+//kiem tra khach hàng có trong hoa don khong
+app.get("/api/v1/khach-hang/trong-hoa-don/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await db.query(
+      "select count(*) from v_hoadon where kh_id=$1",
+      [id]
+    );
+
+    res.status(200).json({
+      status: "ok",
+      data: {
+        khachhang: result.rows[0],
+      },
+    });
+  } catch (err) {
+    console.error("Kiem tra kh trong hoa don: " + err.message);
+  }
+});
+
+//kiem tra khach hàng có trong datphong
+app.get("/api/v1/khach-hang/trong-dat-phong/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await db.query(
+      "select count(*) from v_datphong where kh_id=$1",
+      [id]
+    );
+
+    res.status(200).json({
+      status: "ok",
+      data: {
+        khachhang: result.rows[0],
+      },
+    });
+  } catch (err) {
+    console.error("Kiem tra kh trong datphong: " + err.message);
+  }
+});
+
 //danh sách kieu kh
 app.get("/api/v1/khach-hang/danh-sach-kieu", async (req, res) => {
   try {
@@ -1991,12 +2065,26 @@ app.post("/api/v1/khach-hang/them-kieu", async (req, res) => {
     console.error("Them kieu khach hang:", err.message);
   }
 });
+
+//xoa khach hang
+app.delete("/api/v1/khach-hang/xoa/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    await db.query("delete from tbl_khachhang where id = $1", [id]);
+    res.status(204).json({
+      status: "ok",
+    });
+  } catch (err) {
+    console.log("Xóa kh:" + err.message);
+  }
+});
+
 //#endregion
 
 //#region Dat phong
 
 // danh sach dat phong
-//danh sach dat phong theo phong
 app.get("/api/v1/dat-phong/danh-sach-full", async (req, res) => {
   try {
     const result = await db.query("select * from v_datphong order by id desc ");

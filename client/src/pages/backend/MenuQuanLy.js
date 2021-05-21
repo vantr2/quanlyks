@@ -1,6 +1,6 @@
 import React from "react";
 import Sidebar from "../../components/sidebar/Sidebar";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Switch, Route } from "react-router-dom";
 
 import TaiKhoanPage from "./admin/TaiKhoanPage";
 import DoiMatKhauPage from "./admin/DoiMatKhauPage";
@@ -11,6 +11,7 @@ import DetailPageNhanVien from "./danhmuc/nhanvien/DetailPageNhanVien";
 import SuaPageNhanVien from "./danhmuc/nhanvien/SuaPageNhanVien";
 import DichVuPage from "./danhmuc/DichVuPage";
 import PhongPage from "./danhmuc/PhongPage";
+import LoaiPage from "./danhmuc/LoaiPage";
 
 import TinhTrangPhongPage from "./phong/TinhTrangPhongPage";
 import DanhSachDatPhongPage from "./phong/datphong/DanhSachDatPhongPage";
@@ -20,7 +21,6 @@ import DatPhongOnlinePage from "./phong/DatPhongOnlinePage";
 import HoaDonPage from "./phong/HoaDonPage";
 import ChiTietHoaDonPage from "./phong/hoadon/ChiTietHoaDonPage";
 
-import KieuKhachHangPage from "./qlkhachhang/KieuKhachHangPage";
 import ThongTinKHPage from "./qlkhachhang/ThongTinKHPage";
 
 import TaiSanPage from "./qltaisan/TaiSanPage";
@@ -28,7 +28,6 @@ import BaoDuongPage from "./qltaisan/BaoDuongPage";
 import ChiTietBaoDuongPage from "./qltaisan/baoduong/ChiTietBaoDuongPage";
 import SuaBaoDuongPage from "./qltaisan/baoduong/SuaBaoDuongPage";
 
-import LoaiHangHoaPage from "./qlhanghoa/LoaiHangHoaPage";
 import PhieuMuaPage from "./qlhanghoa/PhieuMuaPage";
 
 import XinNghiPage from "./qlnhanvien/XinNghiPage";
@@ -53,16 +52,16 @@ import CheckInPage from "./phong/datphong/CheckInPage";
 import DatPhongPage from "./phong/datphong/DatPhongPage";
 import SuDungDichVuPage from "./phong/datphong/SuDungDichVuPage";
 import PhieuXacNhanPage from "./phong/PhieuXacNhanPage";
+import ChiTietKhachHangPage from "./qlkhachhang/ChiTietKhachHangPage";
 
 const MenuQuanLy = () => {
   return (
-    <Router>
-      <Sidebar />
-      <div className="container pt-5">
-        <Switch>
+    <div>
+      <Switch>
+        <Sidebar />
+        <div className="container pt-5">
           {/* lich su hoat dong */}
           <Route path="/quan-ly/" exact component={LichSuHoatDongPage} />
-
           {/* Admin */}
           <Route
             path="/quan-ly/admin/tai-khoan"
@@ -74,7 +73,6 @@ const MenuQuanLy = () => {
             exact
             component={DoiMatKhauPage}
           />
-
           {/* Phong */}
           <Route
             path="/quan-ly/phong/tinh-trang"
@@ -122,7 +120,6 @@ const MenuQuanLy = () => {
             exact
             component={ChiTietHoaDonPage}
           />
-
           {/* Danh muc */}
           <Route
             path="/quan-ly/danh-muc/nha-cung-cap"
@@ -139,13 +136,11 @@ const MenuQuanLy = () => {
             path="/quan-ly/danh-muc/nhan-vien/:id"
             component={DetailPageNhanVien}
           ></Route>
-
           <Route
             exact
             path="/quan-ly/danh-muc/nhan-vien/:id/sua"
             component={SuaPageNhanVien}
           ></Route>
-
           <Route
             path="/quan-ly/danh-muc/dich-vu"
             exact
@@ -161,7 +156,6 @@ const MenuQuanLy = () => {
             exact
             component={SuaDichVuPage}
           />
-
           <Route path="/quan-ly/danh-muc/phong" exact component={PhongPage} />
           <Route
             path="/quan-ly/danh-muc/phong/:ten"
@@ -173,26 +167,20 @@ const MenuQuanLy = () => {
             exact
             component={SuaPhongPage}
           />
-
+          <Route path="/quan-ly/danh-muc/loai" exact component={LoaiPage} />
           {/* Ql khach hang */}
+          <Route path="/quan-ly/khach-hang" exact component={ThongTinKHPage} />
           <Route
-            path="/quan-ly/ql-khach-hang/kieu"
+            path="/quan-ly/khach-hang/:id"
             exact
-            component={KieuKhachHangPage}
+            component={ChiTietKhachHangPage}
           />
-          <Route
-            path="/quan-ly/ql-khach-hang/thong-tin"
-            exact
-            component={ThongTinKHPage}
-          />
-
           {/* Ql tai san */}
           <Route
             path="/quan-ly/ql-tai-san/thong-tin"
             exact
             component={TaiSanPage}
           />
-
           <Route
             path="/quan-ly/ql-tai-san/thong-tin/:id"
             exact
@@ -203,7 +191,6 @@ const MenuQuanLy = () => {
             exact
             component={SuaTaiSanPage}
           />
-
           <Route
             path="/quan-ly/ql-tai-san/bao-duong"
             exact
@@ -219,13 +206,7 @@ const MenuQuanLy = () => {
             exact
             component={SuaBaoDuongPage}
           />
-
           {/* ql Hanghoa */}
-          <Route
-            path="/quan-ly/ql-hang-hoa/loai"
-            exact
-            component={LoaiHangHoaPage}
-          />
           <Route
             path="/quan-ly/ql-hang-hoa/phieu-mua"
             exact
@@ -241,7 +222,6 @@ const MenuQuanLy = () => {
             exact
             component={SuaPhieuMuaPage}
           />
-
           {/* Ql nhan vien */}
           <Route
             path="/quan-ly/nhan-vien/thong-tin"
@@ -268,14 +248,12 @@ const MenuQuanLy = () => {
             exact
             component={BangLuongPage}
           />
-
           {/* Nv Quan ly */}
           <Route
             path="/quan-ly/nv-quan-ly/duyet-don"
             exact
             component={DuyetDonPage}
           />
-
           <Route
             path="/quan-ly/nv-quan-ly/duyet-don/:id"
             exact
@@ -285,10 +263,10 @@ const MenuQuanLy = () => {
             path="/quan-ly/nv-quan-ly/cham-cong-nv"
             exact
             component={ChamCongPage}
-          />
-        </Switch>
-      </div>
-    </Router>
+          />{" "}
+        </div>
+      </Switch>
+    </div>
   );
 };
 
