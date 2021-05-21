@@ -1,12 +1,16 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import NhanVienFinder from "../../../apis/NhanVienFinder";
 import TaiKhoanFinder from "../../../apis/TaiKhoanFinder";
 import { AccountContext } from "../../../contexts/AccountContext";
+import { useHistory } from "react-router";
 import {
   checkSpecialCharacter,
   validateEmail,
   dontSignEmail,
+  convertDate,
+  convertTime,
 } from "../../../utils/DataHandler";
+import DateTimePicker from "react-datetime-picker";
 
 import NormalizeString from "../../../utils/NormalizeString";
 
@@ -18,32 +22,42 @@ const ThemNhanVien = () => {
   const [cmnd, setCMND] = useState("");
   const [sdt, setSdt] = useState("");
   const [email, setEmail] = useState("");
-  const [acc, setAcc] = useState("--Chọn--");
+  const [ngayvaolam, setNgayVaoLam] = useState("");
+  const [vaitro, setVaiTro] = useState("NVLT");
+
+  const [acc, setAcc] = useState("");
   const [msg, setMsg] = useState("");
-  const [accFiletered, setAccFiletered] = useState([]);
 
-  const { themNhanVien, setMsgNhanVienActionSuccess } = useContext(
-    AccountContext
-  );
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await TaiKhoanFinder.get("/loc-nguoi-dung-duoc-cap-quyen");
-        setAccFiletered(res.data.data.nguoidung);
-      } catch (err) {
-        console.log(err.message);
-      }
-    };
-    fetchData();
-  }, [setAccFiletered]);
-
+  const { setMsgNhanVienActionSuccess } = useContext(AccountContext);
+  let hi = useHistory();
+  const userrole = window.localStorage.getItem("user_role");
   const handleSubmit = async () => {
-    if (acc === "--Chọn--") {
-      setMsg("Bạn cần chọn tài khoản cho nhân viên.");
+    const english = /^[A-Za-z0-9]*$/;
+    if (acc.length === 0) {
+      setMsg("Tên tài khoản không được để trống.");
       setTimeout(() => {
         setMsg("");
       }, 4000);
+    } else if (acc.indexOf(" ") >= 0) {
+      setMsg("Tên tài khoản không được chứa khoảng trắng.");
+      setTimeout(() => {
+        setMsg("");
+      }, 4000);
+    } else if (!english.test(acc)) {
+      setMsg("Tên tài khoản không được chứa kí tự đặc biệt hoặc dấu.");
+      setTimeout(() => {
+        setMsg("");
+      }, 4000);
+    } else if (acc.length > 0 && acc.length < 6) {
+      setMsg("Tên tài khoản ít nhất phải có 6 kí tự.");
+      setTimeout(() => {
+        setMsg("");
+      }, 4000);
+    } else if (!ngayvaolam) {
+      setMsg("Ngày vào làm không được để trống.");
+      setTimeout(() => {
+        setMsg("");
+      }, 3500);
     } else if (tenNV === "") {
       setMsg("Tên nhân viên không được để trống.");
       setTimeout(() => {
@@ -98,32 +112,37 @@ const ThemNhanVien = () => {
       }, 3000);
     } else {
       try {
-        const res = await NhanVienFinder.post("/them-nhan-vien", {
-          ten: NormalizeString(tenNV),
-          gioitinh: parseInt(gioitinh),
-          ngaysinh: ngaysinh,
-          diachi: NormalizeString(diachi),
-          cmnd: cmnd,
-          sdt: sdt,
-          email: email.toLowerCase(),
-          taikhoan: acc,
+        const res = await TaiKhoanFinder.post("/them-tai-khoan", {
+          ten: acc,
+          mk: "12345678",
+          ten_hienthi: NormalizeString(tenNV),
+          vaitro: vaitro,
         });
-        // console.log(res);
-        if (res.data.status === "ok") {
-          themNhanVien(res.data.data.nhanvien);
-          setMsgNhanVienActionSuccess("Thêm thành công.");
-          setTimeout(() => {
-            setMsgNhanVienActionSuccess("");
-          }, 3000);
 
-          setAcc("--Chọn--");
-          setTenNV("");
-          setEmail("");
-          setNgaySinh("");
-          setGioiTinh("1");
-          setCMND("");
-          setSdt("");
-          setDiaChi("");
+        //   console.log(res);
+        if (res.data.status === "ok") {
+          const res_nv = await NhanVienFinder.post("/them-nhan-vien", {
+            ten: NormalizeString(tenNV),
+            gioitinh: parseInt(gioitinh),
+            ngaysinh: ngaysinh,
+            diachi: NormalizeString(diachi),
+            cmnd: cmnd,
+            sdt: sdt,
+            email: email.toLowerCase(),
+            taikhoan: acc,
+            ngayvaolam:
+              convertDate(ngayvaolam) + " " + convertTime(ngayvaolam) + "-07",
+          });
+          // console.log(res);
+          if (res_nv.data.status === "ok") {
+            setMsgNhanVienActionSuccess("Thêm thành công.");
+            setTimeout(() => {
+              setMsgNhanVienActionSuccess("");
+            }, 3000);
+
+            hi.push("/quan-ly/danh-muc");
+            hi.push("/quan-ly/danh-muc/nhan-vien");
+          }
         } else {
           setMsg(res.data.status);
           setTimeout(() => {
@@ -166,25 +185,39 @@ const ThemNhanVien = () => {
                   <div className="col">
                     <div className="form-group">
                       <label htmlFor="acc">Tài khoản</label>
-                      <select
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="acc"
                         onChange={(e) => setAcc(e.target.value)}
                         value={acc}
-                        id="acc"
+                      />
+                    </div>
+                  </div>
+                  <div className="col">
+                    <div className="form-group">
+                      <label htmlFor="vaitronv">Chức vụ</label>
+                      <select
                         className="form-control"
+                        id="vaitronv"
+                        value={vaitro}
+                        onChange={(e) => setVaiTro(e.target.value)}
                       >
-                        <option value="--Chọn--" disabled>
-                          -- Chọn --
-                        </option>
-                        {accFiletered.map((tennd) => {
-                          return (
-                            <option key={tennd.ten} value={tennd.ten}>
-                              {tennd.ten}
-                            </option>
-                          );
-                        })}
+                        {userrole === "QL" ? (
+                          ""
+                        ) : (
+                          <option value="QL">Quản lý</option>
+                        )}
+
+                        <option value="NVLT">Lễ tân</option>
+                        <option value="NVDP">Dọn phòng</option>
+                        <option value="NVK">Ql Kho</option>
                       </select>
                     </div>
                   </div>
+                </div>
+
+                <div className="form-row">
                   <div className="col">
                     <div className="form-group">
                       <label htmlFor="tennhanvien">Tên nhân viên</label>
@@ -196,6 +229,19 @@ const ThemNhanVien = () => {
                         value={tenNV}
                       />
                     </div>
+                  </div>
+                  <div className="col">
+                    <label htmlFor="ngayvaolam">Ngày vào làm</label>
+                    <DateTimePicker
+                      className="form-control"
+                      value={ngayvaolam}
+                      onChange={setNgayVaoLam}
+                      disableClock
+                      locale="vi-VN"
+                      format="dd-MM-y h:mm a"
+                      id="ngayvaolam"
+                      minDate={new Date()}
+                    />
                   </div>
                 </div>
                 <div className="form-row">

@@ -81,7 +81,7 @@ app.post("/api/v1/tai-khoan/them-tai-khoan", async (req, res) => {
     const { ten, mk, ten_hienthi, vaitro } = req.body;
     const hashedPassword = encrypt(mk);
     const result = await db.query(
-      "insert into tbl_nguoidung (ten, mk, ten_hienthi, trangthai, vaitro, iv) values($1,$2,$3,'f',$4,$5) returning *",
+      "insert into tbl_nguoidung (ten, mk, ten_hienthi, trangthai, vaitro, iv) values($1,$2,$3,'t',$4,$5) returning *",
       [ten, hashedPassword.password, ten_hienthi, vaitro, hashedPassword.iv]
     );
 
@@ -353,8 +353,24 @@ app.post("/api/v1/kiem-tra-dang-nhap-frontend", async (req, res) => {
 //lay danh sách nhan vien
 app.get("/api/v1/nhan-vien/danh-sach-nhan-vien", async (req, res) => {
   try {
+    const result = await db.query("select * from v_nhanvien order by id asc");
+
+    res.status(200).json({
+      status: "ok",
+      data: {
+        nhanvien: result.rows,
+      },
+    });
+  } catch (err) {
+    console.error("Lay danh sach nhan vien" + err.message);
+  }
+});
+
+//lay danh sách nhan vien khong co quan ly
+app.get("/api/v1/nhan-vien/danh-sach-nhan-vien-thuong", async (req, res) => {
+  try {
     const result = await db.query(
-      "select * from tbl_nhanvien order by name asc"
+      "select * from v_nhanvien where vaitro <> 'QL' order by id asc"
     );
 
     res.status(200).json({
@@ -389,6 +405,46 @@ app.get(
   }
 );
 
+//kiem tra nhan vien có trong hoa don khong
+app.get("/api/v1/nhan-vien/trong-hoa-don/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await db.query(
+      "select count(*) from v_hoadon where nv_id=$1",
+      [id]
+    );
+
+    res.status(200).json({
+      status: "ok",
+      data: {
+        nhanvien: result.rows[0],
+      },
+    });
+  } catch (err) {
+    console.error("Kiem tra nv trong hoa don: " + err.message);
+  }
+});
+
+//kiem tra nhan vien có trong dat phong khong
+app.get("/api/v1/nhan-vien/trong-dat-phong/:tennv", async (req, res) => {
+  try {
+    const { tennv } = req.params;
+    const result = await db.query(
+      "select count(*) from v_datphong where nv=$1",
+      [tennv]
+    );
+
+    res.status(200).json({
+      status: "ok",
+      data: {
+        nhanvien: result.rows[0],
+      },
+    });
+  } catch (err) {
+    console.error("Kiem tra nv trong hoa don: " + err.message);
+  }
+});
+
 // lay 1 nhan vien bthg
 app.get("/api/v1/nhan-vien/danh-sach-nhan-vien-xoa/:id", async (req, res) => {
   try {
@@ -412,10 +468,9 @@ app.get("/api/v1/nhan-vien/danh-sach-nhan-vien-xoa/:id", async (req, res) => {
 app.get("/api/v1/nhan-vien/danh-sach-nhan-vien/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const result = await db.query(
-      "select * from v_nhanvieninfo where id = $1",
-      [id]
-    );
+    const result = await db.query("select * from v_nhanvien where id = $1", [
+      id,
+    ]);
 
     res.status(200).json({
       status: "ok",
@@ -501,11 +556,20 @@ app.get(
 
 app.post("/api/v1/nhan-vien/them-nhan-vien", async (req, res) => {
   try {
-    const { ten, gioitinh, ngaysinh, diachi, cmnd, sdt, email, taikhoan } =
-      req.body;
+    const {
+      ten,
+      gioitinh,
+      ngaysinh,
+      diachi,
+      cmnd,
+      sdt,
+      email,
+      taikhoan,
+      ngayvaolam,
+    } = req.body;
     const result = await db.query(
-      "insert into tbl_nhanvien (name, gioitinh, ngaysinh, diachi, cmnd,sdt,email,account) values($1,$2,$3,$4,$5,$6,$7,$8 ) returning *",
-      [ten, gioitinh, ngaysinh, diachi, cmnd, sdt, email, taikhoan]
+      "insert into tbl_nhanvien (name, gioitinh, ngaysinh, diachi, cmnd,sdt,email,account,ngayvaolam) values($1,$2,$3,$4,$5,$6,$7,$8,$9 ) returning *",
+      [ten, gioitinh, ngaysinh, diachi, cmnd, sdt, email, taikhoan, ngayvaolam]
     );
 
     res.status(201).json({
@@ -516,42 +580,23 @@ app.post("/api/v1/nhan-vien/them-nhan-vien", async (req, res) => {
     });
   } catch (err) {
     console.error("Them nhan vien:", err.message);
-    if (
-      err.message ===
-      'duplicate key value violates unique constraint "tbl_nhanvien_account_key"'
-    ) {
-      res.json({
-        status:
-          "Tài khoản này đã được cài đặt cho người khác, xin chọn tài khoản khác.",
-      });
-    }
   }
 });
 
 //sua nhan vien
 app.put("/api/v1/nhan-vien/sua-nhan-vien", async (req, res) => {
   try {
-    const { id, ten, gioitinh, ngaysinh, diachi, cmnd, sdt, email, taikhoan } =
-      req.body;
+    const { id, ten, gioitinh, ngaysinh, diachi, cmnd, sdt, email } = req.body;
 
     const result = await db.query(
-      "update tbl_nhanvien set name=$1, gioitinh=$2, ngaysinh=$3, diachi=$4, cmnd=$5,sdt=$6,email=$7,account=$8 where id=$9",
-      [ten, gioitinh, ngaysinh, diachi, cmnd, sdt, email, taikhoan, id]
+      "update tbl_nhanvien set name=$1, gioitinh=$2, ngaysinh=$3, diachi=$4, cmnd=$5,sdt=$6,email=$7 where id=$8",
+      [ten, gioitinh, ngaysinh, diachi, cmnd, sdt, email, id]
     );
     res.status(200).json({
       status: "ok",
     });
   } catch (err) {
     console.log("Sua nhan vien: " + err.message);
-    if (
-      err.message ===
-      'duplicate key value violates unique constraint "tbl_nhanvien_account_key"'
-    ) {
-      res.status(200).json({
-        status:
-          "Tài khoản bạn sửa đang được người khác sử dụng, xin chọn tài khoản khác.",
-      });
-    }
   }
 });
 
@@ -566,6 +611,26 @@ app.delete("/api/v1/nhan-vien/xoa-nhan-vien/:id", async (req, res) => {
     });
   } catch (err) {
     console.log("Xóa tài khoản:" + err.message);
+  }
+});
+
+// kiem tra nhan vien co dang hoat dong khong
+app.get("/api/v1/nhan-vien/kiem-tra-hoat-dong/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await db.query(
+      "select count(*) from v_nhanvien where id=$1 and trangthai='t' ",
+      [id]
+    );
+
+    res.status(200).json({
+      status: "ok",
+      data: {
+        nhanvien: result.rows[0],
+      },
+    });
+  } catch (err) {
+    console.error("Kiem tra nv hoat dong: " + err.message);
   }
 });
 

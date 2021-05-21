@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router";
 import NhanVienFinder from "../../../apis/NhanVienFinder";
 import { AccountContext } from "../../../contexts/AccountContext";
-import XoaNhanVien from "./XoaNhanVien";
+// import XoaNhanVien from "./XoaNhanVien";
 import { NormalizeDate, RenderGioiTinh } from "../../../utils/DataHandler";
 
 const ChiTietNhanVien = () => {
@@ -66,9 +66,9 @@ const ChiTietNhanVien = () => {
             Sửa
           </button>
         </div>
-        <div className="mt-5 ml-2">
+        {/* <div className="mt-5 ml-2">
           <XoaNhanVien />
-        </div>
+        </div> */}
       </div>
       <p className="text-center text-success">{msgNhanVienActionSuccess}</p>
       <h4 className="mt-3 mb-3">{nhanvienSelected.name}</h4>
@@ -82,6 +82,12 @@ const ChiTietNhanVien = () => {
             <td className="col-4 pl-2 font-weight-bold">Giới tính</td>
             <td className="col-8 pl-2">
               {RenderGioiTinh(nhanvienSelected.gioitinh)}
+            </td>
+          </tr>
+          <tr className="d-flex">
+            <td className="col-4 pl-2 font-weight-bold">Ngày vào làm</td>
+            <td className="col-8 pl-2">
+              {NormalizeDate(nhanvienSelected.ngayvaolam)}
             </td>
           </tr>
           <tr className="d-flex">

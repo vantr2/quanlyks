@@ -1,31 +1,36 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AccountContext } from "../../../contexts/AccountContext";
 import NhanVienFinder from "../../../apis/NhanVienFinder";
-import { NormalizeDate, RenderGioiTinh } from "../../../utils/DataHandler";
+import { NormalizeDate } from "../../../utils/DataHandler";
 import { useHistory } from "react-router";
-import TimKiemNhanVien from "./TimKiemNhanVien";
+// import TimKiemNhanVien from "./TimKiemNhanVien";
 import XoaNhanVienType2 from "./XoaNhanVienType2";
 
 const DanhSachNhanVien = () => {
   let hi = useHistory();
+  const userrole = window.localStorage.getItem("user_role");
+  const { msgNhanVienActionSuccess } = useContext(AccountContext);
 
-  const { dsNhanVien, setDsNhanVien, msgNhanVienActionSuccess } = useContext(
-    AccountContext
-  );
-
+  const [dsNhanVien, setDsNhanVien] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await NhanVienFinder.get("/danh-sach-nhan-vien");
-        // console.log(typeof res.data.data.nhanvien.account);
-        setDsNhanVien(res.data.data.nhanvien);
+        if (userrole === "QL") {
+          const res = await NhanVienFinder.get("/danh-sach-nhan-vien-thuong");
+          // console.log(typeof res.data.data.nhanvien.account);
+          setDsNhanVien(res.data.data.nhanvien);
+        } else {
+          const res = await NhanVienFinder.get("/danh-sach-nhan-vien");
+          // console.log(typeof res.data.data.nhanvien.account);
+          setDsNhanVien(res.data.data.nhanvien);
+        }
       } catch (err) {
         console.log(err.message);
       }
     };
 
     fetchData();
-  }, [setDsNhanVien]);
+  }, [userrole]);
 
   const handleNhanVienSelected = (e, id) => {
     e.stopPropagation();
@@ -39,15 +44,13 @@ const DanhSachNhanVien = () => {
 
   return (
     <div className="list-group">
-      <div className="mb-5">
-        <TimKiemNhanVien />
-      </div>
+      <div className="mb-2">{/* <TimKiemNhanVien /> */}</div>
       <p className="text-center text-success">{msgNhanVienActionSuccess}</p>
       <table className="table table-hover table-striped table-bordered ">
         <thead className="thead-dark text-center">
           <tr>
             <th>Tên nhân viên</th>
-            <th>Giới tính</th>
+            <th>Ngày vào làm</th>
             <th>Ngày sinh</th>
             <th>SDT</th>
             <th>Tài khoản</th>
@@ -61,7 +64,7 @@ const DanhSachNhanVien = () => {
             return (
               <tr key={nhanvien.id}>
                 <td>{nhanvien.name}</td>
-                <td>{RenderGioiTinh(nhanvien.gioitinh)}</td>
+                <td>{NormalizeDate(nhanvien.ngayvaolam)}</td>
                 <td>{NormalizeDate(nhanvien.ngaysinh)}</td>
                 <td>{nhanvien.sdt}</td>
                 <td>
@@ -93,7 +96,7 @@ const DanhSachNhanVien = () => {
                 </td>
 
                 <td style={{ cursor: "pointer" }}>
-                  <XoaNhanVienType2 id={nhanvien.id} />
+                  <XoaNhanVienType2 id={nhanvien.id} tenNV={nhanvien.name} />
                 </td>
               </tr>
             );
