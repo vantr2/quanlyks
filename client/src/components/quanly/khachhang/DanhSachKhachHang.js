@@ -6,7 +6,7 @@ import { NumberFormat } from "../../../utils/DataHandler";
 import { AccountContext } from "../../../contexts/AccountContext";
 const DanhSachKhachHang = () => {
   let hi = useHistory();
-  const { msgKHActionSuccess, msgKHActionError } = useContext(AccountContext);
+  const { msgKHActionSuccess } = useContext(AccountContext);
   const [dsKh, setDsKH] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
@@ -30,7 +30,6 @@ const DanhSachKhachHang = () => {
     <div>
       <div className="mt-5 mb-5">
         <p className="text-success">{msgKHActionSuccess}</p>
-        <p className="text-danger">{msgKHActionError}</p>
         <table className="table table-hover table-striped table-bordered ">
           <thead className="thead-dark text-center">
             <tr>

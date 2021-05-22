@@ -29,6 +29,7 @@ const DanhSachNcc = () => {
         <table className="table table-hover table-striped table-bordered ">
           <thead className="thead-dark text-center">
             <tr>
+              <th>Mã nhà cung cấp</th>
               <th>Tên nhà cung cấp</th>
               <th>Địa chỉ</th>
               <th>Số điện thoại</th>
@@ -40,6 +41,7 @@ const DanhSachNcc = () => {
             {dsNcc.map((ncc) => {
               return (
                 <tr key={ncc.id} className="text-center">
+                  <td className="align-middle">{ncc.id}</td>
                   <td className="align-middle">{ncc.ten}</td>
                   <td className="align-middle">{ncc.diachi}</td>
                   <td className="align-middle">{ncc.sdt}</td>
@@ -54,7 +56,7 @@ const DanhSachNcc = () => {
                     className="align-middle text-center"
                     style={{ cursor: "pointer" }}
                   >
-                    <XoaNcc id={ncc.id} />
+                    <XoaNcc ncc={ncc} />
                   </td>
                 </tr>
               );

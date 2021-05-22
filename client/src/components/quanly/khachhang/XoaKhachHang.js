@@ -6,26 +6,26 @@ import { AccountContext } from "../../../contexts/AccountContext";
 const XoaKhachHang = ({ id, name }) => {
   let hi = useHistory();
 
-  const { setMsgKHActionSuccess, setMsgKHActionError } =
-    useContext(AccountContext);
-  const [isDelete, setIsDelete] = useState(false);
+  const { setMsgKHActionSuccess } = useContext(AccountContext);
+  const [isDeleteDp, setIsDeleteDp] = useState(false);
+  const [isDeleteHd, setIsDeleteHd] = useState(false);
 
   const checkIdKh = async () => {
     try {
       const res_hd = await KhachHangFinder.get(`/trong-hoa-don/${id}`);
       //   console.log(res_hd);
       if (res_hd.data.data.khachhang.count === "0") {
-        setIsDelete(true);
+        setIsDeleteDp(true);
       } else {
-        setIsDelete(false);
+        setIsDeleteDp(false);
       }
 
       const res_dp = await KhachHangFinder.get(`/trong-dat-phong/${id}`);
       //   console.log(res_dp);
       if (res_dp.data.data.khachhang.count === "0") {
-        setIsDelete(true);
+        setIsDeleteHd(true);
       } else {
-        setIsDelete(false);
+        setIsDeleteHd(false);
       }
     } catch (err) {
       console.log(err.message);
@@ -34,7 +34,7 @@ const XoaKhachHang = ({ id, name }) => {
   const handleDelete = async (e) => {
     e.stopPropagation();
     // console.log(isDelete);
-    if (isDelete) {
+    if (isDeleteDp && isDeleteHd) {
       try {
         const res = await KhachHangFinder.delete(`/xoa/${id}`);
         //   console.log(res);
@@ -51,12 +51,9 @@ const XoaKhachHang = ({ id, name }) => {
         console.log(err.message);
       }
     } else {
-      setMsgKHActionError(
+      alert(
         "Khách hàng này đang đặt phòng, hoặc đang tồn tại trong 1 hóa đơn nào đó. Không thể xóa"
       );
-      setTimeout(() => {
-        setMsgKHActionError("");
-      }, 4000);
     }
   };
   return (

@@ -1,38 +1,59 @@
 import React, { useContext, useState } from "react";
 import NhaCungCapFinder from "../../../apis/NhaCungCapFinder";
 import { AccountContext } from "../../../contexts/AccountContext";
-const XoaNcc = ({ id }) => {
-  const { setMsgNccActionSuccess, dsNcc, setDsNcc } = useContext(
-    AccountContext
-  );
-  const [tenNcc, setTenNcc] = useState("");
-  const fetchData = async () => {
+
+const XoaNcc = ({ ncc }) => {
+  const { setMsgNccActionSuccess, dsNcc, setDsNcc } =
+    useContext(AccountContext);
+  const [isDeleteTs, setIsDeleteTs] = useState(false);
+  const [isDeletePm, setIsDeletePm] = useState(false);
+
+  const checkDel = async () => {
     try {
-      const res = await NhaCungCapFinder.get(`/danh-sach/${id}`);
-      setTenNcc(res.data.data.nhacungcap.ten);
+      const res_ts = await NhaCungCapFinder.get(`/trong-tai-san/${ncc.id}`);
+      if (res_ts.data.data.nhacungcap.count === "0") {
+        setIsDeleteTs(true);
+      } else {
+        setIsDeleteTs(false);
+      }
+
+      const res_pmct = await NhaCungCapFinder.get(
+        `/trong-pm-chi-tiet/${ncc.id}`
+      );
+
+      if (res_pmct.data.data.nhacungcap.count === "0") {
+        setIsDeletePm(true);
+      } else {
+        setIsDeletePm(false);
+      }
     } catch (err) {
       console.log(err.message);
     }
   };
-
   const handleDelete = async (e) => {
     e.stopPropagation();
-    try {
-      const res = await NhaCungCapFinder.delete(`/xoa/${id}`);
-      //   console.log(res);
-      if (res.data === "") {
-        setMsgNccActionSuccess("Xóa thành công");
-        setTimeout(() => {
-          setMsgNccActionSuccess("");
-        }, 2000);
-        setDsNcc(
-          dsNcc.filter((ncc) => {
-            return ncc.id !== id;
-          })
-        );
+    if (isDeleteTs && isDeletePm) {
+      try {
+        const res = await NhaCungCapFinder.delete(`/xoa/${ncc.id}`);
+        //   console.log(res);
+        if (res.data === "") {
+          setMsgNccActionSuccess("Xóa thành công");
+          setTimeout(() => {
+            setMsgNccActionSuccess("");
+          }, 2000);
+          setDsNcc(
+            dsNcc.filter((nhacc) => {
+              return nhacc.id !== ncc.id;
+            })
+          );
+        }
+      } catch (err) {
+        console.log(err.message);
       }
-    } catch (err) {
-      console.log(err.message);
+    } else {
+      alert(
+        "Dữ liệu nhà cung cáp này đang được sử dụng tại tài sản hoặc phiếu mua chi tiết. Không thể xóa."
+      );
     }
   };
   return (
@@ -40,13 +61,13 @@ const XoaNcc = ({ id }) => {
       <i
         className="fas fa-trash text-danger"
         data-toggle="modal"
-        data-target={`#id${id}xoa`}
-        onClick={fetchData}
+        data-target={`#id${ncc.id}xoa`}
+        onClick={checkDel}
       >
         &nbsp;Xóa
       </i>
 
-      <div className="modal fade mb-5" id={`id${id}xoa`}>
+      <div className="modal fade mb-5" id={`id${ncc.id}xoa`}>
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
             <div className="modal-header">
@@ -59,7 +80,7 @@ const XoaNcc = ({ id }) => {
             <div className="modal-body">
               <p className="text-left">
                 Bạn có thực sự muốn xóa{" "}
-                <span className="font-weight-bold">"{tenNcc}"</span> không ?
+                <span className="font-weight-bold">"{ncc.ten}"</span> không ?
               </p>
             </div>
 
