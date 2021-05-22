@@ -1,51 +1,62 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 
 import { useHistory } from "react-router";
 import DichVuFinder from "../../../apis/DichVuFinder";
 import { AccountContext } from "../../../contexts/AccountContext";
 import { storage } from "../../../firebase";
 const XoaDichVu = ({ id }) => {
-  const { setMsgDichVuActionSuccess, dsDichVu, setDsDichVu } = useContext(
-    AccountContext
-  );
+  const { setMsgDichVuActionSuccess, dsDichVu, setDsDichVu } =
+    useContext(AccountContext);
 
   let hi = useHistory();
   const [filename, setFileName] = useState("");
   const [tenDV, setTenDV] = useState("");
+  const [isDelete, setIsDelete] = useState(false);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await DichVuFinder.get(`/danh-sach-dich-vu/${id}`);
-        setFileName(res.data.data.dichvu.filename);
-        setTenDV(res.data.data.dichvu.ten);
-      } catch (err) {
-        console.log(err.message);
-      }
-    };
-    fetchData();
-  }, [setFileName, id]);
-
-  const handleDelete = async (e) => {
-    e.stopPropagation();
+  const fetchData = async () => {
     try {
-      const res = await DichVuFinder.delete(`/xoa-dich-vu/${id}`);
-      //   console.log(res);
-      if (res.data === "") {
-        setMsgDichVuActionSuccess("Xóa thành công");
-        setTimeout(() => {
-          setMsgDichVuActionSuccess("");
-        }, 2000);
-        setDsDichVu(
-          dsDichVu.filter((dichvu) => {
-            return dichvu.id !== id;
-          })
-        );
-        storage.ref("dichvu").child(filename).delete();
-        hi.push("/quan-ly/danh-muc/dich-vu");
+      const res = await DichVuFinder.get(`/danh-sach-dich-vu/${id}`);
+      setFileName(res.data.data.dichvu.filename);
+      setTenDV(res.data.data.dichvu.ten);
+
+      const res_dp = await DichVuFinder.get(`/trong-dat-phong/${id}`);
+      //   console.log(res_dp);
+      if (res_dp.data.data.dichvu.count === "0") {
+        setIsDelete(true);
+      } else {
+        setIsDelete(false);
       }
     } catch (err) {
       console.log(err.message);
+    }
+  };
+
+  const handleDelete = async (e) => {
+    e.stopPropagation();
+    if (isDelete) {
+      try {
+        const res = await DichVuFinder.delete(`/xoa-dich-vu/${id}`);
+        //   console.log(res);
+        if (res.data === "") {
+          setMsgDichVuActionSuccess("Xóa thành công");
+          setTimeout(() => {
+            setMsgDichVuActionSuccess("");
+          }, 2000);
+          setDsDichVu(
+            dsDichVu.filter((dichvu) => {
+              return dichvu.id !== id;
+            })
+          );
+          storage.ref("dichvu").child(filename).delete();
+          hi.push("/quan-ly/danh-muc/dich-vu");
+        }
+      } catch (err) {
+        console.log(err.message);
+      }
+    } else {
+      alert(
+        "Dữ liệu của dịch vụ này đang nằm trong phiếu thuê nào đó. Không thể xóa"
+      );
     }
   };
   return (
@@ -54,6 +65,7 @@ const XoaDichVu = ({ id }) => {
         className="fas fa-trash text-danger"
         data-toggle="modal"
         data-target={`#id${id}xoa`}
+        onClick={fetchData}
       >
         &nbsp;Xóa
       </i>

@@ -6,9 +6,8 @@ import { NumberFormat } from "../../../utils/DataHandler";
 import XoaDichVu from "./XoaDichVu";
 
 const DanhSachDichVu = () => {
-  const { dsDichVu, setDsDichVu, msgDichVuActionSuccess } = useContext(
-    AccountContext
-  );
+  const { dsDichVu, setDsDichVu, msgDichVuActionSuccess } =
+    useContext(AccountContext);
 
   const [loaidichvu, setLoaiDichVu] = useState([]);
   let hi = useHistory();

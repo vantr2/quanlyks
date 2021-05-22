@@ -5,9 +5,8 @@ import { useHistory } from "react-router";
 import { NumberFormat } from "../../../utils/DataHandler";
 import XoaPhong from "./XoaPhong";
 const DanhSachPhong = () => {
-  const { dsPhong, setDsPhong, msgPhongActionSuccess } = useContext(
-    AccountContext
-  );
+  const { dsPhong, setDsPhong, msgPhongActionSuccess } =
+    useContext(AccountContext);
   let hi = useHistory();
 
   useEffect(() => {

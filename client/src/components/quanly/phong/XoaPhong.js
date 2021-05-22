@@ -1,49 +1,58 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 
 import { useHistory } from "react-router";
 import PhongFinder from "../../../apis/PhongFinder";
 import { AccountContext } from "../../../contexts/AccountContext";
 import { storage } from "../../../firebase";
 const XoaPhong = ({ ten }) => {
-  const { setMsgPhongActionSuccess, dsPhong, setDsPhong } = useContext(
-    AccountContext
-  );
+  const { setMsgPhongActionSuccess, dsPhong, setDsPhong } =
+    useContext(AccountContext);
 
   let hi = useHistory();
   const [filename, setFileName] = useState("");
+  const [isDelete, setIsDelete] = useState(false);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await PhongFinder.get(`/danh-sach-phong/${ten}`);
-        setFileName(res.data.data.phong.filename);
-      } catch (err) {
-        console.log(err.message);
-      }
-    };
-    fetchData();
-  }, [setFileName, ten]);
-
-  const handleDelete = async (e) => {
-    e.stopPropagation();
+  const handleClick = async () => {
     try {
-      const res = await PhongFinder.delete(`/xoa-phong/${ten}`);
-      //   console.log(res);
-      if (res.data === "") {
-        setMsgPhongActionSuccess("Xóa thành công");
-        setTimeout(() => {
-          setMsgPhongActionSuccess("");
-        }, 2000);
-        setDsPhong(
-          dsPhong.filter((phong) => {
-            return phong.ten !== ten;
-          })
-        );
-        storage.ref("phong").child(filename).delete();
-        hi.push("/quan-ly/danh-muc/phong");
+      const res = await PhongFinder.get(`/danh-sach-phong/${ten}`);
+      setFileName(res.data.data.phong.filename);
+
+      const res_dp = await PhongFinder.get(`/trong-dat-phong/${ten}`);
+      //   console.log(res_dp);
+      if (res_dp.data.data.phong.count === "0") {
+        setIsDelete(true);
+      } else {
+        setIsDelete(false);
       }
     } catch (err) {
       console.log(err.message);
+    }
+  };
+
+  const handleDelete = async (e) => {
+    e.stopPropagation();
+    if (isDelete) {
+      try {
+        const res = await PhongFinder.delete(`/xoa-phong/${ten}`);
+        //   console.log(res);
+        if (res.data === "") {
+          setMsgPhongActionSuccess("Xóa thành công");
+          setTimeout(() => {
+            setMsgPhongActionSuccess("");
+          }, 2000);
+          setDsPhong(
+            dsPhong.filter((phong) => {
+              return phong.ten !== ten;
+            })
+          );
+          storage.ref("phong").child(filename).delete();
+          hi.push("/quan-ly/danh-muc/phong");
+        }
+      } catch (err) {
+        console.log(err.message);
+      }
+    } else {
+      alert("Dữ liệu phòng này đang được sử dụng trong phiếu thuê nào đó.");
     }
   };
   return (
@@ -52,6 +61,7 @@ const XoaPhong = ({ ten }) => {
         className="fas fa-trash text-danger"
         data-toggle="modal"
         data-target={`#id${ten}xoa`}
+        onClick={handleClick}
       >
         &nbsp;Xóa
       </i>

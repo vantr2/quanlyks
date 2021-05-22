@@ -1035,6 +1035,26 @@ app.put("/api/v1/phong/update-tt", async (req, res) => {
   }
 });
 
+//kiem tra phong có trong datphong khong
+app.get("/api/v1/phong/trong-dat-phong/:ten", async (req, res) => {
+  try {
+    const { ten } = req.params;
+    const result = await db.query(
+      "select count(*) from v_datphong where phong_id=$1",
+      [ten]
+    );
+
+    res.status(200).json({
+      status: "ok",
+      data: {
+        phong: result.rows[0],
+      },
+    });
+  } catch (err) {
+    console.error("Kiem tra phong trong dat phong: " + err.message);
+  }
+});
+
 //#endregion
 
 //#region Dich vu
@@ -1068,6 +1088,26 @@ app.get("/api/v1/dich-vu/danh-sach-dich-vu/:id", async (req, res) => {
     });
   } catch (err) {
     console.error("Lay 1 dichvu: " + err.message);
+  }
+});
+
+//kiem tra dv có trong datphong chi tiet khong
+app.get("/api/v1/dich-vu/trong-dat-phong/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await db.query(
+      "select count(*) from v_dpchitiet where dvid=$1",
+      [id]
+    );
+
+    res.status(200).json({
+      status: "ok",
+      data: {
+        dichvu: result.rows[0],
+      },
+    });
+  } catch (err) {
+    console.error("Kiem tra dv trong dat phong ct: " + err.message);
   }
 });
 
@@ -2816,6 +2856,44 @@ app.delete("/api/v1/doi-huy/xoa-huy-phong/:id", async (req, res) => {
     });
   } catch (err) {
     console.error("xoa huy phong: " + err.message);
+  }
+});
+
+app.post("/api/v1/doi-huy/test", async (req, res) => {
+  try {
+    console.log(req.body);
+  } catch (err) {
+    console.error("danh sach huy phong: " + err.message);
+  }
+});
+
+app.post("/api/v1/doi-huy/onload", async (req, res) => {
+  try {
+    console.log(req.body);
+  } catch (err) {
+    console.error("danh sach huy phong: " + err.message);
+  }
+});
+//#endregion
+
+//#region Lich su hoat dong
+// danh sach lich su admin
+//them lich su
+app.post("/api/v1/lich-su/them", async (req, res) => {
+  try {
+    const { nguoithuchien, vairo, hanhdong, dulieucu, dulieumoi } = req.body;
+    const result = await db.query(
+      "insert into tbl_lshoatdong(nguoithuchien,vairo,hanhdong,dulieucu,dulieumoi) values ($1,$2,$3,$4,$5) returning *",
+      [nguoithuchien, vairo, hanhdong, dulieucu, dulieumoi]
+    );
+    res.status(201).json({
+      status: "ok",
+      data: {
+        ls: result.rows[0],
+      },
+    });
+  } catch (err) {
+    console.log("Them lich su: " + err.message);
   }
 });
 //#endregion

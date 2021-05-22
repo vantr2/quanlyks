@@ -3,6 +3,7 @@ import chroma from "chroma-js";
 import { useHistory } from "react-router";
 import PhongFinder from "../../../apis/PhongFinder";
 import Select from "react-select";
+import { ContextMenu, MenuItem, ContextMenuTrigger } from "react-contextmenu";
 
 const DanhSachPhong = () => {
   const [dsPhong, setDsPhong] = useState([]);
@@ -187,13 +188,28 @@ const DanhSachPhong = () => {
       {dsPhong.map((phong) => {
         return (
           <div className="col-2 mb-4" key={phong.ten}>
-            <button
-              className="btn btn-block"
-              style={renderStyle(phong.trangthai)}
-              onClick={(e) => handleClick(e, phong.trangthai, phong.ten)}
+            <ContextMenuTrigger id={phong.ten}>
+              <button
+                className="btn btn-block"
+                style={renderStyle(phong.trangthai)}
+                onClick={(e) => handleClick(e, phong.trangthai, phong.ten)}
+              >
+                {phong.ten}
+              </button>
+            </ContextMenuTrigger>
+            <ContextMenu
+              id={phong.ten}
+              style={{
+                background: "white",
+                zIndex: 1,
+                padding: "1rem",
+                border: "1px solid #191919",
+              }}
             >
-              {phong.ten}
-            </button>
+              <MenuItem data={{ foo: "bar" }}>Rename</MenuItem>
+              <MenuItem data={{ foo: "bar" }}>Edit</MenuItem>
+              <MenuItem data={{ foo: "bar" }}>Delete</MenuItem>
+            </ContextMenu>
           </div>
         );
       })}

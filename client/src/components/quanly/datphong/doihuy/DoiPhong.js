@@ -55,7 +55,7 @@ const DoiPhong = ({ phongid, dpid }) => {
 
     const res = await PhongFinder.get(`/danh-sach-phong/${e.target.value}`);
     if (res.data.data.phong) {
-      console.log(res.data.data.phong);
+      //   console.log(res.data.data.phong);
       if (kieuthue === "Thuê theo ngày") {
         setGiaThue(res.data.data.phong.giaphongtheongay);
       } else {
