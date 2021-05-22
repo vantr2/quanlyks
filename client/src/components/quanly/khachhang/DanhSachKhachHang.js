@@ -82,7 +82,11 @@ const DanhSachKhachHang = () => {
                     style={{ cursor: "pointer" }}
                   >
                     {userrole === "QL" || userrole === "Admin" ? (
-                      <XoaKhachHang id={khachhang.id} name={khachhang.ten} />
+                      <XoaKhachHang
+                        id={khachhang.id}
+                        name={khachhang.ten}
+                        kh={khachhang}
+                      />
                     ) : (
                       ""
                     )}

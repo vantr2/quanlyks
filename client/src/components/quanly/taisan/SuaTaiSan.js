@@ -8,9 +8,13 @@ import NormalizeString from "../../../utils/NormalizeString";
 import { AccountContext } from "../../../contexts/AccountContext";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { convertDataTocreatableSelect } from "../../../utils/DataHandler";
+import {
+  convertDataTocreatableSelect,
+  convertDate,
+} from "../../../utils/DataHandler";
 import CreatableSelect from "react-select/creatable";
 import CurrencyInput from "react-currency-input-field";
+import ThemLichSu from "../../../utils/ThemLichSu";
 
 const SuaTaiSan = () => {
   let hi = useHistory();
@@ -35,6 +39,7 @@ const SuaTaiSan = () => {
 
   const { setMsgTaiSanActionSuccess } = useContext(AccountContext);
   const [msgError, setMsgError] = useState("");
+  const [old, setOld] = useState({});
 
   const getLoaiTaiSan = async () => {
     try {
@@ -61,7 +66,7 @@ const SuaTaiSan = () => {
         setTenTs(taisanSelected.ten);
         setGhiChu(taisanSelected.ghichu);
         setGiaTaiSan(taisanSelected.giataisan);
-        setNgayMua((taisanSelected.ngaymua + "").substring(0, 10));
+        setNgayMua(convertDate(taisanSelected.ngaymua));
         setViTri(taisanSelected.vitri);
         setLoaiTsId(taisanSelected.loaitaisan_id);
         setNhaCC(taisanSelected.nhacc_id);
@@ -74,6 +79,20 @@ const SuaTaiSan = () => {
         setLoaiTSSelected({
           value: taisanSelected.loaitaisan_id,
           label: taisanSelected.loaitaisan_name,
+        });
+
+        setOld({
+          id: id,
+          ten: taisanSelected.ten,
+          ghichu: taisanSelected.ghichu,
+          giataisan: taisanSelected.giataisan,
+          ngaymua: convertDate(taisanSelected.ngaymua),
+          trangthai: taisanSelected.trangthai,
+          vitri: taisanSelected.vitri,
+          bdlancuoi: convertDate(taisanSelected.ngaymua),
+          dvt_id: taisanSelected.donvitinh,
+          nhacc_id: taisanSelected.nhacc_id,
+          loaitaisan_id: taisanSelected.loaitaisan_id,
         });
       } catch (err) {
         console.log(err.message);
@@ -214,6 +233,29 @@ const SuaTaiSan = () => {
           loaitaisan_id: loaitsId,
         });
         if (res.data.status === "ok") {
+          const newd = {
+            id: id,
+            ten: NormalizeString(tents),
+            ghichu: ghichu,
+            giataisan: giataisan,
+            ngaymua: ngaymua,
+            trangthai: 1,
+            vitri: vitri,
+            bdlancuoi: ngaymua,
+            dvt_id: dvtId,
+            nhacc_id: nhacc,
+            loaitaisan_id: loaitsId,
+          };
+
+          console.log(JSON.stringify(old) !== JSON.stringify(newd));
+          if (JSON.stringify(old) !== JSON.stringify(newd)) {
+            ThemLichSu({
+              doing: "Sửa",
+              olddata: { old: old },
+              newdata: { new: newd },
+              tbl: "Tài sản",
+            });
+          }
           setMsgTaiSanActionSuccess("Sửa thành công.");
           setTimeout(() => {
             setMsgTaiSanActionSuccess("");

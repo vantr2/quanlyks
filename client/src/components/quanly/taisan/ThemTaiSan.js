@@ -10,6 +10,7 @@ import NormalizeString from "../../../utils/NormalizeString";
 import CreatableSelect from "react-select/creatable";
 import { convertDataTocreatableSelect } from "../../../utils/DataHandler";
 import CurrencyInput from "react-currency-input-field";
+import ThemLichSu from "../../../utils/ThemLichSu";
 
 const ThemTaiSan = () => {
   const [tents, setTenTs] = useState("");
@@ -184,6 +185,12 @@ const ThemTaiSan = () => {
         });
 
         if (res.data.status === "ok") {
+          ThemLichSu({
+            doing: "Thêm",
+            olddata: {},
+            newdata: { new: res.data.data.taisan },
+            tbl: "Tài sản",
+          });
           themTaiSan(res.data.data.taisan);
           setMsgTaiSanActionSuccess("Thêm thành công.");
           setTimeout(() => {

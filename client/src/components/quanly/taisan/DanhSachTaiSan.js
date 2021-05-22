@@ -6,9 +6,8 @@ import { NormalizeDate, NumberFormat } from "../../../utils/DataHandler";
 import XoaTaiSan from "./XoaTaiSan";
 
 const DanhSachTaiSan = () => {
-  const { dsTaiSan, setDsTaiSan, msgTaiSanActionSuccess } = useContext(
-    AccountContext
-  );
+  const { dsTaiSan, setDsTaiSan, msgTaiSanActionSuccess } =
+    useContext(AccountContext);
 
   let hi = useHistory();
   useEffect(() => {
@@ -111,7 +110,7 @@ const DanhSachTaiSan = () => {
                     className="align-middle text-center"
                     style={{ cursor: "pointer" }}
                   >
-                    <XoaTaiSan id={taisan.id} />
+                    <XoaTaiSan id={taisan.id} ts={taisan} />
                   </td>
                 </tr>
               );

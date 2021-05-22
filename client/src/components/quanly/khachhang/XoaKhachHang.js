@@ -3,7 +3,8 @@ import React, { useContext, useState } from "react";
 import { useHistory } from "react-router";
 import KhachHangFinder from "../../../apis/KhachHangFinder";
 import { AccountContext } from "../../../contexts/AccountContext";
-const XoaKhachHang = ({ id, name }) => {
+import ThemLichSu from "../../../utils/ThemLichSu";
+const XoaKhachHang = ({ id, name, kh }) => {
   let hi = useHistory();
 
   const { setMsgKHActionSuccess } = useContext(AccountContext);
@@ -39,6 +40,12 @@ const XoaKhachHang = ({ id, name }) => {
         const res = await KhachHangFinder.delete(`/xoa/${id}`);
         //   console.log(res);
         if (res.data === "") {
+          ThemLichSu({
+            doing: "Xóa",
+            olddata: { old: kh },
+            newdata: {},
+            tbl: "Khách hàng",
+          });
           setMsgKHActionSuccess("Xóa thành công");
           setTimeout(() => {
             setMsgKHActionSuccess("");

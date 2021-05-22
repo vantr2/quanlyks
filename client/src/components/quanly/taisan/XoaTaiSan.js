@@ -3,10 +3,10 @@ import React, { useContext, useState } from "react";
 import { useHistory } from "react-router";
 import TaiSanFinder from "../../../apis/TaiSanFinder";
 import { AccountContext } from "../../../contexts/AccountContext";
-const XoaTaiSan = ({ id }) => {
-  const { setMsgTaiSanActionSuccess, dsTaiSan, setDsTaiSan } = useContext(
-    AccountContext
-  );
+import ThemLichSu from "../../../utils/ThemLichSu";
+const XoaTaiSan = ({ id, ts }) => {
+  const { setMsgTaiSanActionSuccess, dsTaiSan, setDsTaiSan } =
+    useContext(AccountContext);
 
   let hi = useHistory();
   const [tenTs, setTenTs] = useState("");
@@ -25,6 +25,12 @@ const XoaTaiSan = ({ id }) => {
       const res = await TaiSanFinder.delete(`/xoa-tai-san/${id}`);
       //   console.log(res);
       if (res.data === "") {
+        ThemLichSu({
+          doing: "Xóa",
+          olddata: { old: ts },
+          newdata: {},
+          tbl: "Tài sản",
+        });
         setMsgTaiSanActionSuccess("Xóa thành công");
         setTimeout(() => {
           setMsgTaiSanActionSuccess("");
