@@ -3,6 +3,7 @@ import NhanVienFinder from "../../../apis/NhanVienFinder";
 import TaiKhoanFinder from "../../../apis/TaiKhoanFinder";
 import { AccountContext } from "../../../contexts/AccountContext";
 import { useHistory } from "react-router";
+import ThemLichSu from "../../../utils/ThemLichSu";
 import {
   checkSpecialCharacter,
   validateEmail,
@@ -121,6 +122,18 @@ const ThemNhanVien = () => {
 
         //   console.log(res);
         if (res.data.status === "ok") {
+          ThemLichSu({
+            doing: "Thêm",
+            olddata: {},
+            newdata: {
+              new: {
+                ten: acc,
+                ten_hienthi: NormalizeString(tenNV),
+                vaitro: vaitro,
+              },
+            },
+            tbl: "Tài khoản",
+          });
           const res_nv = await NhanVienFinder.post("/them-nhan-vien", {
             ten: NormalizeString(tenNV),
             gioitinh: parseInt(gioitinh),
@@ -135,6 +148,12 @@ const ThemNhanVien = () => {
           });
           // console.log(res);
           if (res_nv.data.status === "ok") {
+            ThemLichSu({
+              doing: "Thêm",
+              olddata: {},
+              newdata: { new: res_nv.data.data.nhanvien },
+              tbl: "Nhân viên",
+            });
             setMsgNhanVienActionSuccess("Thêm thành công.");
             setTimeout(() => {
               setMsgNhanVienActionSuccess("");
@@ -278,7 +297,9 @@ const ThemNhanVien = () => {
                       type="date"
                       id="ngaysinh"
                       className="form-control"
-                      onChange={(e) => setNgaySinh(e.target.value)}
+                      onChange={(e) => {
+                        setNgaySinh(e.target.value);
+                      }}
                       value={ngaysinh}
                     />
                   </div>

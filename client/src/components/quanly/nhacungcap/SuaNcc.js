@@ -3,11 +3,13 @@ import React, { useContext, useState } from "react";
 import { useHistory } from "react-router";
 import NhaCungCapFinder from "../../../apis/NhaCungCapFinder";
 import { AccountContext } from "../../../contexts/AccountContext";
+import ThemLichSu from "../../../utils/ThemLichSu";
 import NormalizeString from "../../../utils/NormalizeString";
 const SuaNcc = ({ id }) => {
   const [tenncc, setTenNcc] = useState("");
   const [diachi, setDiaChi] = useState("");
   const [sdt, setSdt] = useState("");
+  const [old, setOld] = useState({});
   let hi = useHistory();
   const { setMsgNccActionSuccess } = useContext(AccountContext);
 
@@ -19,6 +21,12 @@ const SuaNcc = ({ id }) => {
         setTenNcc(nccSelected.ten);
         setDiaChi(nccSelected.diachi);
         setSdt(nccSelected.sdt);
+        setOld({
+          id: nccSelected.id,
+          ten: nccSelected.ten,
+          diachi: nccSelected.diachi,
+          sdt: nccSelected.sdt,
+        });
       }
     } catch (err) {
       console.log(err.message);
@@ -27,23 +35,39 @@ const SuaNcc = ({ id }) => {
   const handleUpdate = async (e) => {
     e.stopPropagation();
 
-    try {
-      const res = await NhaCungCapFinder.put("/sua", {
-        id: id,
-        ten: NormalizeString(tenncc),
-        diachi: diachi,
-        sdt: sdt,
-      });
-      if (res.data.status === "ok") {
-        setMsgNccActionSuccess("Sửa thành công.");
-        setTimeout(() => {
-          setMsgNccActionSuccess("");
-        }, 2500);
-        hi.push("/quan-ly");
-        hi.push("/quan-ly/danh-muc/nha-cung-cap");
+    if (tenncc && diachi && sdt && sdt.length === 10 && sdt.length === 11) {
+      try {
+        const res = await NhaCungCapFinder.put("/sua", {
+          id: id,
+          ten: NormalizeString(tenncc),
+          diachi: diachi,
+          sdt: sdt,
+        });
+        if (res.data.status === "ok") {
+          const newd = {
+            id: id,
+            ten: NormalizeString(tenncc),
+            diachi: NormalizeString(diachi),
+            sdt: sdt,
+          };
+          if (JSON.stringify(old) !== JSON.stringify(newd)) {
+            ThemLichSu({
+              doing: "Sửa",
+              olddata: { old },
+              newdata: { new: newd },
+              tbl: "Nhà cung cấp",
+            });
+          }
+          setMsgNccActionSuccess("Sửa thành công.");
+          setTimeout(() => {
+            setMsgNccActionSuccess("");
+          }, 2500);
+          hi.push("/quan-ly");
+          hi.push("/quan-ly/danh-muc/nha-cung-cap");
+        }
+      } catch (err) {
+        console.log(err);
       }
-    } catch (err) {
-      console.log(err);
     }
   };
   return (

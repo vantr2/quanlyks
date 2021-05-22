@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import { AccountContext } from "../../../contexts/AccountContext";
 import NhaCungCapFinder from "../../../apis/NhaCungCapFinder";
 import NormalizeString from "../../../utils/NormalizeString";
+import ThemLichSu from "../../../utils/ThemLichSu";
 const ThemNcc = () => {
   const [tenncc, setTenNcc] = useState("");
   const [diachi, setDiaChi] = useState("");
@@ -34,10 +35,16 @@ const ThemNcc = () => {
       try {
         const res = await NhaCungCapFinder.post("/them", {
           ten: NormalizeString(tenncc),
-          diachi: diachi,
+          diachi: NormalizeString(diachi),
           sdt: sdt,
         });
         if (res.data.status === "ok") {
+          ThemLichSu({
+            doing: "Thêm",
+            olddata: {},
+            newdata: { new: res.data.data.nhacungcap },
+            tbl: "Nhà cung cấp",
+          });
           themNcc(res.data.data.nhacungcap);
           setMsgNccActionSuccess("Thêm thành công.");
           setTimeout(() => {

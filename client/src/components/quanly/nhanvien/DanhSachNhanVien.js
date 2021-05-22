@@ -49,6 +49,7 @@ const DanhSachNhanVien = () => {
       <table className="table table-hover table-striped table-bordered ">
         <thead className="thead-dark text-center">
           <tr>
+            <th>Mã NV</th>
             <th>Tên nhân viên</th>
             <th>Ngày vào làm</th>
             <th>SDT</th>
@@ -63,6 +64,7 @@ const DanhSachNhanVien = () => {
           {dsNhanVien.map((nhanvien) => {
             return (
               <tr key={nhanvien.id}>
+                <td>{nhanvien.id}</td>
                 <td>{nhanvien.name}</td>
                 <td>{NormalizeDate(nhanvien.ngayvaolam)}</td>
 
@@ -107,7 +109,11 @@ const DanhSachNhanVien = () => {
                 </td>
 
                 <td style={{ cursor: "pointer" }}>
-                  <XoaNhanVienType2 id={nhanvien.id} tenNV={nhanvien.name} />
+                  <XoaNhanVienType2
+                    id={nhanvien.id}
+                    tenNV={nhanvien.name}
+                    nv={nhanvien}
+                  />
                 </td>
               </tr>
             );

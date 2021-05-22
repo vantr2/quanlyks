@@ -1,10 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import NhanVienFinder from "../../../apis/NhanVienFinder";
 import { useHistory, useParams } from "react-router";
+import ThemLichSu from "../../../utils/ThemLichSu";
 import {
   checkSpecialCharacter,
   validateEmail,
   dontSignEmail,
+  convertDate,
 } from "../../../utils/DataHandler";
 import NormalizeString from "../../../utils/NormalizeString";
 import { AccountContext } from "../../../contexts/AccountContext";
@@ -13,6 +15,7 @@ const SuaNhanVien = () => {
   let hi = useHistory();
   const { id } = useParams();
 
+  const [old, setOld] = useState({});
   const [tenNV, setTenNV] = useState("");
   const [gioitinh, setGioiTinh] = useState("");
   const [ngaysinh, setNgaySinh] = useState("");
@@ -30,11 +33,21 @@ const SuaNhanVien = () => {
         // console.log(res.data.data.nhanvien.ngaysinh);
         setTenNV(res.data.data.nhanvien.name);
         setGioiTinh(res.data.data.nhanvien.gioitinh);
-        setNgaySinh(res.data.data.nhanvien.ngaysinh.substring(0, 10));
+        setNgaySinh(convertDate(res.data.data.nhanvien.ngaysinh));
         setDiaChi(res.data.data.nhanvien.diachi);
         setCMND(res.data.data.nhanvien.cmnd);
         setSdt(res.data.data.nhanvien.sdt);
         setEmail(res.data.data.nhanvien.email);
+        setOld({
+          id: id,
+          ten: res.data.data.nhanvien.name,
+          gioitinh: res.data.data.nhanvien.gioitinh,
+          ngaysinh: convertDate(res.data.data.nhanvien.ngaysinh),
+          diachi: res.data.data.nhanvien.diachi,
+          cmnd: res.data.data.nhanvien.cmnd,
+          sdt: res.data.data.nhanvien.sdt,
+          email: res.data.data.nhanvien.email,
+        });
       } catch (err) {
         console.log(err.message);
       }
@@ -108,8 +121,25 @@ const SuaNhanVien = () => {
           sdt: sdt,
           email: email.toLowerCase(),
         });
-        console.log(res);
         if (res.data.status === "ok") {
+          const newd = {
+            id: id,
+            ten: NormalizeString(tenNV),
+            gioitinh: parseInt(gioitinh),
+            ngaysinh: ngaysinh,
+            diachi: NormalizeString(diachi),
+            cmnd: cmnd,
+            sdt: sdt,
+            email: email.toLowerCase(),
+          };
+          if (JSON.stringify(old) !== JSON.stringify(newd)) {
+            ThemLichSu({
+              doing: "Sửa",
+              olddata: { old: old },
+              newdata: { new: newd },
+              tbl: "Nhân viên",
+            });
+          }
           setMsgNhanVienActionSuccess("Sửa thành công");
           setTimeout(() => {
             setMsgNhanVienActionSuccess("");

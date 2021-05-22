@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import NhaCungCapFinder from "../../../apis/NhaCungCapFinder";
 import { AccountContext } from "../../../contexts/AccountContext";
-
+import ThemLichSu from "../../../utils/ThemLichSu";
 const XoaNcc = ({ ncc }) => {
   const { setMsgNccActionSuccess, dsNcc, setDsNcc } =
     useContext(AccountContext);
@@ -37,6 +37,13 @@ const XoaNcc = ({ ncc }) => {
         const res = await NhaCungCapFinder.delete(`/xoa/${ncc.id}`);
         //   console.log(res);
         if (res.data === "") {
+          ThemLichSu({
+            doing: "Xóa",
+            olddata: { old: ncc },
+            newdata: {},
+            tbl: "Nhà cung cấp",
+          });
+
           setMsgNccActionSuccess("Xóa thành công");
           setTimeout(() => {
             setMsgNccActionSuccess("");

@@ -1643,6 +1643,46 @@ app.get("/api/v1/nha-cung-cap/danh-sach/:id", async (req, res) => {
   }
 });
 
+// nha cung cap trong tai san
+app.get("/api/v1/nha-cung-cap/trong-tai-san/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await db.query(
+      "select count(*) from tbl_taisan where nhacc_id=$1",
+      [id]
+    );
+
+    res.status(200).json({
+      status: "ok",
+      data: {
+        nhacungcap: result.rows[0],
+      },
+    });
+  } catch (err) {
+    console.error("Kiem tra kh trong tai san: " + err.message);
+  }
+});
+
+//nha cc trong phieu mua chi tiet
+app.get("/api/v1/nha-cung-cap/trong-pm-chi-tiet/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await db.query(
+      "select count(*) from tbl_phieumua_chitiet where nhacc_id=$1",
+      [id]
+    );
+
+    res.status(200).json({
+      status: "ok",
+      data: {
+        nhacungcap: result.rows[0],
+      },
+    });
+  } catch (err) {
+    console.error("Kiem tra kh trong pm chi tiet: " + err.message);
+  }
+});
+
 //them nha cc
 app.post("/api/v1/nha-cung-cap/them", async (req, res) => {
   try {
@@ -2881,10 +2921,11 @@ app.post("/api/v1/doi-huy/onload", async (req, res) => {
 //them lich su
 app.post("/api/v1/lich-su/them", async (req, res) => {
   try {
-    const { nguoithuchien, vairo, hanhdong, dulieucu, dulieumoi } = req.body;
+    const { nguoithuchien, vaitro, hanhdong, dulieucu, dulieumoi, doituong } =
+      req.body;
     const result = await db.query(
-      "insert into tbl_lshoatdong(nguoithuchien,vairo,hanhdong,dulieucu,dulieumoi) values ($1,$2,$3,$4,$5) returning *",
-      [nguoithuchien, vairo, hanhdong, dulieucu, dulieumoi]
+      "insert into tbl_lshoatdong(nguoithuchien,vaitro,hanhdong,dulieucu,dulieumoi,doituong) values ($1,$2,$3,$4,$5,$6) returning *",
+      [nguoithuchien, vaitro, hanhdong, dulieucu, dulieumoi, doituong]
     );
     res.status(201).json({
       status: "ok",

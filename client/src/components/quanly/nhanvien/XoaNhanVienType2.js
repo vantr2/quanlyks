@@ -2,8 +2,9 @@ import React, { useContext, useState } from "react";
 import NhanVienFinder from "../../../apis/NhanVienFinder";
 import { AccountContext } from "../../../contexts/AccountContext";
 import { useHistory } from "react-router";
+import ThemLichSu from "../../../utils/ThemLichSu";
 
-const XoaNhanVienType2 = ({ id, tenNV }) => {
+const XoaNhanVienType2 = ({ id, tenNV, nv }) => {
   let hi = useHistory();
   const { setMsgNhanVienActionSuccess } = useContext(AccountContext);
   const [isDel, setIsDel] = useState(false);
@@ -29,6 +30,12 @@ const XoaNhanVienType2 = ({ id, tenNV }) => {
         const res = await NhanVienFinder.delete(`/xoa-nhan-vien/${id}`);
         //   console.log(res);
         if (res.data === "") {
+          ThemLichSu({
+            doing: "Xóa",
+            olddata: { old: nv },
+            newdata: {},
+            tbl: "Nhân viên",
+          });
           setMsgNhanVienActionSuccess("Xóa thành công");
           setTimeout(() => {
             setMsgNhanVienActionSuccess("");
