@@ -7,6 +7,7 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { storage } from "../../../firebase";
 import CurrencyInput from "react-currency-input-field";
+import ThemLichSu from "../../../utils/ThemLichSu";
 
 const SuaPhong = () => {
   let hi = useHistory();
@@ -21,6 +22,8 @@ const SuaPhong = () => {
   const [motangangon, setMoTaNganGon] = useState("");
   const [motachitiet, setMoTaChiTiet] = useState("");
   const [trangthai, setTrangThai] = useState("");
+
+  const [old, setOld] = useState({});
 
   const [msgError, setMsgError] = useState("");
   const { setMsgPhongActionSuccess } = useContext(AccountContext);
@@ -39,6 +42,18 @@ const SuaPhong = () => {
         setMoTaNganGon(phongUpdate.mota_ngangon);
         setMoTaChiTiet(phongUpdate.mota_chitiet);
         setTrangThai(phongUpdate.trangthai);
+
+        setOld({
+          ten: phongUpdate.ten,
+          trangthai: phongUpdate.trangthai,
+          anh: phongUpdate.anh,
+          tieude: phongUpdate.tieude,
+          mtngangon: phongUpdate.mota_ngangon,
+          mtchitiet: phongUpdate.mota_chitiet,
+          giaphongtheongay: phongUpdate.giaphongtheongay,
+          giaphongtheogio: phongUpdate.giaphongtheogio,
+          filename: phongUpdate.filename,
+        });
       } catch (err) {
         console.log(err.message);
       }
@@ -96,6 +111,26 @@ const SuaPhong = () => {
         });
         // console.log(res);
         if (res.data.status === "ok") {
+          const newd = {
+            ten: NormalizeString(tenphong),
+            trangthai: trangthai,
+            anh: anhphong,
+            tieude: NormalizeString(tieude),
+            mtngangon: motangangon,
+            mtchitiet: motachitiet,
+            giaphongtheongay: giaphongtheongay,
+            giaphongtheogio: giaphongtheogio,
+            filename: filename,
+          };
+
+          if (JSON.stringify(newd) !== JSON.stringify(old)) {
+            ThemLichSu({
+              doing: "Sửa",
+              olddata: { old: old },
+              newdata: { new: newd },
+              tbl: "Phòng",
+            });
+          }
           setMsgPhongActionSuccess("Sửa thành công.");
           setTimeout(() => {
             setMsgPhongActionSuccess("");

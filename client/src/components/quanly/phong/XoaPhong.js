@@ -4,7 +4,8 @@ import { useHistory } from "react-router";
 import PhongFinder from "../../../apis/PhongFinder";
 import { AccountContext } from "../../../contexts/AccountContext";
 import { storage } from "../../../firebase";
-const XoaPhong = ({ ten }) => {
+import ThemLichSu from "../../../utils/ThemLichSu";
+const XoaPhong = ({ ten, phong }) => {
   const { setMsgPhongActionSuccess, dsPhong, setDsPhong } =
     useContext(AccountContext);
 
@@ -36,6 +37,13 @@ const XoaPhong = ({ ten }) => {
         const res = await PhongFinder.delete(`/xoa-phong/${ten}`);
         //   console.log(res);
         if (res.data === "") {
+          ThemLichSu({
+            doing: "Xóa",
+            olddata: { old: phong },
+            newdata: {},
+            tbl: "Phòng",
+          });
+
           setMsgPhongActionSuccess("Xóa thành công");
           setTimeout(() => {
             setMsgPhongActionSuccess("");

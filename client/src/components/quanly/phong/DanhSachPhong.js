@@ -81,7 +81,7 @@ const DanhSachPhong = () => {
                   </i>
                 </td>
                 <td className="align-middle" style={{ cursor: "pointer" }}>
-                  <XoaPhong ten={phong.ten} />
+                  <XoaPhong ten={phong.ten} phong={phong} />
                 </td>
               </tr>
             );

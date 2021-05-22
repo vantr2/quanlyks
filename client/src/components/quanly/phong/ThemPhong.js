@@ -6,6 +6,7 @@ import PhongFinder from "../../../apis/PhongFinder";
 import NormalizeString from "../../../utils/NormalizeString";
 import { storage } from "../../../firebase";
 import CurrencyInput from "react-currency-input-field";
+import ThemLichSu from "../../../utils/ThemLichSu";
 
 const ThemPhong = () => {
   const [tenphong, setTenPhong] = useState("");
@@ -93,6 +94,13 @@ const ThemPhong = () => {
         });
         // console.log(res);
         if (res.data.status === "ok") {
+          ThemLichSu({
+            doing: "Thêm",
+            olddata: {},
+            newdata: { new: res.data.data.phong },
+            tbl: "Phòng",
+          });
+
           themPhong(res.data.data.phong);
           setMsgPhongActionSuccess("Thêm thành công.");
           setTimeout(() => {
