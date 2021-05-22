@@ -1,7 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AccountContext } from "../../../contexts/AccountContext";
 import DoiHuyFinder from "../../../apis/DoiHuyFinder";
-import { convertDate, convertTime } from "../../../utils/DataHandler";
+import {
+  NormalizeDate,
+  convertTime,
+  NumberFormat,
+} from "../../../utils/DataHandler";
 import SuaPhieuXacNhan from "./SuaPhieuXacNhan";
 import XoaPhieuXacNhan from "./XoaPhieuXacNhan";
 
@@ -39,19 +43,20 @@ const PhieuHuyPhong = () => {
                   </li>
                   <li className="list-group-item">Lý do : {hp.lydohuy}</li>
                   <li className="list-group-item">
-                    Ngày đổi: {convertDate(hp.ngayhuy)}, lúc{" "}
+                    Ngày hủy: {NormalizeDate(hp.ngayhuy)}, lúc{" "}
                     {convertTime(hp.ngayhuy)}
                   </li>
-                  <li className="list-group-item">Người đổi : {hp.nguoihuy}</li>
+                  <li className="list-group-item">Người hủy : {hp.nguoihuy}</li>
                   <li className="list-group-item">
-                    Tiền cọc KH : {hp.tiencoc}
+                    Tiền cọc KH : <strong>{NumberFormat(hp.tiencoc)}</strong>
+                    &nbsp;VND
                   </li>
                 </ul>
               </div>
               <div className="card-footer d-flex flex-row justify-content-center">
                 <SuaPhieuXacNhan type="hp" id={hp.id} />
                 {userrole === "QL" || userrole === "Admin" ? (
-                  <XoaPhieuXacNhan type="hp" id={hp.id} />
+                  <XoaPhieuXacNhan type="hp" dp={hp} />
                 ) : (
                   ""
                 )}

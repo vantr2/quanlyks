@@ -7,6 +7,7 @@ import PhongFinder from "../../../apis/PhongFinder";
 import CurrencyInput from "react-currency-input-field";
 import MultiSelect from "react-multi-select-component";
 import { useHistory } from "react-router";
+import ThemLichSu from "../../../utils/ThemLichSu";
 
 const LapHoaDon = () => {
   let hi = useHistory();
@@ -108,6 +109,9 @@ const LapHoaDon = () => {
         });
         if (res.data.status === "ok") {
           const hoadon_id_inserted = res.data.data.hoadon.id;
+          const hd = res.data.data.hoadon;
+          hd.chitiet = [];
+
           dpsSelected.forEach(async (item) => {
             const res_dpchitiet = await DatPhongFinder.get(
               `danh-sach-full/${item.value}`
@@ -127,6 +131,7 @@ const LapHoaDon = () => {
               tiencoc: tiencoc,
             });
             if (res_hdchitiet.data.status === "ok") {
+              hd.chitiet.push(res_hdchitiet.data.data.hoadon_chitiet);
               await PhongFinder.put("/update-tt", {
                 ten: item.label,
                 trangthai: 4,
@@ -138,6 +143,13 @@ const LapHoaDon = () => {
                 hi.push("/quan-ly/phong/hoa-don");
               }, 2000);
             }
+          });
+          console.log(hd);
+          ThemLichSu({
+            doing: "Lập",
+            olddata: {},
+            newdata: { new: hd },
+            tbl: "Hóa Đơn",
           });
         }
       } catch (err) {

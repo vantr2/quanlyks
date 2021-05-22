@@ -1,17 +1,29 @@
 import React, { useState } from "react";
 import DoiHuyFinder from "../../../apis/DoiHuyFinder";
 import { useHistory } from "react-router";
+import ThemLichSu from "../../../utils/ThemLichSu";
 const SuaPhieuXacNhan = ({ type, id }) => {
   const [lydo, setLydo] = useState("");
   let hi = useHistory();
+
+  const [old, setOld] = useState({});
+
   const onClick = async () => {
     try {
       if (type === "dp") {
         const res = await DoiHuyFinder.get(`/danh-sach-doi/${id}`);
         setLydo(res.data.data.doiphong.lydodoi);
+        setOld({
+          id: id,
+          lydodoi: res.data.data.doiphong.lydodoi,
+        });
       } else if (type === "hp") {
         const res = await DoiHuyFinder.get(`/danh-sach-huy/${id}`);
         setLydo(res.data.data.huyphong.lydohuy);
+        setOld({
+          id: id,
+          lydohuy: res.data.data.huyphong.lydohuy,
+        });
       }
     } catch (err) {
       console.log(err.message);
@@ -28,6 +40,15 @@ const SuaPhieuXacNhan = ({ type, id }) => {
             lydodoi: lydo,
           });
           if (res.data.status === "ok") {
+            const newd = { id: id, lydodoi: lydo };
+            if (JSON.stringify(old) !== JSON.stringify(newd)) {
+              ThemLichSu({
+                doing: "Sửa lý do",
+                olddata: { old },
+                newdata: { new: newd },
+                tbl: "Phiếu xác đổi",
+              });
+            }
             hi.push("/quan-ly/phong");
             hi.push("/quan-ly/phong/phieu-xac-nhan");
           }
@@ -37,6 +58,15 @@ const SuaPhieuXacNhan = ({ type, id }) => {
             lydohuy: lydo,
           });
           if (res.data.status === "ok") {
+            const newd = { id: id, lydohuy: lydo };
+            if (JSON.stringify(old) !== JSON.stringify(newd)) {
+              ThemLichSu({
+                doing: "Sửa lý do",
+                olddata: { old },
+                newdata: { new: newd },
+                tbl: "Phiếu xác nhận hủy",
+              });
+            }
             hi.push("/quan-ly/phong");
             hi.push("/quan-ly/phong/phieu-xac-nhan");
           }

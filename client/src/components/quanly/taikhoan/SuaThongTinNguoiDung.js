@@ -2,26 +2,50 @@ import React, { useContext, useState } from "react";
 import TaiKhoanFinder from "../../../apis/TaiKhoanFinder";
 import { useHistory } from "react-router";
 import { AccountContext } from "../../../contexts/AccountContext";
+import ThemLichSu from "../../../utils/ThemLichSu";
 
 const SuaThongTinNguoiDung = ({ nguoidung }) => {
   let hi = useHistory();
+  const old = {
+    ten: nguoidung.ten,
+    ten_hienthi: nguoidung.ten_hienthi,
+    vaitro: nguoidung.vaitro,
+  };
   const [tenHT, setTenHT] = useState(nguoidung.ten_hienthi);
   const [vaitro, setVaiTro] = useState(nguoidung.vaitro);
 
   const { setMsgUserActionSuccess } = useContext(AccountContext);
   const handleUpdate = async (e) => {
     try {
-      await TaiKhoanFinder.put("/cap-nhat-thong-tin-nguoi-dung", {
+      const res = await TaiKhoanFinder.put("/cap-nhat-thong-tin-nguoi-dung", {
         ten: nguoidung.ten,
         tenht: tenHT,
         vaitro: vaitro,
       });
-      setMsgUserActionSuccess("Sửa thành công");
-      setTimeout(() => {
-        setMsgUserActionSuccess("");
-      }, 1800);
-      hi.push("/quan-ly");
-      hi.push("/quan-ly/admin/tai-khoan");
+      if (res.data.status) {
+        const newd = {
+          ten: nguoidung.ten,
+          ten_hienthi: tenHT,
+          vaitro: vaitro,
+        };
+        if (JSON.stringify(newd) !== JSON.stringify(old)) {
+          ThemLichSu({
+            doing: "Sửa",
+            olddata: { old },
+            newdata: {
+              new: newd,
+            },
+            tbl: "Người dùng",
+          });
+        }
+
+        setMsgUserActionSuccess(res.data.status);
+        setTimeout(() => {
+          setMsgUserActionSuccess("");
+        }, 1800);
+        hi.push("/quan-ly");
+        hi.push("/quan-ly/admin/tai-khoan");
+      }
     } catch (err) {
       console.log(err.message);
     }

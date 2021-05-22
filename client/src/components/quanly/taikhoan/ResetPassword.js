@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { useHistory } from "react-router";
 import TaiKhoanFinder from "../../../apis/TaiKhoanFinder";
 import { AccountContext } from "../../../contexts/AccountContext";
+import ThemLichSu from "../../../utils/ThemLichSu";
 const ResetPassword = ({ ten }) => {
   let hi = useHistory();
   const { setMsgUserActionSuccess } = useContext(AccountContext);
@@ -10,10 +11,19 @@ const ResetPassword = ({ ten }) => {
       const res = await TaiKhoanFinder.put("/cai-dat-lai-mat-khau", {
         ten: ten,
       });
+
       setMsgUserActionSuccess("Đặt lại mật khẩu thành công");
       setTimeout(() => {
         setMsgUserActionSuccess("");
       }, 2000);
+
+      ThemLichSu({
+        doing: "Reset mật khẩu",
+        olddata: { taikhoan: ten },
+        newdata: { taikhoan: ten },
+        tbl: "Người dùng",
+      });
+
       hi.push("/quan-ly");
       hi.push("/quan-ly/admin/tai-khoan");
       console.log(res);

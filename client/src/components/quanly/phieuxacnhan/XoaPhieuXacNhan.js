@@ -1,19 +1,31 @@
 import React from "react";
 import DoiHuyFinder from "../../../apis/DoiHuyFinder";
 import { useHistory } from "react-router";
+import ThemLichSu from "../../../utils/ThemLichSu";
 
-const XoaPhieuXacNhan = ({ id, type }) => {
+const XoaPhieuXacNhan = ({ dp, type }) => {
   let hi = useHistory();
   const handleDelete = async (e) => {
     e.stopPropagation();
     try {
       if (type === "dp") {
-        await DoiHuyFinder.delete(`/xoa-doi-phong/${id}`);
-
+        await DoiHuyFinder.delete(`/xoa-doi-phong/${dp.id}`);
+        ThemLichSu({
+          doing: "Xóa",
+          olddata: { old: dp },
+          newdata: {},
+          tbl: "Phiếu xác nhận đổi",
+        });
         hi.push("/quan-ly/phong");
         hi.push("/quan-ly/phong/phieu-xac-nhan");
       } else if (type === "hp") {
-        await DoiHuyFinder.delete(`/xoa-huy-phong/${id}`);
+        await DoiHuyFinder.delete(`/xoa-huy-phong/${dp.id}`);
+        ThemLichSu({
+          doing: "Xóa",
+          olddata: { old: dp },
+          newdata: {},
+          tbl: "Phiếu xác nhận hủy",
+        });
         hi.push("/quan-ly/phong");
         hi.push("/quan-ly/phong/phieu-xac-nhan");
       }
@@ -26,12 +38,12 @@ const XoaPhieuXacNhan = ({ id, type }) => {
       <button
         className="btn btn-danger mr-2"
         type="button"
-        data-target={`#id${id}${type}xoaphong`}
+        data-target={`#id${dp.id}${type}xoaphong`}
         data-toggle="modal"
       >
         Xóa
       </button>
-      <div className="modal fade mb-5" id={`id${id}${type}xoaphong`}>
+      <div className="modal fade mb-5" id={`id${dp.id}${type}xoaphong`}>
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
             <div className="modal-header">

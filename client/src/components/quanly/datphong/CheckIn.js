@@ -8,6 +8,7 @@ import {
   convertTime,
   NumberFormat,
 } from "../../../utils/DataHandler";
+import ThemLichSu from "../../../utils/ThemLichSu";
 import DoiPhong from "./doihuy/DoiPhong";
 import HuyPhong from "./doihuy/HuyPhong";
 const CheckIn = () => {
@@ -22,6 +23,7 @@ const CheckIn = () => {
   const [dpId, setDpId] = useState("");
   const [msgError, setMsgError] = useState("");
 
+  const [old, setOld] = useState({});
   useEffect(() => {
     const getDatPhong = async () => {
       try {
@@ -34,6 +36,12 @@ const CheckIn = () => {
           setSdtKh(datPhongSelected.kh_sdt);
           setKhId(datPhongSelected.kh_id);
           setDpId(datPhongSelected.id);
+          setOld({
+            id: datPhongSelected.kh_id,
+            ten: datPhongSelected.kh_name,
+            cmnd: datPhongSelected.kh_cmnd,
+            sdt: datPhongSelected.kh_sdt,
+          });
         }
       } catch (err) {
         console.log(err.message);
@@ -86,6 +94,23 @@ const CheckIn = () => {
           sdt: sdtKh,
         });
         if (res.data.status === "ok") {
+          const newd = {
+            id: khId,
+            ten: tenKh,
+            cmnd: cmndKH,
+            sdt: sdtKh,
+          };
+
+          if (JSON.stringify(newd) !== JSON.stringify(old)) {
+            ThemLichSu({
+              doing: "Sửa",
+              olddata: { old },
+              newdata: {
+                new: newd,
+              },
+              tbl: "Khách hàng",
+            });
+          }
           hi.push("/quan-ly/phong/tinh-trang");
         }
       } catch (err) {
@@ -133,9 +158,32 @@ const CheckIn = () => {
           cmnd: cmndKH,
           sdt: sdtKh,
         });
+        const newd = {
+          id: khId,
+          ten: tenKh,
+          cmnd: cmndKH,
+          sdt: sdtKh,
+        };
+
+        if (JSON.stringify(newd) !== JSON.stringify(old)) {
+          ThemLichSu({
+            doing: "Sửa",
+            olddata: { old },
+            newdata: {
+              new: newd,
+            },
+            tbl: "Khách hàng",
+          });
+        }
 
         await DatPhongFinder.put("/check-in", {
           id: dpId,
+        });
+        ThemLichSu({
+          doing: "Check In",
+          olddata: {},
+          newdata: {},
+          tbl: "Phòng",
         });
 
         await PhongFinder.put("/update-tt", {

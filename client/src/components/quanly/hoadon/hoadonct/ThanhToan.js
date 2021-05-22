@@ -3,6 +3,7 @@ import DatPhongFinder from "../../../../apis/DatPhongFinder";
 import HoaDonFinder from "../../../../apis/HoaDonFinder";
 import PhongFinder from "../../../../apis/PhongFinder";
 import { useHistory } from "react-router";
+import ThemLichSu from "../../../../utils/ThemLichSu";
 const ThanhToan = ({ id, dsdp }) => {
   let hi = useHistory();
   const handleThanhToan = async (e) => {
@@ -28,6 +29,12 @@ const ThanhToan = ({ id, dsdp }) => {
               trangthai: 0,
             });
           }
+        });
+        ThemLichSu({
+          doing: "Thanh toán",
+          olddata: { old: { id } },
+          newdata: { new: { id } },
+          tbl: "Hóa đơn",
         });
         hi.push("/quan-ly/phong/hoa-don");
       }

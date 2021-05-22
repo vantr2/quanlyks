@@ -34,6 +34,7 @@ const DanhSachHoaDon = () => {
         <table className="table table-hover table-striped table-bordered ">
           <thead className="thead-dark text-center">
             <tr>
+              <th>Mã hóa đơn</th>
               <th>Khách hàng</th>
               <th>Ngày lập</th>
               <th>Trạng thái</th>
@@ -48,6 +49,7 @@ const DanhSachHoaDon = () => {
             {dsHoaDon.map((hoadon) => {
               return (
                 <tr key={hoadon.id}>
+                  <td className="align-middle text-center">{hoadon.id}</td>
                   <td className="align-middle">{hoadon.kh_name}</td>
                   <td className="text-center ">
                     {NormalizeDate(hoadon.ngaylap)}

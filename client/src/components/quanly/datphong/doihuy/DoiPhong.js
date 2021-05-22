@@ -4,6 +4,7 @@ import DoiHuyFinder from "../../../../apis/DoiHuyFinder";
 import { NumberFormat } from "../../../../utils/DataHandler";
 import { useHistory } from "react-router";
 import DatPhongFinder from "../../../../apis/DatPhongFinder";
+import ThemLichSu from "../../../../utils/ThemLichSu";
 const DoiPhong = ({ phongid, dpid }) => {
   const [lydo, setLyDo] = useState("");
   const [phongden, setPhongDen] = useState("");
@@ -28,6 +29,12 @@ const DoiPhong = ({ phongid, dpid }) => {
           giathue: giathue,
         });
         if (res.data.data.doiphong) {
+          ThemLichSu({
+            doing: "Đổi",
+            olddata: {},
+            newdata: { new: res.data.data.doiphong },
+            tbl: "Phòng",
+          });
           hi.push("/quan-ly/phong/tinh-trang");
         }
       } catch (err) {

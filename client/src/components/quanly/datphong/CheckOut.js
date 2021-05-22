@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import DatPhongFinder from "../../../apis/DatPhongFinder";
 import PhongFinder from "../../../apis/PhongFinder";
 import { useHistory } from "react-router";
+import ThemLichSu from "../../../utils/ThemLichSu";
 const CheckOut = ({ phongid }) => {
   const [dpSelected, setDpSelected] = useState([]);
   let hi = useHistory();
@@ -20,6 +21,12 @@ const CheckOut = ({ phongid }) => {
     try {
       await DatPhongFinder.put("/check-out", {
         id: dpSelected.id,
+      });
+      ThemLichSu({
+        doing: "Check Out",
+        olddata: {},
+        newdata: {},
+        tbl: "Phòng",
       });
 
       await PhongFinder.put("/update-tt", {

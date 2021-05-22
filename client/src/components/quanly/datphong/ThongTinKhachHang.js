@@ -8,6 +8,7 @@ import {
 } from "../../../utils/DataHandler";
 import CreatableSelect from "react-select/creatable";
 import NormalizeString from "../../../utils/NormalizeString";
+import ThemLichSu from "../../../utils/ThemLichSu";
 
 const ThongTinKhachHang = () => {
   const [dsKhachHang, setDsKhachHang] = useState([]);
@@ -31,6 +32,8 @@ const ThongTinKhachHang = () => {
   const [kieuKHSelected, setKieuKHSelected] = useState([]);
 
   const { setKHID } = useContext(AccountContext);
+
+  const [old, setOld] = useState({});
 
   const getKieuKhachHang = async () => {
     try {
@@ -72,6 +75,18 @@ const ThongTinKhachHang = () => {
         value: khachhangSelected.kieukhachhang_id,
         label: khachhangSelected.kieukhachhang_name,
       });
+
+      //Lich su hoat dong
+      setOld({
+        id: khachhangSelected.id + "",
+        ten: khachhangSelected.ten,
+        cmnd: khachhangSelected.cmnd,
+        gioitinh: khachhangSelected.gioitinh,
+        ngaysinh: convertDate(khachhangSelected.ngaysinh),
+        diachi: khachhangSelected.diachi,
+        sdt: khachhangSelected.sdt,
+        kieukhachhang_id: khachhangSelected.kieukhachhang_id,
+      });
     } catch (err) {
       console.log(err.message);
     }
@@ -101,6 +116,12 @@ const ThongTinKhachHang = () => {
     try {
       const res = await KhachHangFinder.post("/them-kieu", {
         name: name,
+      });
+      ThemLichSu({
+        doing: "Thêm",
+        olddata: {},
+        newdata: { new: res.data.data.kieukh },
+        tbl: "Kiểu khách hàng",
       });
       setKieuKhID(res.data.data.kieukh.id);
       setKieuKHSelected({
@@ -205,6 +226,18 @@ const ThongTinKhachHang = () => {
           ten_hienthi: NormalizeString(tenKH),
         });
         if (res.data.status === "ok") {
+          ThemLichSu({
+            doing: "Thêm",
+            olddata: {},
+            newdata: {
+              new: {
+                ten: res.data.data.acc.ten,
+                ten_hienthi: res.data.data.acc.ten_hienthi,
+                vaitro: res.data.data.acc.vaitro,
+              },
+            },
+            tbl: "Người dùng",
+          });
           const r = await KhachHangFinder.post("/them", {
             ten: NormalizeString(tenKH),
             cmnd: cmnd,
@@ -216,6 +249,14 @@ const ThongTinKhachHang = () => {
             account: acc,
           });
           if (r.data.status === "ok") {
+            ThemLichSu({
+              doing: "Thêm",
+              olddata: {},
+              newdata: {
+                new: r.data.data.khachhang,
+              },
+              tbl: "Khách hàng",
+            });
             getListKh();
             setKHID(r.data.data.khachhang.id);
             setKhId(r.data.data.khachhang.id);
@@ -296,7 +337,7 @@ const ThongTinKhachHang = () => {
       //
     } else {
       try {
-        console.log(tenKH, gioitinh, ngaysinh, cmnd, sdt, diachi, kieukhID);
+        // console.log(tenKH, gioitinh, ngaysinh, cmnd, sdt, diachi, kieukhID);
         const res = await KhachHangFinder.put("/sua", {
           id: khID,
           ten: NormalizeString(tenKH),
@@ -307,8 +348,29 @@ const ThongTinKhachHang = () => {
           sdt: sdt,
           kieukhachhang_id: kieukhID,
         });
-        console.log(res);
+        // console.log(res);
         if (res.data.status === "ok") {
+          const newd = {
+            id: khID,
+            ten: NormalizeString(tenKH),
+            cmnd: cmnd,
+            gioitinh: gioitinh,
+            ngaysinh: ngaysinh,
+            diachi: NormalizeString(diachi),
+            sdt: sdt,
+            kieukhachhang_id: kieukhID,
+          };
+          if (JSON.stringify(old) !== JSON.stringify(newd)) {
+            ThemLichSu({
+              doing: "Sửa",
+              olddata: { old },
+              newdata: {
+                new: newd,
+              },
+              tbl: "Khách hàng",
+            });
+          }
+
           getListKh();
           setSuccessMsg("Sửa thành công");
           setTimeout(() => {

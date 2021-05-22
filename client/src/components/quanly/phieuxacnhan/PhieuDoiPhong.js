@@ -1,13 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AccountContext } from "../../../contexts/AccountContext";
 import DoiHuyFinder from "../../../apis/DoiHuyFinder";
-import { convertDate, convertTime } from "../../../utils/DataHandler";
+import { NormalizeDate, convertTime } from "../../../utils/DataHandler";
 import SuaPhieuXacNhan from "./SuaPhieuXacNhan";
 import XoaPhieuXacNhan from "./XoaPhieuXacNhan";
 const PhieuDoiPhong = () => {
   const { controllerPhieuXacNhan } = useContext(AccountContext);
   const userrole = window.localStorage.getItem("user_role");
   const [dsDoiPhong, setDsDoiPhong] = useState([]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -38,7 +39,7 @@ const PhieuDoiPhong = () => {
                   </li>
                   <li className="list-group-item">Lý do : {dp.lydodoi}</li>
                   <li className="list-group-item">
-                    Ngày đổi: {convertDate(dp.ngaydoi)}, lúc{" "}
+                    Ngày đổi: {NormalizeDate(dp.ngaydoi)}, lúc{" "}
                     {convertTime(dp.ngaydoi)}
                   </li>
                   <li className="list-group-item">Người đổi : {dp.nguoidoi}</li>
@@ -47,7 +48,7 @@ const PhieuDoiPhong = () => {
               <div className="card-footer d-flex flex-row justify-content-center">
                 <SuaPhieuXacNhan type="dp" id={dp.id} />
                 {userrole === "QL" || userrole === "Admin" ? (
-                  <XoaPhieuXacNhan type="dp" id={dp.id} />
+                  <XoaPhieuXacNhan type="dp" dp={dp} />
                 ) : (
                   ""
                 )}

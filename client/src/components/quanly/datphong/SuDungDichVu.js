@@ -6,6 +6,7 @@ import { useParams, useHistory } from "react-router";
 import { AccountContext } from "../../../contexts/AccountContext";
 import XemThanhToan from "./XemThanhToan";
 import CheckOut from "./CheckOut";
+import ThemLichSu from "../../../utils/ThemLichSu";
 const SuDungDichVu = () => {
   const [ldvIdSelected, setLdvIdSelected] = useState("");
 
@@ -102,6 +103,12 @@ const SuDungDichVu = () => {
           thanhtien: parseInt(dv.giahientai),
         });
         if (res.data.status === "ok") {
+          ThemLichSu({
+            doing: "Sử dụng",
+            olddata: {},
+            newdata: { new: res.data.data.datphong_chitiet },
+            tbl: "Dịch vụ",
+          });
           setMsgSuccess("Thêm thành công");
           setTimeout(() => {
             setMsgSuccess("");
@@ -123,6 +130,20 @@ const SuDungDichVu = () => {
     try {
       const res = await DatPhongFinder.put("/tang-so-luong", { id: dv.id });
       if (res.data.status === "ok") {
+        ThemLichSu({
+          doing: "Tăng số lượng",
+          olddata: {
+            old: {
+              soluong: dv.soluong,
+            },
+          },
+          newdata: {
+            new: {
+              soluong: dv.soluong + 1,
+            },
+          },
+          tbl: "Dịch vụ",
+        });
         hi.push("/quan-ly/phong/tinh-trang");
         hi.push(`/quan-ly/phong/tinh-trang/${phongid}/su-dung-dich-vu`);
       }
@@ -136,11 +157,39 @@ const SuDungDichVu = () => {
     try {
       if (dv.soluong === 1) {
         await DatPhongFinder.delete(`/xoa-chi-tiet/${dv.id}`);
+        ThemLichSu({
+          doing: "Tăng số lượng",
+          olddata: {
+            old: {
+              soluong: dv.soluong,
+            },
+          },
+          newdata: {
+            new: {
+              soluong: dv.soluong - 1,
+            },
+          },
+          tbl: "Dịch vụ",
+        });
         hi.push("/quan-ly/phong/tinh-trang");
         hi.push(`/quan-ly/phong/tinh-trang/${phongid}/su-dung-dich-vu`);
       } else {
         const res = await DatPhongFinder.put("/giam-so-luong", { id: dv.id });
         if (res.data.status === "ok") {
+          ThemLichSu({
+            doing: "Giảm số lượng",
+            olddata: {
+              old: {
+                soluong: dv.soluong,
+              },
+            },
+            newdata: {
+              new: {
+                soluong: dv.soluong - 1,
+              },
+            },
+            tbl: "Dịch vụ",
+          });
           hi.push("/quan-ly/phong/tinh-trang");
           hi.push(`/quan-ly/phong/tinh-trang/${phongid}/su-dung-dich-vu`);
         }
@@ -258,7 +307,7 @@ const SuDungDichVu = () => {
                         <button
                           type="button"
                           className="btn btn-info"
-                          onClick={(e) => handleIncrease(e, dvsd)}
+                          onClick={(e) => handleIncrease(e, dvsd, dvsd.soluong)}
                         >
                           <strong>+</strong>
                         </button>

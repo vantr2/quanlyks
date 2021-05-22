@@ -139,6 +139,7 @@ const DanhSachDatPhong = () => {
         <table className="table table-hover table-striped table-bordered ">
           <thead className="thead-dark text-center">
             <tr>
+              <th>Mã phiếu</th>
               <th>Phòng</th>
               <th>Khách hàng</th>
               <th>SDT</th>
@@ -152,6 +153,7 @@ const DanhSachDatPhong = () => {
             {dsDatPhong.map((datphong) => {
               return (
                 <tr key={datphong.id}>
+                  <td className="align-middle text-center">{datphong.id}</td>
                   <td className="align-middle">{datphong.phong_id}</td>
                   <td className="align-middle">{datphong.kh_name}</td>
                   <td className="align-middle">{datphong.kh_sdt}</td>

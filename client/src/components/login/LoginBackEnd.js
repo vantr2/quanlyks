@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import KiemTraDangNhapBackEnd from "../../apis/KiemTraDangNhapBackEnd";
 import ReactIsCapsLockActive from "@matsun/reactiscapslockactive";
+import ThemLichSu from "../../utils/ThemLichSu";
 
 const LoginBackEnd = () => {
   const [ten, setTen] = useState("");
@@ -62,6 +63,14 @@ const LoginBackEnd = () => {
           window.localStorage.setItem("user_displayname", res.data.data.ten_ht);
           window.localStorage.setItem("user_role", res.data.data.vaitro);
           window.localStorage.setItem("user_avt", res.data.data.avt);
+
+          ThemLichSu({
+            doing: "Đăng nhập",
+            olddata: {},
+            newdata: {},
+            tbl: "Người dùng",
+          });
+
           window.location.href = "/quan-ly";
         }
       } catch (err) {

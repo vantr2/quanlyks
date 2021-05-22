@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import TaiKhoanFinder from "../../../apis/TaiKhoanFinder";
+import ThemLichSu from "../../../utils/ThemLichSu";
 
 const ThayDoiTrangThaiTaiKhoan = ({ trangthai, ten }) => {
   const [trangThai, setTrangThai] = useState(trangthai);
@@ -19,6 +20,41 @@ const ThayDoiTrangThaiTaiKhoan = ({ trangthai, ten }) => {
         trangthai: !trangThai,
       });
       //   console.log(trangThai);
+      if (trangThai) {
+        ThemLichSu({
+          doing: "Thay đổi trạng thái",
+          olddata: {
+            old: {
+              ten: username,
+              trangthai: "Bật",
+            },
+          },
+          newdata: {
+            new: {
+              ten: username,
+              trangthai: "Tắt",
+            },
+          },
+          tbl: "Người dùng",
+        });
+      } else {
+        ThemLichSu({
+          doing: "Thay đổi trạng thái",
+          olddata: {
+            old: {
+              ten: username,
+              trangthai: "Tắt",
+            },
+          },
+          newdata: {
+            new: {
+              ten: username,
+              trangthai: "Bật",
+            },
+          },
+          tbl: "Người dùng",
+        });
+      }
       setTrangThai(!trangThai);
     } catch (err) {
       console.log(err.message);

@@ -7,6 +7,7 @@ import DatPhongFinder from "../../../apis/DatPhongFinder";
 import NhanVienFinder from "../../../apis/NhanVienFinder";
 import { useParams, useHistory } from "react-router";
 import { convertDate, convertTime } from "../../../utils/DataHandler";
+import ThemLichSu from "../../../utils/ThemLichSu";
 
 const ThongTinDatPhong = () => {
   let hi = useHistory();
@@ -154,6 +155,12 @@ const ThongTinDatPhong = () => {
         });
         if (res.data.status === "ok") {
           if (res.data.data.datphong) {
+            ThemLichSu({
+              doing: "Mở",
+              olddata: {},
+              newdata: { new: res.data.data.datphong },
+              tbl: "Đặt phòng",
+            });
             const r = await PhongFinder.put("/update-tt", {
               ten: phongid,
               trangthai: 1,

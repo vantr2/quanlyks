@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import DoiHuyFinder from "../../../../apis/DoiHuyFinder";
 import { useHistory } from "react-router";
+import ThemLichSu from "../../../../utils/ThemLichSu";
 const HuyPhong = ({ phongid, dpid, tiencoc }) => {
   const [lydo, setLyDo] = useState("");
   let hi = useHistory();
@@ -18,6 +19,12 @@ const HuyPhong = ({ phongid, dpid, tiencoc }) => {
           tiencoc: tiencoc,
         });
         if (res.data.data.huyphong) {
+          ThemLichSu({
+            doing: "Hủy",
+            olddata: {},
+            newdata: { new: res.data.data.huyphong },
+            tbl: "Phòng",
+          });
           hi.push("/quan-ly/phong/tinh-trang");
         }
       } catch (err) {

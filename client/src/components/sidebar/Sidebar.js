@@ -7,6 +7,7 @@ import { SidebarData } from "./SidebarData";
 import SubMenu from "./SubMenu";
 import { IconContext } from "react-icons/lib";
 import { AccountContext } from "../../contexts/AccountContext";
+import ThemLichSu from "../../utils/ThemLichSu";
 
 const SidebarContainer = styled.div`
   position: fixed;
@@ -111,6 +112,12 @@ const Sidebar = () => {
   };
 
   const handleLogout = () => {
+    ThemLichSu({
+      doing: "Đăng xuất",
+      olddata: {},
+      newdata: {},
+      tbl: "Người dùng",
+    });
     window.localStorage.setItem("dangnhap", false);
     history.push("/quan-ly");
     window.location.reload();
