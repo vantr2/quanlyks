@@ -8,6 +8,7 @@ import { storage } from "../../../firebase";
 import CreatableSelect from "react-select/creatable";
 import { convertDataTocreatableSelect } from "../../../utils/DataHandler";
 import CurrencyInput from "react-currency-input-field";
+import ThemLichSu from "../../../utils/ThemLichSu";
 
 const ThemDichVu = () => {
   const [tendv, setTenDV] = useState("");
@@ -121,6 +122,13 @@ const ThemDichVu = () => {
         });
 
         if (res.data.status === "ok") {
+          ThemLichSu({
+            doing: "Thêm",
+            olddata: {},
+            newdata: { new: res.data.data.dichvu },
+            tbl: "Dịch vụ",
+          });
+
           themDichVu(res.data.data.dichvu);
           setMsgDichVuActionSuccess("Thêm thành công.");
           setTimeout(() => {

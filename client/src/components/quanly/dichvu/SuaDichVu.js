@@ -9,10 +9,12 @@ import { storage } from "../../../firebase";
 import { convertDataTocreatableSelect } from "../../../utils/DataHandler";
 import CreatableSelect from "react-select/creatable";
 import CurrencyInput from "react-currency-input-field";
+import ThemLichSu from "../../../utils/ThemLichSu";
 const SuaDichVu = () => {
   let hi = useHistory();
   const { id } = useParams();
 
+  const [old, setOld] = useState("");
   const [tendv, setTenDV] = useState("");
   const [anhDV, setAnhDV] = useState("");
   const [filename, setFileName] = useState("");
@@ -41,6 +43,17 @@ const SuaDichVu = () => {
         setTrangThai(dichvuUpdate.trangthai);
         setLoai(dichvuUpdate.value);
         setLoadDv({ value: dichvuUpdate.value, label: dichvuUpdate.label });
+
+        setOld({
+          id: id,
+          ten: dichvuUpdate.ten,
+          ghichu: dichvuUpdate.ghichu,
+          giadv: dichvuUpdate.giahientai,
+          trangthai: dichvuUpdate.trangthai,
+          anh: dichvuUpdate.anhminhhoa,
+          filename: dichvuUpdate.filename,
+          loaidichvu_id: dichvuUpdate.value,
+        });
       } catch (err) {
         console.log(err.message);
       }
@@ -144,6 +157,26 @@ const SuaDichVu = () => {
         });
         // console.log(res);
         if (res.data.status === "ok") {
+          const newd = {
+            id: id,
+            ten: NormalizeString(tendv),
+            ghichu: ghichu,
+            giadv: giadichvu,
+            trangthai: trangthai,
+            anh: anhDV,
+            filename: filename,
+            loaidichvu_id: loai,
+          };
+          console.log();
+          if (JSON.stringify(old) !== JSON.stringify(newd)) {
+            ThemLichSu({
+              doing: "Sửa",
+              olddata: { old },
+              newdata: { new: newd },
+              tbl: "Dịch vụ",
+            });
+          }
+
           setMsgDichVuActionSuccess("Sửa thành công.");
           setTimeout(() => {
             setMsgDichVuActionSuccess("");

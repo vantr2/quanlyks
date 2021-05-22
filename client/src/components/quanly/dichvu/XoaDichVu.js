@@ -4,6 +4,7 @@ import { useHistory } from "react-router";
 import DichVuFinder from "../../../apis/DichVuFinder";
 import { AccountContext } from "../../../contexts/AccountContext";
 import { storage } from "../../../firebase";
+import ThemLichSu from "../../../utils/ThemLichSu";
 const XoaDichVu = ({ id }) => {
   const { setMsgDichVuActionSuccess, dsDichVu, setDsDichVu } =
     useContext(AccountContext);
@@ -13,12 +14,14 @@ const XoaDichVu = ({ id }) => {
   const [tenDV, setTenDV] = useState("");
   const [isDelete, setIsDelete] = useState(false);
 
+  const [old, setOld] = useState({});
+
   const fetchData = async () => {
     try {
       const res = await DichVuFinder.get(`/danh-sach-dich-vu/${id}`);
       setFileName(res.data.data.dichvu.filename);
       setTenDV(res.data.data.dichvu.ten);
-
+      setOld(res.data.data.dichvu);
       const res_dp = await DichVuFinder.get(`/trong-dat-phong/${id}`);
       //   console.log(res_dp);
       if (res_dp.data.data.dichvu.count === "0") {
@@ -38,6 +41,13 @@ const XoaDichVu = ({ id }) => {
         const res = await DichVuFinder.delete(`/xoa-dich-vu/${id}`);
         //   console.log(res);
         if (res.data === "") {
+          ThemLichSu({
+            doing: "Xóa",
+            olddata: { old: old },
+            newdata: {},
+            tbl: "Dịch vụ",
+          });
+
           setMsgDichVuActionSuccess("Xóa thành công");
           setTimeout(() => {
             setMsgDichVuActionSuccess("");
