@@ -9,11 +9,15 @@ const XoaTaiSan = ({ id, ts }) => {
     useContext(AccountContext);
 
   let hi = useHistory();
-  const [tenTs, setTenTs] = useState("");
+  const [isDel, setIsDel] = useState(false);
   const fetchData = async () => {
     try {
-      const res = await TaiSanFinder.get(`/danh-sach-tai-san/${id}`);
-      setTenTs(res.data.data.taisan.ten);
+      const res = await TaiSanFinder.get(`/trong-bd-chi-tiet/${ts.id}`);
+      if (res.data.data.taisan.count === "0") {
+        setIsDel(true);
+      } else {
+        setIsDel(false);
+      }
     } catch (err) {
       console.log(err.message);
     }
@@ -21,29 +25,35 @@ const XoaTaiSan = ({ id, ts }) => {
 
   const handleDelete = async (e) => {
     e.stopPropagation();
-    try {
-      const res = await TaiSanFinder.delete(`/xoa-tai-san/${id}`);
-      //   console.log(res);
-      if (res.data === "") {
-        ThemLichSu({
-          doing: "Xóa",
-          olddata: { old: ts },
-          newdata: {},
-          tbl: "Tài sản",
-        });
-        setMsgTaiSanActionSuccess("Xóa thành công");
-        setTimeout(() => {
-          setMsgTaiSanActionSuccess("");
-        }, 2000);
-        setDsTaiSan(
-          dsTaiSan.filter((taisan) => {
-            return taisan.id !== id;
-          })
-        );
-        hi.push("/quan-ly/ql-tai-san/thong-tin");
+    if (isDel) {
+      try {
+        const res = await TaiSanFinder.delete(`/xoa-tai-san/${ts.id}`);
+        //   console.log(res);
+        if (res.data === "") {
+          ThemLichSu({
+            doing: "Xóa",
+            olddata: { old: ts },
+            newdata: {},
+            tbl: "Tài sản",
+          });
+          setMsgTaiSanActionSuccess("Xóa thành công");
+          setTimeout(() => {
+            setMsgTaiSanActionSuccess("");
+          }, 2000);
+          setDsTaiSan(
+            dsTaiSan.filter((taisan) => {
+              return taisan.id !== id;
+            })
+          );
+          hi.push("/quan-ly/ql-tai-san/thong-tin");
+        }
+      } catch (err) {
+        console.log(err.message);
       }
-    } catch (err) {
-      console.log(err.message);
+    } else {
+      alert(
+        "Dữ liệu tài sản này đang được sử dụng trong bảo dưỡng. Không thể xóa"
+      );
     }
   };
   return (
@@ -51,13 +61,13 @@ const XoaTaiSan = ({ id, ts }) => {
       <i
         className="fas fa-trash text-danger"
         data-toggle="modal"
-        data-target={`#id${id}xoa`}
+        data-target={`#id${ts.id}xoa`}
         onClick={fetchData}
       >
         &nbsp;Xóa
       </i>
 
-      <div className="modal fade mb-5" id={`id${id}xoa`}>
+      <div className="modal fade mb-5" id={`id${ts.id}xoa`}>
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
             <div className="modal-header">
@@ -70,7 +80,7 @@ const XoaTaiSan = ({ id, ts }) => {
             <div className="modal-body">
               <p className="text-left">
                 Bạn có thực sự muốn xóa{" "}
-                <span className="font-weight-bold">"{tenTs}"</span> không ?
+                <span className="font-weight-bold">"{ts.ten}"</span> không ?
               </p>
             </div>
 

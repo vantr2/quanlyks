@@ -1275,6 +1275,26 @@ app.get("/api/v1/tai-san/danh-sach-tai-san/:id", async (req, res) => {
   }
 });
 
+//kiem tratai san co trong bd chi tiet khong
+app.get("/api/v1/tai-san/trong-bd-chi-tiet/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await db.query(
+      "select count(*) from tbl_taisan_baoduong_chitiet where taisan_id=$1",
+      [id]
+    );
+
+    res.status(200).json({
+      status: "ok",
+      data: {
+        taisan: result.rows[0],
+      },
+    });
+  } catch (err) {
+    console.error("Kiem tra ts trong bd chi tiêt: " + err.message);
+  }
+});
+
 //them tai san
 app.post("/api/v1/tai-san/them-tai-san", async (req, res) => {
   try {
