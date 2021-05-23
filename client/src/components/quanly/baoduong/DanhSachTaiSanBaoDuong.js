@@ -6,9 +6,8 @@ import { useParams } from "react-router";
 import XoaTaiSanBaoDuong from "./XoaTaiSanBaoDuong";
 import SuaTaiSanBaoDuong from "./SuaTaiSanBaoDuong";
 const DanhSachTaiSanBaoDuong = () => {
-  const { dsBaoDuongChiTiet, setDsBaoDuongChiTiet } = useContext(
-    AccountContext
-  );
+  const { dsBaoDuongChiTiet, setDsBaoDuongChiTiet } =
+    useContext(AccountContext);
 
   const { id } = useParams();
   useEffect(() => {
@@ -42,6 +41,7 @@ const DanhSachTaiSanBaoDuong = () => {
                   id={bdchitiet.id}
                   tsId={bdchitiet.taisanbd}
                   bdId={id}
+                  bdct={bdchitiet}
                 />
               </span>
             </div>

@@ -1,26 +1,22 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import TaiSanFinder from "../../../apis/TaiSanFinder";
 import BaoDuongFinder from "../../../apis/BaoDuongFinder";
 import { AccountContext } from "../../../contexts/AccountContext";
-import { useHistory } from "react-router";
-const XoaTaiSanBaoDuong = ({ tsId, id, bdID }) => {
-  const { dsBaoDuongChiTiet, setDsBaoDuongChiTiet } = useContext(
-    AccountContext
-  );
+import ThemLichSu from "../../../utils/ThemLichSu";
+const XoaTaiSanBaoDuong = ({ tsId, id, bdID, bdct }) => {
+  const { dsBaoDuongChiTiet, setDsBaoDuongChiTiet } =
+    useContext(AccountContext);
 
   const [tenTs, setTenTs] = useState("");
-  let hi = useHistory();
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await TaiSanFinder.get(`/danh-sach-tai-san/${tsId}`);
-        setTenTs(res.data.data.taisan.ten);
-      } catch (err) {
-        console.log(err.message);
-      }
-    };
-    fetchData();
-  }, [setTenTs, tsId]);
+
+  const fetchData = async () => {
+    try {
+      const res = await TaiSanFinder.get(`/danh-sach-tai-san/${tsId}`);
+      setTenTs(res.data.data.taisan.ten);
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
 
   const handleDelete = async (e) => {
     e.stopPropagation();
@@ -28,13 +24,18 @@ const XoaTaiSanBaoDuong = ({ tsId, id, bdID }) => {
       const res = await BaoDuongFinder.delete(`/xoa-chi-tiet/${id}`);
       //   console.log(res);
       if (res.data === "") {
+        ThemLichSu({
+          doing: "Xóa",
+          olddata: { old: bdct },
+          newdata: {},
+          tbl: "Phiếu bảo dưỡng chi tiết",
+        });
+
         setDsBaoDuongChiTiet(
           dsBaoDuongChiTiet.filter((bdchitiet) => {
             return bdchitiet.id !== id;
           })
         );
-        hi.push("/quan-ly/ql-tai-san/bao-duong");
-        hi.push(`/quan-ly/ql-tai-san/bao-duong/${bdID}`);
       }
     } catch (err) {
       console.log(err.message);
@@ -46,6 +47,7 @@ const XoaTaiSanBaoDuong = ({ tsId, id, bdID }) => {
         className="fas fa-trash p-1 text-danger"
         data-toggle="modal"
         data-target={`#id${id}xoa`}
+        onClick={fetchData}
       ></i>
 
       <div className="modal fade mb-5" id={`id${id}xoa`}>

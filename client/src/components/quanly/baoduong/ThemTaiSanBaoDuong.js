@@ -4,6 +4,7 @@ import BaoDuongFinder from "../../../apis/BaoDuongFinder";
 import TaiSanFinder from "../../../apis/TaiSanFinder";
 import { useParams, useHistory } from "react-router";
 import CurrencyInput from "react-currency-input-field";
+import ThemLichSu from "../../../utils/ThemLichSu";
 const ThemTaiSanBaoDuong = () => {
   const [phibd, setPhiBd] = useState("");
   const [ghichu, setGhiChu] = useState("");
@@ -55,6 +56,13 @@ const ThemTaiSanBaoDuong = () => {
         });
 
         if (res.data.status === "ok") {
+          ThemLichSu({
+            doing: "Thêm",
+            olddata: {},
+            newdata: { new: res.data.data.baoduong_chitiet },
+            tbl: "Chi tiết phiếu bảo dưỡng",
+          });
+
           const bdchitetInserted = res.data.data.baoduong_chitiet;
           const bdchitietContext = {
             id: bdchitetInserted.id,
@@ -70,9 +78,6 @@ const ThemTaiSanBaoDuong = () => {
               return taisan.id !== bdchitetInserted.taisanbd;
             })
           );
-          setGhiChu("");
-          setIdTS("--Chọn--");
-          setPhiBd("");
           hi.push("/quan-ly/ql-tai-san/bao-duong");
           hi.push(`/quan-ly/ql-tai-san/bao-duong/${id}`);
         } else {

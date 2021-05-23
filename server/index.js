@@ -364,6 +364,24 @@ app.get("/api/v1/nhan-vien/danh-sach-nhan-vien", async (req, res) => {
   }
 });
 
+//lay danh sách nhan vien
+app.get("/api/v1/nhan-vien/danh-sach-nhan-vien-kho", async (req, res) => {
+  try {
+    const result = await db.query(
+      "select * from v_nhanvien where vaitro = 'NVK' order by vaitro desc"
+    );
+
+    res.status(200).json({
+      status: "ok",
+      data: {
+        nhanvien: result.rows,
+      },
+    });
+  } catch (err) {
+    console.error("Lay danh sach nhan vien kho :" + err.message);
+  }
+});
+
 //lay danh sách nhan vien khong co quan ly
 app.get("/api/v1/nhan-vien/danh-sach-nhan-vien-thuong", async (req, res) => {
   try {
@@ -1280,7 +1298,7 @@ app.get("/api/v1/tai-san/trong-bd-chi-tiet/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const result = await db.query(
-      "select count(*) from tbl_taisan_baoduong_chitiet where taisan_id=$1",
+      "select count(*) from tbl_taisan_baoduong_chitiet where taisanbd=$1",
       [id]
     );
 

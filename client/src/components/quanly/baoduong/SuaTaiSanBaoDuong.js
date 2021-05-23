@@ -3,10 +3,12 @@ import BaoDuongFinder from "../../../apis/BaoDuongFinder";
 import { useHistory } from "react-router";
 import CurrencyInput from "react-currency-input-field";
 import PhieuMuaFinder from "../../../apis/PhieuMuaFinder";
+import ThemLichSu from "../../../utils/ThemLichSu";
 
 const SuaTaiSanBaoDuong = ({ id, bdId }) => {
   const [phibd, setPhiBd] = useState("");
   const [ghichu, setGhiChu] = useState("");
+  const [old, setOld] = useState({});
 
   let hi = useHistory();
   const fetchData = async () => {
@@ -16,6 +18,11 @@ const SuaTaiSanBaoDuong = ({ id, bdId }) => {
         const bdChiTietSelected = res.data.data.baoduong_chitiet;
         setGhiChu(bdChiTietSelected.ghichu);
         setPhiBd(bdChiTietSelected.phibd);
+        setOld({
+          id: id,
+          phibd: bdChiTietSelected.phibd,
+          ghichu: bdChiTietSelected.ghichu,
+        });
       }
     } catch (err) {
       console.log(err.message);
@@ -32,6 +39,19 @@ const SuaTaiSanBaoDuong = ({ id, bdId }) => {
         ghichu: ghichu,
       });
       if (res.data.status === "ok") {
+        const newd = {
+          id: id,
+          phibd: phibd,
+          ghichu: ghichu,
+        };
+        if (JSON.stringify(old) !== JSON.stringify(newd)) {
+          ThemLichSu({
+            doing: "Sửa",
+            olddata: { old },
+            newdata: { new: newd },
+            tbl: "Chi tiết phiếu bảo dưỡng",
+          });
+        }
         hi.push("/quan-ly/ql-tai-san/bao-duong");
         hi.push(`/quan-ly/ql-tai-san/bao-duong/${bdId}`);
       }

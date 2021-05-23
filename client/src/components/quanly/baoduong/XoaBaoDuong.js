@@ -3,10 +3,10 @@ import React, { useContext } from "react";
 import { useHistory } from "react-router";
 import BaoDuongFinder from "../../../apis/BaoDuongFinder";
 import { AccountContext } from "../../../contexts/AccountContext";
-const XoaBaoDuong = ({ id }) => {
-  const { setMsgBaoDuongActionSuccess, dsBaoDuong, setDsBaoDuong } = useContext(
-    AccountContext
-  );
+import ThemLichSu from "../../../utils/ThemLichSu";
+const XoaBaoDuong = ({ id, bd }) => {
+  const { setMsgBaoDuongActionSuccess, dsBaoDuong, setDsBaoDuong } =
+    useContext(AccountContext);
 
   let hi = useHistory();
 
@@ -16,6 +16,13 @@ const XoaBaoDuong = ({ id }) => {
       const res = await BaoDuongFinder.delete(`/xoa/${id}`);
       //   console.log(res);
       if (res.data === "") {
+        ThemLichSu({
+          doing: "Xóa",
+          olddata: { old: bd },
+          newdata: {},
+          tbl: "Phiếu bảo dưỡng",
+        });
+
         setMsgBaoDuongActionSuccess("Xóa thành công");
         setTimeout(() => {
           setMsgBaoDuongActionSuccess("");

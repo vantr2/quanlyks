@@ -5,9 +5,8 @@ import { useHistory } from "react-router";
 import { NormalizeDate, NumberFormat } from "../../../utils/DataHandler";
 import XoaBaoDuong from "./XoaBaoDuong";
 const DanhSachBaoDuong = () => {
-  const { dsBaoDuong, setDsBaoDuong, msgBaoDuongActionSuccess } = useContext(
-    AccountContext
-  );
+  const { dsBaoDuong, setDsBaoDuong, msgBaoDuongActionSuccess } =
+    useContext(AccountContext);
 
   let hi = useHistory();
   useEffect(() => {
@@ -90,7 +89,7 @@ const DanhSachBaoDuong = () => {
                     className="align-middle text-center"
                     style={{ cursor: "pointer" }}
                   >
-                    <XoaBaoDuong id={baoduong.id} />
+                    <XoaBaoDuong id={baoduong.id} bd={baoduong} />
                   </td>
                 </tr>
               );

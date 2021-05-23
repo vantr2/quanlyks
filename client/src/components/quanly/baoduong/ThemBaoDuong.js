@@ -3,6 +3,7 @@ import { AccountContext } from "../../../contexts/AccountContext";
 import BaoDuongFinder from "../../../apis/BaoDuongFinder";
 import NhanVienFinder from "../../../apis/NhanVienFinder";
 import NormalizeString from "../../../utils/NormalizeString";
+import ThemLichSu from "../../../utils/ThemLichSu";
 
 const ThemBaoDuong = () => {
   const [nguoiBd, setNguoiBd] = useState("");
@@ -14,15 +15,14 @@ const ThemBaoDuong = () => {
 
   const [nhanvienFilter, setNhanVienFilter] = useState([]);
 
-  const { themBaoDuong, setMsgBaoDuongActionSuccess } = useContext(
-    AccountContext
-  );
+  const { themBaoDuong, setMsgBaoDuongActionSuccess } =
+    useContext(AccountContext);
   const [msgError, setMsgError] = useState("");
 
   useEffect(() => {
     const filterNhanVien = async () => {
       try {
-        const res = await NhanVienFinder.get("/danh-sach-nhan-vien");
+        const res = await NhanVienFinder.get("/danh-sach-nhan-vien-kho");
         setNhanVienFilter(res.data.data.nhanvien);
       } catch (err) {
         console.log(err.message);
@@ -75,6 +75,13 @@ const ThemBaoDuong = () => {
         });
         if (res.data.status === "ok") {
           const baoduongInserted = res.data.data.baoduong;
+          ThemLichSu({
+            doing: "Thêm",
+            olddata: {},
+            newdata: { new: baoduongInserted },
+            tbl: "Phiếu bảo dưỡng",
+          });
+
           const baoduongContext = {
             id: baoduongInserted.id,
             nguoibd: baoduongInserted.nguoibd,

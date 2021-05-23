@@ -5,10 +5,12 @@ import { useHistory, useParams } from "react-router";
 import NormalizeString from "../../../utils/NormalizeString";
 import { AccountContext } from "../../../contexts/AccountContext";
 import { convertDate } from "../../../utils/DataHandler";
+import ThemLichSu from "../../../utils/ThemLichSu";
 
 const SuaBaoDuong = () => {
   let hi = useHistory();
   const { id } = useParams();
+  const [old, setOld] = useState({});
 
   const [nguoiBd, setNguoiBd] = useState("");
   const [sdt, setSdt] = useState("");
@@ -41,6 +43,15 @@ const SuaBaoDuong = () => {
         setGhiChu(baoduongSelected.ghichu);
         setNgayBd(convertDate(baoduongSelected.ngaybd));
         setIDNV(baoduongSelected.idnv);
+
+        setOld({
+          id: id,
+          nguoibd: baoduongSelected.nguoibd,
+          sdt: baoduongSelected.sdt,
+          ngaybd: convertDate(baoduongSelected.ngaybd),
+          ghichu: baoduongSelected.ghichu,
+          nvtiepnhan: baoduongSelected.idnv,
+        });
       } catch (err) {
         console.log(err.message);
       }
@@ -91,6 +102,22 @@ const SuaBaoDuong = () => {
           nvtiepnhan: idNV,
         });
         if (res.data.status === "ok") {
+          const newd = {
+            id: id,
+            nguoibd: NormalizeString(nguoiBd),
+            sdt: sdt,
+            ngaybd: ngaybd,
+            ghichu: ghichu,
+            nvtiepnhan: idNV,
+          };
+          if (JSON.stringify(old) !== JSON.stringify(newd)) {
+            ThemLichSu({
+              doing: "Sửa",
+              olddata: { old },
+              newdata: { new: newd },
+              tbl: "Phiếu bảo dưỡng",
+            });
+          }
           setMsgBaoDuongActionSuccess("Sửa thành công.");
           setTimeout(() => {
             setMsgBaoDuongActionSuccess("");
