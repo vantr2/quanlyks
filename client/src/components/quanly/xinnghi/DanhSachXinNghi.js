@@ -156,7 +156,11 @@ const DanhSachXinNghi = () => {
                     className="align-middle text-center"
                     style={{ cursor: "pointer" }}
                   >
-                    {don.trangthai === 0 ? <XoaXinNghi id={don.id} /> : ""}
+                    {don.trangthai === 0 ? (
+                      <XoaXinNghi id={don.id} xn={don} />
+                    ) : (
+                      ""
+                    )}
                   </td>
                 </tr>
               );

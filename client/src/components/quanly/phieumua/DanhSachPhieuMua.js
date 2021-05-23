@@ -40,6 +40,7 @@ const DanhSachPhieuMua = () => {
         <table className="table table-hover table-striped table-bordered ">
           <thead className="thead-dark text-center">
             <tr>
+              <th>Mã phiếu</th>
               <th>Tên nhân viên</th>
               <th>Ngày mua</th>
               <th>Tổng tiền</th>
@@ -53,6 +54,7 @@ const DanhSachPhieuMua = () => {
             {dsPhieuMua.map((phieumua) => {
               return (
                 <tr key={phieumua.id}>
+                  <td className="align-middle text-center">{phieumua.id}</td>
                   <td className="align-middle">{phieumua.tennv}</td>
                   <td className="text-center ">
                     {NormalizeDate(phieumua.ngaymua)}
@@ -88,7 +90,7 @@ const DanhSachPhieuMua = () => {
                     className="align-middle text-center"
                     style={{ cursor: "pointer" }}
                   >
-                    <XoaPhieuMua id={phieumua.id} />
+                    <XoaPhieuMua id={phieumua.id} pm={phieumua} />
                   </td>
                 </tr>
               );

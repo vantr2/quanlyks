@@ -1,8 +1,9 @@
 import React, { useContext } from "react";
 import { AccountContext } from "../../../contexts/AccountContext";
 import XinNghiFinder from "../../../apis/XinNghiFinder";
+import ThemLichSu from "../../../utils/ThemLichSu";
 
-const XoaXinNghi = ({ id }) => {
+const XoaXinNghi = ({ id, xn }) => {
   const { setMsgDonActionSuccess, dsDon, setDsDon } =
     useContext(AccountContext);
   const handleDelete = async (e) => {
@@ -11,6 +12,12 @@ const XoaXinNghi = ({ id }) => {
       const res = await XinNghiFinder.delete(`/xoa/${id}`);
       //   console.log(res);
       if (res.data === "") {
+        ThemLichSu({
+          doing: "Xóa",
+          olddata: { old: xn },
+          newdata: {},
+          tbl: "Đơn xin nghỉ",
+        });
         setMsgDonActionSuccess("Xóa thành công");
         setTimeout(() => {
           setMsgDonActionSuccess("");

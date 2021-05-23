@@ -4,9 +4,11 @@ import NhanVienFinder from "../../../apis/NhanVienFinder";
 import { useHistory, useParams } from "react-router";
 import { AccountContext } from "../../../contexts/AccountContext";
 import { convertDate } from "../../../utils/DataHandler";
+import ThemLichSu from "../../../utils/ThemLichSu";
 
 const SuaPhieuMua = () => {
   let hi = useHistory();
+  const [old, setOld] = useState({});
   const { id } = useParams();
   const [ngaymua, setNgayMua] = useState("");
   const [ghichu, setGhiChu] = useState("");
@@ -35,6 +37,13 @@ const SuaPhieuMua = () => {
         setNgayMua(convertDate(phieumuaSelected.ngaymua));
         setGhiChu(phieumuaSelected.ghichu);
         setIDNV(phieumuaSelected.idnv);
+
+        setOld({
+          id: id,
+          ngaymua: convertDate(phieumuaSelected.ngaymua),
+          ghichu: phieumuaSelected.ghichu,
+          nvtiepnhan: phieumuaSelected.idnv,
+        });
       } catch (err) {
         console.log(err.message);
       }
@@ -67,6 +76,21 @@ const SuaPhieuMua = () => {
           nvtiepnhan: idNV,
         });
         if (res.data.status === "ok") {
+          const newd = {
+            id: id,
+            ngaymua: ngaymua,
+            ghichu: ghichu,
+            nvtiepnhan: idNV,
+          };
+
+          if (JSON.stringify(old) !== JSON.stringify(newd)) {
+            ThemLichSu({
+              doing: "Sửa",
+              olddata: { old },
+              newdata: { new: newd },
+              tbl: "Phiếu mua hàng",
+            });
+          }
           setMsgPhieuMuaActionSuccess("Sửa thành công.");
           setTimeout(() => {
             setMsgPhieuMuaActionSuccess("");

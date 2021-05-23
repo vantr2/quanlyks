@@ -4,6 +4,7 @@ import NhanVienFinder from "../../../apis/NhanVienFinder";
 import XinNghiFinder from "../../../apis/XinNghiFinder";
 import { useHistory } from "react-router";
 import { dateInPast } from "../../../utils/DataHandler";
+import ThemLichSu from "../../../utils/ThemLichSu";
 
 const ThemXinNghi = () => {
   const [khinao, setKhiNao] = useState("");
@@ -63,6 +64,12 @@ const ThemXinNghi = () => {
         });
         console.log(res);
         if (res.data.status === "ok") {
+          ThemLichSu({
+            doing: "Viết",
+            olddata: {},
+            newdata: { new: res.data.data.xinnghi },
+            tbl: "Đơn xin nghỉ",
+          });
           setMsgDonActionSuccess("Thêm thành công.");
           setTimeout(() => {
             setMsgDonActionSuccess("");
@@ -121,6 +128,7 @@ const ThemXinNghi = () => {
                             className="form-control"
                             onChange={(e) => setKhiNao(e.target.value)}
                             value={khinao}
+                            min={new Date() - 1}
                           />
                         </div>
                       </div>

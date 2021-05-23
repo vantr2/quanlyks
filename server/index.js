@@ -2956,6 +2956,60 @@ app.post("/api/v1/doi-huy/onload", async (req, res) => {
 
 //#region Lich su hoat dong
 // danh sach lich su admin
+app.get("/api/v1/lich-su/danh-sach", async (req, res) => {
+  try {
+    const result = await db.query(
+      "select * from tbl_lshoatdong order by id desc"
+    );
+
+    res.status(200).json({
+      status: "ok",
+      data: {
+        lichsu: result.rows,
+      },
+    });
+  } catch (err) {
+    console.error("danh sach lich su: " + err.message);
+  }
+});
+
+//danh sach lich su cap quan ly
+app.get("/api/v1/lich-su/danh-sach-cap-quan-ly", async (req, res) => {
+  try {
+    const result = await db.query(
+      "select * from tbl_lshoatdong where vaitro <> 'Admin' order by id desc"
+    );
+
+    res.status(200).json({
+      status: "ok",
+      data: {
+        lichsu: result.rows,
+      },
+    });
+  } catch (err) {
+    console.error("danh sach lich su cap quan ly: " + err.message);
+  }
+});
+
+//danh sach lich su theo nhan vien
+app.get("/api/v1/lich-su/danh-sach-theo-nv/:acc", async (req, res) => {
+  try {
+    const { acc } = req.params;
+    const result = await db.query(
+      "select * from tbl_lshoatdong where where nguoithuchien = $1 order by id desc",
+      [acc]
+    );
+
+    res.status(200).json({
+      status: "ok",
+      data: {
+        lichsu: result.rows,
+      },
+    });
+  } catch (err) {
+    console.error("danh sach lich su theo nhan vien: " + err.message);
+  }
+});
 //them lich su
 app.post("/api/v1/lich-su/them", async (req, res) => {
   try {

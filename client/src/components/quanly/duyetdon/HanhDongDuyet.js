@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import XinNghiFinder from "../../../apis/XinNghiFinder";
 import { useHistory } from "react-router";
 import NhanVienFinder from "../../../apis/NhanVienFinder";
+import ThemLichSu from "../../../utils/ThemLichSu";
 const HanhDongDuyet = ({ hd, id }) => {
   let hi = useHistory();
   const [ghichu, setGhiChu] = useState();
   const [tennv, setTenNv] = useState();
   const username = window.localStorage.getItem("user_name");
+  const udisplayname = window.localStorage.getItem("user_displayname");
 
   useEffect(() => {
     const getNhanVien = async () => {
@@ -29,6 +31,35 @@ const HanhDongDuyet = ({ hd, id }) => {
         nguoiduyet: tennv,
         ph_nguoiduyet: ghichu ? ghichu : "Không có lời nhắn",
       });
+      if (hd === "dy") {
+        ThemLichSu({
+          doing: "Đồng ý",
+          olddata: {},
+          newdata: {
+            new: {
+              id: id,
+              trangthai: hd === "dy" ? 1 : 2,
+              nguoiduyet: tennv ? tennv : udisplayname,
+              ph_nguoiduyet: ghichu ? ghichu : "Không có lời nhắn",
+            },
+          },
+          tbl: "Đơn xin nghỉ",
+        });
+      } else {
+        ThemLichSu({
+          doing: "Từ chối",
+          olddata: {},
+          newdata: {
+            new: {
+              id: id,
+              trangthai: hd === "dy" ? 1 : 2,
+              nguoiduyet: tennv ? tennv : udisplayname,
+              ph_nguoiduyet: ghichu ? ghichu : "Không có lời nhắn",
+            },
+          },
+          tbl: "Đơn xin nghỉ",
+        });
+      }
       hi.push("/quan-ly");
       hi.push("/quan-ly/nv-quan-ly/duyet-don");
     } catch (err) {

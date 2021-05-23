@@ -135,7 +135,7 @@ const DanhSachDaDuyet = () => {
                     className="align-middle text-center"
                     style={{ cursor: "pointer" }}
                   >
-                    <XoaDanhSachDaDuyet id={don.id} />
+                    <XoaDanhSachDaDuyet id={don.id} dsdd={don} />
                   </td>
                 </tr>
               );

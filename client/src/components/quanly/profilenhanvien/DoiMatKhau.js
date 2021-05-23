@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import TaiKhoanFinder from "../../../apis/TaiKhoanFinder";
+import ThemLichSu from "../../../utils/ThemLichSu";
 const DoiMatKhau = ({ ten, iv, mk }) => {
   const [mkCu, setMkCu] = useState("");
   const [mkMoi, setMkMoi] = useState("");
@@ -48,6 +49,12 @@ const DoiMatKhau = ({ ten, iv, mk }) => {
           mkmoi: mkMoi,
         });
         if (res.data.status === "ok") {
+          ThemLichSu({
+            doing: "Đổi mật khẩu",
+            olddata: {},
+            newdata: {},
+            tbl: "Người dùng",
+          });
           setMsgS("Đổi mật khẩu thành công.");
           setTimeout(() => {
             setMsgS("");

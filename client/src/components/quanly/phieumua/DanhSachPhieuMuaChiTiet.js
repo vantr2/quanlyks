@@ -39,6 +39,7 @@ const DanhSachPhieuMuaChiTiet = () => {
                   <XoaPhieuMuaChiTiet
                     id={pmchitiet.id}
                     pmid={pmchitiet.phieumua_id}
+                    pmct={pmchitiet}
                   />
 
                   {/* <i className="fas fa-pencil-alt p-1 text-primary"></i>

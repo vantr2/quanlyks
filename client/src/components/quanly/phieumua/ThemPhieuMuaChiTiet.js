@@ -7,6 +7,7 @@ import { useParams, useHistory } from "react-router";
 import CreatableSelect from "react-select/creatable";
 import { convertDataTocreatableSelect } from "../../../utils/DataHandler";
 import CurrencyInput from "react-currency-input-field";
+import ThemLichSu from "../../../utils/ThemLichSu";
 
 const ThemPhieuMuaChiTiet = () => {
   const { id } = useParams();
@@ -79,6 +80,12 @@ const ThemPhieuMuaChiTiet = () => {
       const res = await DonViTinhFinder.post("/them-don-vi-tinh", {
         name: name,
       });
+      ThemLichSu({
+        doing: "Thêm",
+        olddata: {},
+        newdata: { new: res.data.data.donvitinh },
+        tbl: "Đơn vị tính",
+      });
       setDonViTinhId(res.data.data.donvitinh.id);
     } catch (error) {
       console.log(error.message);
@@ -99,6 +106,12 @@ const ThemPhieuMuaChiTiet = () => {
     try {
       const res = await PhieuMuaFinder.post("/them-loai-hang-hoa", {
         name: name,
+      });
+      ThemLichSu({
+        doing: "Thêm",
+        olddata: {},
+        newdata: { new: res.data.data.loaihh },
+        tbl: "Loại hàng hóa",
       });
       setLoaiHhId(res.data.data.loaihh.id);
     } catch (error) {
@@ -161,6 +174,12 @@ const ThemPhieuMuaChiTiet = () => {
           nhacc_id: nhacc,
         });
         if (res.data.status === "ok") {
+          ThemLichSu({
+            doing: "Thêm",
+            olddata: {},
+            newdata: { new: res.data.data.phieumua_chitiet },
+            tbl: "Hàng hóa trong phiếu mua",
+          });
           hi.push("/quan-ly/ql-hang-hoa/phieu-mua");
           hi.push(`/quan-ly/ql-hang-hoa/phieu-mua/${id}`);
         } else {

@@ -3,9 +3,11 @@ import XinNghiFinder from "../../../apis/XinNghiFinder";
 import { useHistory, useParams } from "react-router";
 import { AccountContext } from "../../../contexts/AccountContext";
 import { dateInPast, convertDate } from "../../../utils/DataHandler";
+import ThemLichSu from "../../../utils/ThemLichSu";
 const SuaXinNghi = () => {
   let hi = useHistory();
   const { id } = useParams();
+  const [old, setOld] = useState({});
   const [khinao, setKhiNao] = useState("");
   const [baolau, setBaoLau] = useState("");
   const [lydo, setLyDo] = useState("");
@@ -18,9 +20,15 @@ const SuaXinNghi = () => {
         const res = await XinNghiFinder.get(`/danh-sach-full-theo-id/${id}`);
         const donSelected = res.data.data.xinnghi;
         setKhiNao(convertDate(donSelected.khinao));
-        console.log(convertDate(donSelected.khinao));
+        // console.log(convertDate(donSelected.khinao));
         setBaoLau(donSelected.baolau);
         setLyDo(donSelected.lydo);
+        setOld({
+          id,
+          khinao: convertDate(donSelected.khinao),
+          baolau: donSelected.baolau,
+          lydo: donSelected.lydo,
+        });
       } catch (err) {
         console.log(err.message);
       }
@@ -58,6 +66,20 @@ const SuaXinNghi = () => {
           lydo,
         });
         if (res.data.status === "ok") {
+          const newd = {
+            id,
+            khinao,
+            baolau,
+            lydo,
+          };
+          if (JSON.stringify(old) !== JSON.stringify(newd)) {
+            ThemLichSu({
+              doing: "Sửa",
+              olddata: { old },
+              newdata: { new: newd },
+              tbl: "Đơn xin nghỉ",
+            });
+          }
           setMsgDonActionSuccess("Sửa thành công.");
           setTimeout(() => {
             setMsgDonActionSuccess("");

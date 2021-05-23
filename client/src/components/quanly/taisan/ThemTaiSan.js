@@ -97,6 +97,12 @@ const ThemTaiSan = () => {
         name: name,
       });
       setDonViTinhId(res.data.data.donvitinh.id);
+      ThemLichSu({
+        doing: "Thêm",
+        olddata: {},
+        newdata: { new: res.data.data.donvitinh },
+        tbl: "Đơn vị tính",
+      });
     } catch (error) {
       console.log(error.message);
     }
@@ -116,6 +122,12 @@ const ThemTaiSan = () => {
     try {
       const res = await TaiSanFinder.post("/them-loai-tai-san", {
         name: name,
+      });
+      ThemLichSu({
+        doing: "Thêm",
+        olddata: {},
+        newdata: { new: res.data.data.loaitaisan },
+        tbl: "Loại tài sản",
       });
       setLoaiTsId(res.data.data.loaitaisan.id);
     } catch (error) {

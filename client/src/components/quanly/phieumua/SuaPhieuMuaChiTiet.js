@@ -7,10 +7,11 @@ import NormalizeString from "../../../utils/NormalizeString";
 import { convertDataTocreatableSelect } from "../../../utils/DataHandler";
 import CreatableSelect from "react-select/creatable";
 import CurrencyInput from "react-currency-input-field";
+import ThemLichSu from "../../../utils/ThemLichSu";
 
 const SuaPhieuMuaChiTiet = ({ id, pmid }) => {
   let hi = useHistory();
-
+  const [old, setOld] = useState({});
   const [tenhh, setTenHh] = useState("");
   const [ghichu, setGhiChu] = useState("");
   const [dongia, setDonGia] = useState("");
@@ -73,6 +74,18 @@ const SuaPhieuMuaChiTiet = ({ id, pmid }) => {
           value: pmCtSelected.loaihang_id,
           label: pmCtSelected.loaihang_name,
         });
+
+        setOld({
+          id: id,
+          ten: pmCtSelected.ten,
+          dongia: pmCtSelected.dongia,
+          soluong: pmCtSelected.soluong,
+          thanhtien: pmCtSelected.thanhtien,
+          ghichu: pmCtSelected.ghichu,
+          donvitinh: pmCtSelected.donvitinh_id,
+          loaihang_id: pmCtSelected.loaihang_id,
+          nhacc_id: pmCtSelected.nhacc_id,
+        });
       }
     } catch (err) {
       console.log(err.message);
@@ -102,6 +115,12 @@ const SuaPhieuMuaChiTiet = ({ id, pmid }) => {
       const res = await DonViTinhFinder.post("/them-don-vi-tinh", {
         name: name,
       });
+      ThemLichSu({
+        doing: "Thêm",
+        olddata: {},
+        newdata: { new: res.data.data.donvitinh },
+        tbl: "Đơn vị tính",
+      });
       setDonViTinhId(res.data.data.donvitinh.id);
     } catch (error) {
       console.log(error.message);
@@ -124,6 +143,12 @@ const SuaPhieuMuaChiTiet = ({ id, pmid }) => {
         name: name,
       });
       setLoaiHhId(res.data.data.loaihh.id);
+      ThemLichSu({
+        doing: "Thêm",
+        olddata: {},
+        newdata: { new: res.data.data.loaihh },
+        tbl: "Loại hàng hóa",
+      });
     } catch (error) {
       console.log(error.message);
     }
@@ -138,35 +163,56 @@ const SuaPhieuMuaChiTiet = ({ id, pmid }) => {
 
   const handleUpdate = async (e) => {
     e.stopPropagation();
-    try {
-      const res = await PhieuMuaFinder.put("/sua-chi-tiet", {
-        id: id,
-        ten: NormalizeString(tenhh),
-        dongia: dongia,
-        soluong: soluong,
-        thanhtien: parseInt(dongia) * parseInt(soluong),
-        ghichu: ghichu,
-        donvitinh: dvtId,
-        loaihang_id: loaihhId,
-        nhacc_id: nhacc,
-      });
-      if (res.data.status === "ok") {
-        hi.push("/quan-ly/ql-hang-hoa/phieu-mua");
-        hi.push(`/quan-ly/ql-hang-hoa/phieu-mua/${pmid}`);
+    if (tenhh && dongia && soluong && ghichu && dvtId && loaiHH && nhacc) {
+      try {
+        const res = await PhieuMuaFinder.put("/sua-chi-tiet", {
+          id: id,
+          ten: NormalizeString(tenhh),
+          dongia: dongia,
+          soluong: soluong,
+          thanhtien: parseInt(dongia) * parseInt(soluong),
+          ghichu: ghichu,
+          donvitinh: dvtId,
+          loaihang_id: loaihhId,
+          nhacc_id: nhacc,
+        });
+        if (res.data.status === "ok") {
+          const newd = {
+            id: id,
+            ten: NormalizeString(tenhh),
+            dongia: dongia,
+            soluong: soluong,
+            thanhtien: "" + parseInt(dongia) * parseInt(soluong),
+            ghichu: ghichu,
+            donvitinh: dvtId,
+            loaihang_id: loaihhId,
+            nhacc_id: nhacc,
+          };
+          if (JSON.stringify(old) !== JSON.stringify(newd)) {
+            ThemLichSu({
+              doing: "Sửa",
+              olddata: { old },
+              newdata: { new: newd },
+              tbl: "Hàng hóa trong phiếu mua",
+            });
+          }
+          hi.push("/quan-ly/ql-hang-hoa/phieu-mua");
+          hi.push(`/quan-ly/ql-hang-hoa/phieu-mua/${pmid}`);
+        }
+        //   console.log(
+        //     id,
+        //     NormalizeString(tenhh),
+        //     dongia,
+        //     soluong,
+        //     parseInt(dongia) * parseInt(soluong),
+        //     ghichu,
+        //     dvtId,
+        //     loaihhId,
+        //     nhacc
+        //   );
+      } catch (err) {
+        console.log(err.message);
       }
-      //   console.log(
-      //     id,
-      //     NormalizeString(tenhh),
-      //     dongia,
-      //     soluong,
-      //     parseInt(dongia) * parseInt(soluong),
-      //     ghichu,
-      //     dvtId,
-      //     loaihhId,
-      //     nhacc
-      //   );
-    } catch (err) {
-      console.log(err.message);
     }
   };
 

@@ -1,8 +1,9 @@
 import React from "react";
 import { useHistory } from "react-router";
 import XinNghiFinder from "../../../apis/XinNghiFinder";
+import ThemLichSu from "../../../utils/ThemLichSu";
 
-const XoaDanhSachDaDuyet = ({ id }) => {
+const XoaDanhSachDaDuyet = ({ id, dsdd }) => {
   let hi = useHistory();
   const handleDelete = async (e) => {
     e.stopPropagation();
@@ -10,6 +11,12 @@ const XoaDanhSachDaDuyet = ({ id }) => {
       const res = await XinNghiFinder.delete(`/xoa-da-duyet/${id}`);
       //   console.log(res);
       if (res.data === "") {
+        ThemLichSu({
+          doing: "Xóa",
+          olddata: { old: dsdd },
+          newdata: {},
+          tbl: "Đơn xin nghỉ",
+        });
         hi.push("/quan-ly");
         hi.push("/quan-ly/nv-quan-ly/duyet-don");
       }

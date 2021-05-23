@@ -57,6 +57,9 @@ const LoginBackEnd = () => {
         // console.log(typeof res.data.data.ten_ht);
         if (res.data.status !== "ok") {
           setMessageError(res.data.status);
+          setTimeout(() => {
+            setMessageError("");
+          }, 3000);
         } else {
           window.localStorage.setItem("dangnhap", "true");
           window.localStorage.setItem("user_name", res.data.data.ten);

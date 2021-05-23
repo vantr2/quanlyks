@@ -1,8 +1,9 @@
 import React, { useContext } from "react";
 import PhieuMuaFinder from "../../../apis/PhieuMuaFinder";
 import { AccountContext } from "../../../contexts/AccountContext";
+import ThemLichSu from "../../../utils/ThemLichSu";
 
-const XoaPhieuMua = ({ id }) => {
+const XoaPhieuMua = ({ id, pm }) => {
   const { setMsgPhieuMuaActionSuccess, dsPhieuMua, setDsPhieuMua } =
     useContext(AccountContext);
 
@@ -12,6 +13,12 @@ const XoaPhieuMua = ({ id }) => {
       const res = await PhieuMuaFinder.delete(`/xoa/${id}`);
       //   console.log(res);
       if (res.data === "") {
+        ThemLichSu({
+          doing: "Xóa",
+          olddata: { old: pm },
+          newdata: {},
+          tbl: "Phiếu mua hàng",
+        });
         setMsgPhieuMuaActionSuccess("Xóa thành công");
         setTimeout(() => {
           setMsgPhieuMuaActionSuccess("");

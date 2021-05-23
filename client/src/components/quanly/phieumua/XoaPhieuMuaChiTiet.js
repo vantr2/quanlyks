@@ -2,8 +2,9 @@ import React, { useContext } from "react";
 import { useHistory } from "react-router";
 import PhieuMuaFinder from "../../../apis/PhieuMuaFinder";
 import { AccountContext } from "../../../contexts/AccountContext";
+import ThemLichSu from "../../../utils/ThemLichSu";
 
-const XoaPhieuMuaChiTiet = ({ id, pmid }) => {
+const XoaPhieuMuaChiTiet = ({ id, pmid, pmct }) => {
   let hi = useHistory();
   const { dsPhieuMuaChiTiet, setDsPhieuMuaChiTiet } =
     useContext(AccountContext);
@@ -14,6 +15,12 @@ const XoaPhieuMuaChiTiet = ({ id, pmid }) => {
       const res = await PhieuMuaFinder.delete(`/xoa-chi-tiet/${id}`);
       //   console.log(res);
       if (res.data === "") {
+        ThemLichSu({
+          doing: "Xóa",
+          olddata: { old: pmct },
+          newdata: {},
+          tbl: "Hàng hóa trong phiếu mua",
+        });
         setDsPhieuMuaChiTiet(
           dsPhieuMuaChiTiet.filter((pmchitiet) => {
             return pmchitiet.id !== id;

@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { AccountContext } from "../../../contexts/AccountContext";
 import PhieuMuaFinder from "../../../apis/PhieuMuaFinder";
 import NhanVienFinder from "../../../apis/NhanVienFinder";
-
+import ThemLichSu from "../../../utils/ThemLichSu";
 const ThemPhieuMua = () => {
   const [ngaymua, setNgayMua] = useState("");
   const [ghichu, setGhiChu] = useState("");
@@ -18,7 +18,7 @@ const ThemPhieuMua = () => {
   useEffect(() => {
     const filterNhanVien = async () => {
       try {
-        const res = await NhanVienFinder.get("/danh-sach-nhan-vien");
+        const res = await NhanVienFinder.get("/danh-sach-nhan-vien-kho");
         setNhanVienFilter(res.data.data.nhanvien);
       } catch (err) {
         console.log(err.message);
@@ -53,6 +53,12 @@ const ThemPhieuMua = () => {
         console.log(res);
         if (res.data.status === "ok") {
           const phieumuaInserted = res.data.data.phieumua;
+          ThemLichSu({
+            doing: "Thêm",
+            olddata: {},
+            newdata: { new: phieumuaInserted },
+            tbl: "Phiếu mua hàng",
+          });
           const phieumuaContext = {
             id: phieumuaInserted.id,
             ngaymua: phieumuaInserted.ngaymua,

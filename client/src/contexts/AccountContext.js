@@ -132,6 +132,8 @@ export const AccountContextProvider = (props) => {
   const [msgKHActionSuccess, setMsgKHActionSuccess] = useState("");
   const [msgKHActionError, setMsgKHActionError] = useState("");
 
+  //lich su
+  const [dsLichSu, setDsLichSu] = useState([]);
   return (
     <AccountContext.Provider
       value={{
@@ -248,6 +250,10 @@ export const AccountContextProvider = (props) => {
         setMsgKHActionSuccess,
         msgKHActionError,
         setMsgKHActionError,
+
+        //lich su
+        dsLichSu,
+        setDsLichSu,
       }}
     >
       {props.children}
