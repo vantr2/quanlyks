@@ -582,10 +582,22 @@ app.post("/api/v1/nhan-vien/them-nhan-vien", async (req, res) => {
       email,
       taikhoan,
       ngayvaolam,
+      luongcoban,
     } = req.body;
     const result = await db.query(
-      "insert into tbl_nhanvien (name, gioitinh, ngaysinh, diachi, cmnd,sdt,email,account,ngayvaolam) values($1,$2,$3,$4,$5,$6,$7,$8,$9 ) returning *",
-      [ten, gioitinh, ngaysinh, diachi, cmnd, sdt, email, taikhoan, ngayvaolam]
+      "insert into tbl_nhanvien (name, gioitinh, ngaysinh, diachi, cmnd,sdt,email,account,ngayvaolam,luongcoban) values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10 ) returning *",
+      [
+        ten,
+        gioitinh,
+        ngaysinh,
+        diachi,
+        cmnd,
+        sdt,
+        email,
+        taikhoan,
+        ngayvaolam,
+        luongcoban,
+      ]
     );
 
     res.status(201).json({
@@ -602,11 +614,21 @@ app.post("/api/v1/nhan-vien/them-nhan-vien", async (req, res) => {
 //sua nhan vien
 app.put("/api/v1/nhan-vien/sua-nhan-vien", async (req, res) => {
   try {
-    const { id, ten, gioitinh, ngaysinh, diachi, cmnd, sdt, email } = req.body;
+    const {
+      id,
+      ten,
+      gioitinh,
+      ngaysinh,
+      diachi,
+      cmnd,
+      sdt,
+      email,
+      luongcoban,
+    } = req.body;
 
     const result = await db.query(
-      "update tbl_nhanvien set name=$1, gioitinh=$2, ngaysinh=$3, diachi=$4, cmnd=$5,sdt=$6,email=$7 where id=$8",
-      [ten, gioitinh, ngaysinh, diachi, cmnd, sdt, email, id]
+      "update tbl_nhanvien set name=$1, gioitinh=$2, ngaysinh=$3, diachi=$4, cmnd=$5,sdt=$6,email=$7,luongcoban=$8 where id=$9",
+      [ten, gioitinh, ngaysinh, diachi, cmnd, sdt, email, luongcoban, id]
     );
     res.status(200).json({
       status: "ok",

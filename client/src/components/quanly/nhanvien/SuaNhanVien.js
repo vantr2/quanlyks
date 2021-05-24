@@ -10,6 +10,7 @@ import {
 } from "../../../utils/DataHandler";
 import NormalizeString from "../../../utils/NormalizeString";
 import { AccountContext } from "../../../contexts/AccountContext";
+import CurrencyInput from "react-currency-input-field";
 
 const SuaNhanVien = () => {
   let hi = useHistory();
@@ -23,6 +24,7 @@ const SuaNhanVien = () => {
   const [cmnd, setCMND] = useState("");
   const [sdt, setSdt] = useState("");
   const [email, setEmail] = useState("");
+  const [luongcb, setLuongCb] = useState("");
   const [msg, setMsg] = useState("");
   const { setMsgNhanVienActionSuccess } = useContext(AccountContext);
 
@@ -38,6 +40,9 @@ const SuaNhanVien = () => {
         setCMND(res.data.data.nhanvien.cmnd);
         setSdt(res.data.data.nhanvien.sdt);
         setEmail(res.data.data.nhanvien.email);
+        setLuongCb(res.data.data.nhanvien.luongcoban);
+        // console.log(res.data.data.nhanvien);
+
         setOld({
           id: id,
           ten: res.data.data.nhanvien.name,
@@ -47,6 +52,7 @@ const SuaNhanVien = () => {
           cmnd: res.data.data.nhanvien.cmnd,
           sdt: res.data.data.nhanvien.sdt,
           email: res.data.data.nhanvien.email,
+          luongcoban: res.data.data.nhanvien.luongcoban,
         });
       } catch (err) {
         console.log(err.message);
@@ -104,6 +110,11 @@ const SuaNhanVien = () => {
       setTimeout(() => {
         setMsg("");
       }, 5000);
+    } else if (luongcb === "") {
+      setMsg("Lương cơ bản không được để trống.");
+      setTimeout(() => {
+        setMsg("");
+      }, 4000);
     } else if (diachi.length === 0) {
       setMsg("Địa chỉ không được để trống.");
       setTimeout(() => {
@@ -120,6 +131,7 @@ const SuaNhanVien = () => {
           cmnd: cmnd,
           sdt: sdt,
           email: email.toLowerCase(),
+          luongcoban: luongcb,
         });
         if (res.data.status === "ok") {
           const newd = {
@@ -131,6 +143,7 @@ const SuaNhanVien = () => {
             cmnd: cmnd,
             sdt: sdt,
             email: email.toLowerCase(),
+            luongcoban: luongcb,
           };
           if (JSON.stringify(old) !== JSON.stringify(newd)) {
             ThemLichSu({
@@ -175,6 +188,25 @@ const SuaNhanVien = () => {
                 />
               </div>
             </div>
+            <div className="col">
+              <div className="form-group">
+                <label htmlFor="luongcoban">Lương cơ bản</label>
+                <CurrencyInput
+                  id="luongcoban"
+                  value={luongcb}
+                  className="form-control text-right"
+                  suffix=" đồng"
+                  groupSeparator="."
+                  onValueChange={(value) => {
+                    setLuongCb(value);
+                  }}
+                  step="1000"
+                  maxLength="9"
+                />
+              </div>
+            </div>
+          </div>
+          <div className="form-row">
             <div className="col">
               <div className="form-group">
                 <label htmlFor="cmnd">Chứng minh nhân dân</label>

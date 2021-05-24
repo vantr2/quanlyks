@@ -14,6 +14,7 @@ import {
 import DateTimePicker from "react-datetime-picker";
 
 import NormalizeString from "../../../utils/NormalizeString";
+import CurrencyInput from "react-currency-input-field";
 
 const ThemNhanVien = () => {
   const [tenNV, setTenNV] = useState("");
@@ -25,6 +26,7 @@ const ThemNhanVien = () => {
   const [email, setEmail] = useState("");
   const [ngayvaolam, setNgayVaoLam] = useState("");
   const [vaitro, setVaiTro] = useState("NVLT");
+  const [luongcoban, setLuongCoBan] = useState("");
 
   const [acc, setAcc] = useState("");
   const [msg, setMsg] = useState("");
@@ -106,6 +108,11 @@ const ThemNhanVien = () => {
       setTimeout(() => {
         setMsg("");
       }, 5000);
+    } else if (!luongcoban) {
+      setMsg("Lương cơ bản không được để trống.");
+      setTimeout(() => {
+        setMsg("");
+      }, 3500);
     } else if (diachi.length === 0) {
       setMsg("Địa chỉ không được để trống.");
       setTimeout(() => {
@@ -145,6 +152,7 @@ const ThemNhanVien = () => {
             taikhoan: acc,
             ngayvaolam:
               convertDate(ngayvaolam) + " " + convertTime(ngayvaolam) + "-07",
+            luongcoban: luongcoban,
           });
           // console.log(res);
           if (res_nv.data.status === "ok") {
@@ -326,6 +334,23 @@ const ThemNhanVien = () => {
                         id="sdt"
                         onChange={(e) => setSdt(e.target.value)}
                         value={sdt}
+                      />
+                    </div>
+                  </div>
+                  <div className="col">
+                    <div className="form-group">
+                      <label htmlFor="luongcoban">Lương cơ bản</label>
+                      <CurrencyInput
+                        id="luongcoban"
+                        value={luongcoban}
+                        className="form-control text-right"
+                        suffix=" đồng"
+                        groupSeparator="."
+                        onValueChange={(value) => {
+                          setLuongCoBan(value);
+                        }}
+                        step="1000"
+                        maxLength="9"
                       />
                     </div>
                   </div>

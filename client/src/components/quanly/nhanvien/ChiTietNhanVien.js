@@ -3,7 +3,11 @@ import { useHistory, useParams } from "react-router";
 import NhanVienFinder from "../../../apis/NhanVienFinder";
 import { AccountContext } from "../../../contexts/AccountContext";
 // import XoaNhanVien from "./XoaNhanVien";
-import { NormalizeDate, RenderGioiTinh } from "../../../utils/DataHandler";
+import {
+  NormalizeDate,
+  NumberFormat,
+  RenderGioiTinh,
+} from "../../../utils/DataHandler";
 
 const ChiTietNhanVien = () => {
   const { id } = useParams();
@@ -88,6 +92,12 @@ const ChiTietNhanVien = () => {
             <td className="col-4 pl-2 font-weight-bold">Ngày vào làm</td>
             <td className="col-8 pl-2">
               {NormalizeDate(nhanvienSelected.ngayvaolam)}
+            </td>
+          </tr>
+          <tr className="d-flex">
+            <td className="col-4 pl-2 font-weight-bold">Lương cơ bản</td>
+            <td className="col-8 pl-2">
+              <strong> {NumberFormat(nhanvienSelected.luongcoban)}</strong> VND
             </td>
           </tr>
           <tr className="d-flex">
