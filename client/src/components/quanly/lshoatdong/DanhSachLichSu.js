@@ -2,11 +2,13 @@ import React, { useContext, useEffect } from "react";
 import LichSuFinder from "../../../apis/LichSuFinder";
 import { AccountContext } from "../../../contexts/AccountContext";
 import { NormalizeDate, convertTime } from "../../../utils/DataHandler";
+import { useHistory } from "react-router";
 const DanhSachLichSu = () => {
   const { dsLichSu, setDsLichSu } = useContext(AccountContext);
 
   const userrole = window.localStorage.getItem("user_role");
   const username = window.localStorage.getItem("user_name");
+  let hi = useHistory();
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -26,7 +28,7 @@ const DanhSachLichSu = () => {
     fetchData();
   }, [setDsLichSu, username, userrole]);
   return (
-    <div className="mt-5">
+    <div className="mt-3">
       {dsLichSu.map((ls) => {
         return (
           <div
@@ -64,6 +66,10 @@ const DanhSachLichSu = () => {
             <i
               className="far fa-eye text-dark ml-3"
               style={{ cursor: "pointer", float: "right" }}
+              onClick={(e) => {
+                e.stopPropagation();
+                hi.push(`/quan-ly/lich-su-hoat-dong/${ls.id}`);
+              }}
             ></i>
           </div>
         );

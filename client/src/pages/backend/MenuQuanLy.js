@@ -52,6 +52,7 @@ import DatPhongPage from "./phong/datphong/DatPhongPage";
 import SuDungDichVuPage from "./phong/datphong/SuDungDichVuPage";
 import PhieuXacNhanPage from "./phong/PhieuXacNhanPage";
 import ChiTietKhachHangPage from "./qlkhachhang/ChiTietKhachHangPage";
+import ChiTietLichSuPage from "./lshoatdong/ChiTietLichSuPage";
 
 const MenuQuanLy = () => {
   return (
@@ -61,6 +62,11 @@ const MenuQuanLy = () => {
         <div className="container pt-5">
           {/* lich su hoat dong */}
           <Route path="/quan-ly/" exact component={LichSuHoatDongPage} />
+          <Route
+            path="/quan-ly/lich-su-hoat-dong/:id"
+            exact
+            component={ChiTietLichSuPage}
+          />
           {/* Admin */}
           <Route
             path="/quan-ly/admin/tai-khoan"
