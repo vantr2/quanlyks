@@ -3072,3 +3072,21 @@ app.post("/api/v1/lich-su/them", async (req, res) => {
   }
 });
 //#endregion
+
+//#region  Thu chi
+//danh sach phieuthu
+app.get("/api/v1/thu-chi/phieu-thu", async (req, res) => {
+  try {
+    const result = await db.query("select * from v_phieuthu order by id desc");
+
+    res.status(200).json({
+      status: "ok",
+      data: {
+        phieuthu: result.rows,
+      },
+    });
+  } catch (err) {
+    console.error("danh sach phieuthu: " + err.message);
+  }
+});
+//#endregion

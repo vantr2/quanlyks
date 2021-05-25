@@ -1,6 +1,6 @@
 import React from "react";
 import Sidebar from "../../components/sidebar/Sidebar";
-import { BrowserRouter as Switch, Redirect, Route } from "react-router-dom";
+import { BrowserRouter as Switch, Route } from "react-router-dom";
 
 import TaiKhoanPage from "./admin/TaiKhoanPage";
 
@@ -62,7 +62,6 @@ const MenuQuanLy = () => {
       <Switch>
         <Sidebar />
         <div className="container pt-5">
-          <Route render={() => <Redirect to={{ pathname: "/quan-ly/" }} />} />
           {/* <Route path="/quan-ly/*" component={LichSuHoatDongPage} /> */}
           {/* lich su hoat dong */}
           <Route path="/quan-ly/" exact component={LichSuHoatDongPage} />
