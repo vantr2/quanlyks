@@ -1,6 +1,6 @@
 import React from "react";
 import Sidebar from "../../components/sidebar/Sidebar";
-import { BrowserRouter as Switch, Route } from "react-router-dom";
+import { BrowserRouter as Switch, Redirect, Route } from "react-router-dom";
 
 import TaiKhoanPage from "./admin/TaiKhoanPage";
 
@@ -53,6 +53,8 @@ import SuDungDichVuPage from "./phong/datphong/SuDungDichVuPage";
 import PhieuXacNhanPage from "./phong/PhieuXacNhanPage";
 import ChiTietKhachHangPage from "./qlkhachhang/ChiTietKhachHangPage";
 import ChiTietLichSuPage from "./lshoatdong/ChiTietLichSuPage";
+import PhieuThuPage from "./thuchi/PhieuThuPage";
+import PhieuChiPage from "./thuchi/PhieuChiPage";
 
 const MenuQuanLy = () => {
   return (
@@ -60,6 +62,8 @@ const MenuQuanLy = () => {
       <Switch>
         <Sidebar />
         <div className="container pt-5">
+          <Route render={() => <Redirect to={{ pathname: "/quan-ly/" }} />} />
+          {/* <Route path="/quan-ly/*" component={LichSuHoatDongPage} /> */}
           {/* lich su hoat dong */}
           <Route path="/quan-ly/" exact component={LichSuHoatDongPage} />
           <Route
@@ -264,6 +268,17 @@ const MenuQuanLy = () => {
             exact
             component={ChamCongPage}
           />{" "}
+          {/* Thu chi */}
+          <Route
+            path="/quan-ly/thu-chi/phieu-thu"
+            exact
+            component={PhieuThuPage}
+          />
+          <Route
+            path="/quan-ly/thu-chi/phieu-chi"
+            exact
+            component={PhieuChiPage}
+          />
         </div>
       </Switch>
     </div>

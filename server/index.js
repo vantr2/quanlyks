@@ -2995,6 +2995,26 @@ app.get("/api/v1/lich-su/danh-sach", async (req, res) => {
   }
 });
 
+// lich su theo id
+app.get("/api/v1/lich-su/danh-sach/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await db.query(
+      "select * from tbl_lshoatdong where id = $1",
+      [id]
+    );
+
+    res.status(200).json({
+      status: "ok",
+      data: {
+        lichsu: result.rows[0],
+      },
+    });
+  } catch (err) {
+    console.error("danh sach lich su: " + err.message);
+  }
+});
+
 //danh sach lich su cap quan ly
 app.get("/api/v1/lich-su/danh-sach-cap-quan-ly", async (req, res) => {
   try {
@@ -3018,7 +3038,7 @@ app.get("/api/v1/lich-su/danh-sach-theo-nv/:acc", async (req, res) => {
   try {
     const { acc } = req.params;
     const result = await db.query(
-      "select * from tbl_lshoatdong where where nguoithuchien = $1 order by id desc",
+      "select * from tbl_lshoatdong where nguoithuchien = $1 order by id desc",
       [acc]
     );
 

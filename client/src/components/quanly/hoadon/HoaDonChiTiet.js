@@ -102,7 +102,11 @@ const HoaDonChiTiet = () => {
         >
           {showDSPhong ? "Đóng" : "Danh sách phòng"}
         </button>
-        <ThanhToan id={id} dsdp={dsDPTheoHoaDon} />
+        {hoadonSelected.trangthai === 0 ? (
+          <ThanhToan id={id} dsdp={dsDPTheoHoaDon} />
+        ) : (
+          ""
+        )}
       </div>
 
       <h4 className="mt-3">Thông tin hóa đơn</h4>

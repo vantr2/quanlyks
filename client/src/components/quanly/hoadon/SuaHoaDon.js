@@ -3,12 +3,15 @@ import CurrencyInput from "react-currency-input-field";
 import HoaDonFinder from "../../../apis/HoaDonFinder";
 import NhanVienFinder from "../../../apis/NhanVienFinder";
 import { useHistory } from "react-router";
+import ThemLichSu from "../../../utils/ThemLichSu";
 const SuaHoaDon = ({ id }) => {
   let hi = useHistory();
   const [nvId, setNvId] = useState("");
   const [vat, setVat] = useState("10");
   const [hinhthuctt, setHinhThucTT] = useState("1");
   const [dsNhanVien, setDsNhanVien] = useState([]);
+
+  const [old, setOld] = useState({});
   const fetchData = async () => {
     try {
       const res = await NhanVienFinder.get("/danh-sach-nhan-vien");
@@ -19,6 +22,12 @@ const SuaHoaDon = ({ id }) => {
       setNvId(hdSelected.nv_id);
       setVat(hdSelected.vat);
       setHinhThucTT(hdSelected.hinhthuctt);
+      setOld({
+        id: id,
+        nv: hdSelected.nv_id,
+        hinhthuctt: hdSelected.hinhthuctt,
+        vat: hdSelected.vat,
+      });
     } catch (err) {
       console.log(err.message);
     }
@@ -34,6 +43,20 @@ const SuaHoaDon = ({ id }) => {
           vat: vat,
         });
         if (res.data.status === "ok") {
+          const newd = {
+            id: id,
+            nv: nvId,
+            hinhthuctt: hinhthuctt,
+            vat: vat,
+          };
+          if (JSON.stringify(old) !== JSON.stringify(newd)) {
+            ThemLichSu({
+              doing: "Sửa",
+              olddata: { old },
+              newdata: { new: newd },
+              tbl: "Hóa đơn",
+            });
+          }
           hi.push("/quan-ly/phong");
           hi.push("/quan-ly/phong/hoa-don");
         }
