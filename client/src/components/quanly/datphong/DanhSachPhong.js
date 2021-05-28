@@ -67,7 +67,7 @@ const DanhSachPhong = () => {
     { value: "0", label: "Sẵn sàng", color: "#2640eb" },
     { value: "1", label: "Đang được đặt", color: "#24e3dd" },
     { value: "2", label: "Đang sử dụng", color: "#2fed39" },
-    { value: "3", label: "Chờ hóa đơn", color: "#b3e33b" },
+    { value: "3", label: "Đã trả phòng", color: "#b3e33b" },
     { value: "4", label: "Chưa thanh toán", color: "#f5c536" },
   ];
 

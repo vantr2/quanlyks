@@ -10,3 +10,13 @@ body {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+
+.printbill {
+  display: none !important;
+}
+
+@media print {
+  .printbill {
+    display: block !important;
+  }
+}

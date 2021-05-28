@@ -55,14 +55,12 @@ const DanhSachDatPhong = () => {
         trangthai = "Đang sử dụng";
         break;
       case "3":
-        trangthai = "Chờ hóa đơn.";
+        trangthai = "Đã trả phòng.";
         break;
       case "4":
         trangthai = "Chưa thanh toán.";
         break;
-      case "5":
-        trangthai = "Chưa dọn.";
-        break;
+
       default:
         break;
     }

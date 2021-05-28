@@ -4,7 +4,7 @@ const cors = require("cors");
 const morgan = require("morgan");
 const fs = require("fs");
 const db = require("./db");
-
+const func = require("./assets/js/func.js");
 const app = express();
 // const accessLogStream = fs.createWriteStream("./log/access.log", {
 //   flags: "a",
@@ -350,7 +350,7 @@ app.post("/api/v1/kiem-tra-dang-nhap-frontend", async (req, res) => {
 app.get("/api/v1/nhan-vien/danh-sach-nhan-vien", async (req, res) => {
   try {
     const result = await db.query(
-      "select * from v_nhanvien order by vaitro desc"
+      "select * from v_nhanvien order by ma_nhan_vien desc"
     );
 
     res.status(200).json({
@@ -368,7 +368,7 @@ app.get("/api/v1/nhan-vien/danh-sach-nhan-vien", async (req, res) => {
 app.get("/api/v1/nhan-vien/danh-sach-nhan-vien-kho", async (req, res) => {
   try {
     const result = await db.query(
-      "select * from v_nhanvien where vaitro = 'NVK' order by vaitro desc"
+      "select * from v_nhanvien where vaitro = 'NVK' order by ma_nhan_vien desc"
     );
 
     res.status(200).json({
@@ -386,7 +386,7 @@ app.get("/api/v1/nhan-vien/danh-sach-nhan-vien-kho", async (req, res) => {
 app.get("/api/v1/nhan-vien/danh-sach-nhan-vien-thuong", async (req, res) => {
   try {
     const result = await db.query(
-      "select * from v_nhanvien where vaitro <> 'QL' order by vaitro desc"
+      "select * from v_nhanvien where vaitro <> 'QL' order by ma_nhan_vien desc"
     );
 
     res.status(200).json({
@@ -397,6 +397,24 @@ app.get("/api/v1/nhan-vien/danh-sach-nhan-vien-thuong", async (req, res) => {
     });
   } catch (err) {
     console.error("Lay danh sach nhan vien" + err.message);
+  }
+});
+
+//lay danh sách nhan vien ql
+app.get("/api/v1/nhan-vien/danh-sach-nhan-vien-ql", async (req, res) => {
+  try {
+    const result = await db.query(
+      "select * from v_nhanvien where vaitro = 'QL' order by ma_nhan_vien desc"
+    );
+
+    res.status(200).json({
+      status: "ok",
+      data: {
+        nhanvien: result.rows,
+      },
+    });
+  } catch (err) {
+    console.error("Lay danh sach nhan vien ql:" + err.message);
   }
 });
 
@@ -582,10 +600,12 @@ app.post("/api/v1/nhan-vien/them-nhan-vien", async (req, res) => {
       email,
       taikhoan,
       ngayvaolam,
-      luongcoban,
     } = req.body;
+
+    const res_dsnv = await db.query("select * from tbl_nhanvien");
+
     const result = await db.query(
-      "insert into tbl_nhanvien (name, gioitinh, ngaysinh, diachi, cmnd,sdt,email,account,ngayvaolam,luongcoban) values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10 ) returning *",
+      "insert into tbl_nhanvien (name, gioitinh, ngaysinh, diachi, cmnd,sdt,email,account,ngayvaolam,ma_nhan_vien) values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10 ) returning *",
       [
         ten,
         gioitinh,
@@ -596,7 +616,8 @@ app.post("/api/v1/nhan-vien/them-nhan-vien", async (req, res) => {
         email,
         taikhoan,
         ngayvaolam,
-        luongcoban,
+        // luongcoban,
+        func.MaNV(res_dsnv.rows),
       ]
     );
 
@@ -614,21 +635,11 @@ app.post("/api/v1/nhan-vien/them-nhan-vien", async (req, res) => {
 //sua nhan vien
 app.put("/api/v1/nhan-vien/sua-nhan-vien", async (req, res) => {
   try {
-    const {
-      id,
-      ten,
-      gioitinh,
-      ngaysinh,
-      diachi,
-      cmnd,
-      sdt,
-      email,
-      luongcoban,
-    } = req.body;
+    const { id, ten, gioitinh, ngaysinh, diachi, cmnd, sdt, email } = req.body;
 
     const result = await db.query(
-      "update tbl_nhanvien set name=$1, gioitinh=$2, ngaysinh=$3, diachi=$4, cmnd=$5,sdt=$6,email=$7,luongcoban=$8 where id=$9",
-      [ten, gioitinh, ngaysinh, diachi, cmnd, sdt, email, luongcoban, id]
+      "update tbl_nhanvien set name=$1, gioitinh=$2, ngaysinh=$3, diachi=$4, cmnd=$5,sdt=$6,email=$7 where id=$8",
+      [ten, gioitinh, ngaysinh, diachi, cmnd, sdt, email, id]
     );
     res.status(200).json({
       status: "ok",
@@ -2362,6 +2373,26 @@ app.get("/api/v1/dat-phong/danh-sach-theo-kh/:khid", async (req, res) => {
   }
 });
 
+// danh sách kh đã check out, chưa lập hóa đơn
+app.get("/api/v1/dat-phong/danh-sach-kh-lap-hoa-don", async (req, res) => {
+  try {
+    const result = await db.query(
+      "select DISTINCT kh_id,kh_name,kh_sdt from v_datphong where trangthai = 1 and tt_phong = 3"
+    );
+
+    res.status(200).json({
+      status: "ok",
+      data: {
+        datphong: result.rows,
+      },
+    });
+  } catch (err) {
+    console.error(
+      "danh sach kh đã check out, chưa lập hóa đơn: " + err.message
+    );
+  }
+});
+
 // them dat phong
 app.post("/api/v1/dat-phong/them", async (req, res) => {
   try {
@@ -2465,10 +2496,10 @@ app.put("/api/v1/dat-phong/check-out", async (req, res) => {
 //them chi tiet
 app.post("/api/v1/dat-phong/them-chi-tiet", async (req, res) => {
   try {
-    const { datphong_id, dichvu_id, gia, soluong, thanhtien } = req.body;
+    const { datphong_id, dichvu_id, gia, thanhtien } = req.body;
     const result = await db.query(
-      "insert into tbl_datphong_sddichvu (datphong_id,dichvu_id,gia,soluong,thanhtien) values($1,$2,$3,$4,$5) returning *",
-      [datphong_id, dichvu_id, gia, soluong, thanhtien]
+      "insert into tbl_datphong_sddichvu (datphong_id,dichvu_id,gia,thanhtien) values($1,$2,$3,$4) returning *",
+      [datphong_id, dichvu_id, gia, thanhtien]
     );
 
     res.status(201).json({
@@ -2547,40 +2578,6 @@ app.get("/api/v1/dat-phong/kiem-tra-dv/:dvid/:dpid", async (req, res) => {
     });
   } catch (err) {
     console.error("kiem tra dich vu da su dung chua: " + err.message);
-  }
-});
-
-// Cap nhat so luong ++
-app.put("/api/v1/dat-phong/tang-so-luong", async (req, res) => {
-  try {
-    const { id } = req.body;
-
-    const result = await db.query(
-      "update tbl_datphong_sddichvu set soluong=soluong+1 where id=$1",
-      [id]
-    );
-    res.status(200).json({
-      status: "ok",
-    });
-  } catch (err) {
-    console.log("tăng so luong:  " + err.message);
-  }
-});
-
-// Cap nhat so luong --
-app.put("/api/v1/dat-phong/giam-so-luong", async (req, res) => {
-  try {
-    const { id } = req.body;
-
-    const result = await db.query(
-      "update tbl_datphong_sddichvu set soluong=soluong-1 where id=$1",
-      [id]
-    );
-    res.status(200).json({
-      status: "ok",
-    });
-  } catch (err) {
-    console.log("tăng so luong:  " + err.message);
   }
 });
 
@@ -3087,6 +3084,97 @@ app.get("/api/v1/thu-chi/phieu-thu", async (req, res) => {
     });
   } catch (err) {
     console.error("danh sach phieuthu: " + err.message);
+  }
+});
+
+// Lay phieuthu theo id
+app.get("/api/v1/thu-chi/phieu-thu/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await db.query("select * from v_phieuthu where id = $1", [
+      id,
+    ]);
+
+    res.status(200).json({
+      status: "ok",
+      data: {
+        phieuthu: result.rows[0],
+      },
+    });
+  } catch (err) {
+    console.error("lay 1 phieuthu theo id: " + err.message);
+  }
+});
+
+//danh sach phieu chi
+app.get("/api/v1/thu-chi/phieu-chi", async (req, res) => {
+  try {
+    const result = await db.query("select * from v_phieuchi order by id desc");
+
+    res.status(200).json({
+      status: "ok",
+      data: {
+        phieuchi: result.rows,
+      },
+    });
+  } catch (err) {
+    console.error("danh sach phieu chi: " + err.message);
+  }
+});
+
+// Lay phieu chi theo id
+app.get("/api/v1/thu-chi/phieu-chi/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await db.query("select * from v_phieuchi where id = $1", [
+      id,
+    ]);
+
+    res.status(200).json({
+      status: "ok",
+      data: {
+        phieuchi: result.rows[0],
+      },
+    });
+  } catch (err) {
+    console.error("lay 1 phieu chi theo id: " + err.message);
+  }
+});
+
+// them phieu chi
+app.post("/api/v1/thu-chi/phieu-chi", async (req, res) => {
+  try {
+    const { khoanchi, ngaychi, nguoichi, tienchi } = req.body;
+    const result = await db.query(
+      "insert into tbl_phieuchi(khoanchi,ngaychi,nguoichi,tienchi,linkct,thamchieu) values($1,$2,$3,$4,'','') returning *",
+      [khoanchi, ngaychi, nguoichi, tienchi]
+    );
+
+    res.status(200).json({
+      status: "ok",
+      data: {
+        phieuchi: result.rows[0],
+      },
+    });
+  } catch (err) {
+    console.error("Them phieu chi: " + err.message);
+  }
+});
+
+// sua phieu chi
+app.put("/api/v1/thu-chi/phieu-chi", async (req, res) => {
+  try {
+    const { id, khoanchi, ngaychi, nguoichi, tienchi } = req.body;
+    const result = await db.query(
+      "update tbl_phieuchi set khoanchi = $2,ngaychi=$3, nguoichi=$4, tienchi=$5 where id  = $1",
+      [id, khoanchi, ngaychi, nguoichi, tienchi]
+    );
+
+    res.status(200).json({
+      status: "ok",
+    });
+  } catch (err) {
+    console.error("Sửa phieu chi: " + err.message);
   }
 });
 //#endregion

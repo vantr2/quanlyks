@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import KhachHangFinder from "../../../apis/KhachHangFinder";
 import TaiKhoanFinder from "../../../apis/TaiKhoanFinder";
 import { AccountContext } from "../../../contexts/AccountContext";
+import Select from "react-select";
 import {
   convertDate,
   convertDataTocreatableSelect,
@@ -11,7 +12,7 @@ import NormalizeString from "../../../utils/NormalizeString";
 import ThemLichSu from "../../../utils/ThemLichSu";
 
 const ThongTinKhachHang = () => {
-  const [dsKhachHang, setDsKhachHang] = useState([]);
+  //   const [dsKhachHang, setDsKhachHang] = useState([]);
   const [khID, setKhId] = useState("");
 
   const [tenKH, setTenKH] = useState("");
@@ -33,6 +34,12 @@ const ThongTinKhachHang = () => {
 
   const { setKHID } = useContext(AccountContext);
 
+  const [optionsKH, setOptionsKH] = useState([]);
+  const [valueKh, setValueKh] = useState({
+    label: "-- Chưa có --",
+    value: "",
+  });
+
   const [old, setOld] = useState({});
 
   const getKieuKhachHang = async () => {
@@ -47,7 +54,21 @@ const ThongTinKhachHang = () => {
   const getListKh = async () => {
     try {
       const res = await KhachHangFinder.get("/danh-sach");
-      setDsKhachHang(res.data.data.khachhang);
+      //   setDsKhachHang(res.data.data.khachhang);
+      const options = [
+        {
+          label: "-- Chưa có --",
+          value: "",
+        },
+      ];
+      res.data.data.khachhang.forEach((item) => {
+        const option = {
+          label: item.sdt + " - " + item.ten,
+          value: item.id,
+        };
+        options.push(option);
+      });
+      setOptionsKH(options);
       //   setKHID("");
     } catch (err) {
       console.log(err.message);
@@ -133,29 +154,56 @@ const ThongTinKhachHang = () => {
     }
   };
 
-  const handleChangeDsKH = (e) => {
-    setKhId(e.target.value);
-    setKHID(e.target.value);
-    if (e.target.value !== "0") {
-      getMotKH(e.target.value);
-      setButtonThem("d-none");
-      setButtonSua("");
-      setDisableAccount(true);
-    } else {
-      setTenKH("");
-      setGioiTinh("");
-      setNgaySinh("");
-      setDiaChi("");
-      setCMND("");
-      setSdt("");
-      setAcc("");
-      setButtonSua("d-none");
-      setButtonThem("");
-      setDisableAccount(false);
-      setKieuKhID("");
-      setKieuKHSelected([]);
+  const handleChangeSelectKh = (value, action) => {
+    setValueKh(value);
+    setKhId(value.value);
+    setKHID(value.value);
+    if (action.action === "select-option") {
+      if (value.value !== "") {
+        getMotKH(value.value);
+        setButtonThem("d-none");
+        setButtonSua("");
+        setDisableAccount(true);
+      } else {
+        setTenKH("");
+        setGioiTinh("");
+        setNgaySinh("");
+        setDiaChi("");
+        setCMND("");
+        setSdt("");
+        setAcc("");
+        setButtonSua("d-none");
+        setButtonThem("");
+        setDisableAccount(false);
+        setKieuKhID("");
+        setKieuKHSelected([]);
+      }
     }
+    console.log(value, action);
   };
+  //   const handleChangeDsKH = (e) => {
+  //     setKhId(e.target.value);
+  //     setKHID(e.target.value);
+  //     if (e.target.value !== "0") {
+  //       getMotKH(e.target.value);
+  //       setButtonThem("d-none");
+  //       setButtonSua("");
+  //       setDisableAccount(true);
+  //     } else {
+  //       setTenKH("");
+  //       setGioiTinh("");
+  //       setNgaySinh("");
+  //       setDiaChi("");
+  //       setCMND("");
+  //       setSdt("");
+  //       setAcc("");
+  //       setButtonSua("d-none");
+  //       setButtonThem("");
+  //       setDisableAccount(false);
+  //       setKieuKhID("");
+  //       setKieuKHSelected([]);
+  //     }
+  //   };
 
   const handleInsertKh = async () => {
     if (!tenKH) {
@@ -257,9 +305,15 @@ const ThongTinKhachHang = () => {
               },
               tbl: "Khách hàng",
             });
+
             getListKh();
             setKHID(r.data.data.khachhang.id);
             setKhId(r.data.data.khachhang.id);
+            setValueKh({
+              label:
+                r.data.data.khachhang.sdt + " - " + r.data.data.khachhang.ten,
+              value: r.data.data.khachhang.id,
+            });
             getMotKH(r.data.data.khachhang.id);
             setButtonThem("d-none");
             setButtonSua("");
@@ -388,7 +442,13 @@ const ThongTinKhachHang = () => {
       <h3 className="text-center">Thông tin khách hàng</h3>
 
       <form action="" className="mt-5">
-        <div className="input-group-prepend form-group">
+        <Select
+          className="form-group"
+          options={optionsKH}
+          value={valueKh}
+          onChange={handleChangeSelectKh}
+        />
+        {/* <div className="input-group-prepend form-group">
           <label className="input-group-text" htmlFor="dskhachhang">
             Khách hàng
           </label>
@@ -407,7 +467,8 @@ const ThongTinKhachHang = () => {
               );
             })}
           </select>
-        </div>
+        </div> */}
+
         <div className="form-group">
           <label htmlFor="tenkh">Tên khách hàng</label>
           <input

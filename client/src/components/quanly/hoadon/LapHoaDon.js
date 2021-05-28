@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import DatPhongFinder from "../../../apis/DatPhongFinder";
-import KhachHangFinder from "../../../apis/KhachHangFinder";
 import NhanVienFinder from "../../../apis/NhanVienFinder";
 import HoaDonFinder from "../../../apis/HoaDonFinder";
 import PhongFinder from "../../../apis/PhongFinder";
@@ -17,7 +16,6 @@ const LapHoaDon = () => {
   const [hinhthuctt, setHinhThucTT] = useState("1");
 
   const [msgError, setMsgError] = useState("");
-  const [msgSuccess, setMsgSuccess] = useState("");
 
   const [dsKhachHang, setDsKhachHang] = useState([]);
   const [dsNhanVien, setDsNhanVien] = useState([]);
@@ -30,9 +28,8 @@ const LapHoaDon = () => {
   useEffect(() => {
     const getListKH = async () => {
       try {
-        const res = await KhachHangFinder.get("/danh-sach");
-        setDsKhachHang(res.data.data.khachhang);
-        //   setKHID("");
+        const res = await DatPhongFinder.get("/danh-sach-kh-lap-hoa-don");
+        setDsKhachHang(res.data.data.datphong);
       } catch (err) {
         console.log(err.message);
       }
@@ -136,15 +133,9 @@ const LapHoaDon = () => {
                 ten: item.label,
                 trangthai: 4,
               });
-              setMsgSuccess("Thêm thành công.");
-              setTimeout(() => {
-                setMsgSuccess("");
-                hi.push("/quan-ly");
-                hi.push("/quan-ly/phong/hoa-don");
-              }, 2000);
+              hi.push(`/quan-ly/phong/hoa-don/${hoadon_id_inserted}`);
             }
           });
-          console.log(hd);
           ThemLichSu({
             doing: "Lập",
             olddata: {},
@@ -236,8 +227,8 @@ const LapHoaDon = () => {
                             </option>
                             {dsKhachHang.map((kh) => {
                               return (
-                                <option value={kh.id} key={kh.id}>
-                                  {kh.ten} - {kh.cmnd} - {kh.sdt}
+                                <option value={kh.kh_id} key={kh.kh_id}>
+                                  {kh.kh_name} - {kh.kh_sdt}
                                 </option>
                               );
                             })}
@@ -328,7 +319,6 @@ const LapHoaDon = () => {
                     </div>
 
                     <p className="text-danger my-2">{msgError}</p>
-                    <p className="text-success my-2">{msgSuccess}</p>
                     <button
                       type="button"
                       className="btn btn-primary py-2 px-4 "

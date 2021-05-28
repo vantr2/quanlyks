@@ -1,7 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
 import DichVuFinder from "../../../apis/DichVuFinder";
 import DatPhongFinder from "../../../apis/DatPhongFinder";
-import { NumberFormat } from "../../../utils/DataHandler";
+import {
+  convertTime,
+  NumberFormat,
+  NormalizeDate,
+} from "../../../utils/DataHandler";
 import { useParams, useHistory } from "react-router";
 import { AccountContext } from "../../../contexts/AccountContext";
 import XemThanhToan from "./XemThanhToan";
@@ -17,8 +21,9 @@ const SuDungDichVu = () => {
 
   const { dsDvSuDung, setDsDvSuDung, themDvSd } = useContext(AccountContext);
 
-  const [msgError, setMsgError] = useState("");
   const [msgSuccess, setMsgSuccess] = useState("");
+  const [khName, setKhName] = useState("");
+  const [khSdt, setKhSdt] = useState("");
   const { phongid } = useParams();
 
   const getDichVu = async () => {
@@ -44,6 +49,8 @@ const SuDungDichVu = () => {
         const res = await DatPhongFinder.get(`/danh-sach/${phongid}`);
         if (res.data.status === "ok") {
           setDpSelected(res.data.data.datphong);
+          setKhName(res.data.data.datphong.kh_name);
+          setKhSdt(res.data.data.datphong.kh_sdt);
           const res2 = await DatPhongFinder.get(
             `/danh-sach-dich-vu/${res.data.data.datphong.id}`
           );
@@ -76,123 +83,28 @@ const SuDungDichVu = () => {
   const handleClickImg = async (e, dv) => {
     e.stopPropagation();
     try {
-      const res_checkdv = await DatPhongFinder.get(
-        `/kiem-tra-dv/${dv.id}/${dpSelected.id}`
-      );
-      //   console.log(typeof res_checkdv.data.data);
-
-      if (res_checkdv.data.data.datphong_chitiet) {
-        setMsgError(
-          "Dịch vụ đã được sử dụng, do đó sẽ tự động tăng số lượng dịch vụ này lên."
-        );
-        setTimeout(() => {
-          setMsgError("");
-        }, 4000);
-        await DatPhongFinder.put("/tang-so-luong", {
-          id: res_checkdv.data.data.datphong_chitiet.id,
-        });
-
-        hi.push("/quan-ly/phong/tinh-trang");
-        hi.push(`/quan-ly/phong/tinh-trang/${phongid}/su-dung-dich-vu`);
-      } else {
-        const res = await DatPhongFinder.post("/them-chi-tiet", {
-          datphong_id: dpSelected.id,
-          dichvu_id: dv.id,
-          gia: dv.giahientai,
-          soluong: 1,
-          thanhtien: parseInt(dv.giahientai),
-        });
-        if (res.data.status === "ok") {
-          ThemLichSu({
-            doing: "Sử dụng",
-            olddata: {},
-            newdata: { new: res.data.data.datphong_chitiet },
-            tbl: "Dịch vụ",
-          });
-          setMsgSuccess("Thêm thành công");
-          setTimeout(() => {
-            setMsgSuccess("");
-          }, 4000);
-          const res_dpchitiet = await DatPhongFinder.get(
-            `/danh-sach-dich-vu-theo-id/${res.data.data.datphong_chitiet.id}`
-          );
-
-          themDvSd(res_dpchitiet.data.data.datphong_chitiet);
-        }
-      }
-    } catch (err) {
-      console.log(err.message);
-    }
-  };
-
-  const handleIncrease = async (e, dv) => {
-    e.stopPropagation();
-    try {
-      const res = await DatPhongFinder.put("/tang-so-luong", { id: dv.id });
+      const res = await DatPhongFinder.post("/them-chi-tiet", {
+        datphong_id: dpSelected.id,
+        dichvu_id: dv.id,
+        gia: dv.giahientai,
+        thanhtien: parseInt(dv.giahientai),
+      });
       if (res.data.status === "ok") {
         ThemLichSu({
-          doing: "Tăng số lượng",
-          olddata: {
-            old: {
-              soluong: dv.soluong,
-            },
-          },
-          newdata: {
-            new: {
-              soluong: dv.soluong + 1,
-            },
-          },
+          doing: "Sử dụng",
+          olddata: {},
+          newdata: { new: res.data.data.datphong_chitiet },
           tbl: "Dịch vụ",
         });
-        hi.push("/quan-ly/phong/tinh-trang");
-        hi.push(`/quan-ly/phong/tinh-trang/${phongid}/su-dung-dich-vu`);
-      }
-    } catch (err) {
-      console.log(err.message);
-    }
-  };
+        setMsgSuccess("Thêm thành công");
+        setTimeout(() => {
+          setMsgSuccess("");
+        }, 2000);
+        const res_dpchitiet = await DatPhongFinder.get(
+          `/danh-sach-dich-vu-theo-id/${res.data.data.datphong_chitiet.id}`
+        );
 
-  const handleDecrease = async (e, dv) => {
-    e.stopPropagation();
-    try {
-      if (dv.soluong === 1) {
-        await DatPhongFinder.delete(`/xoa-chi-tiet/${dv.id}`);
-        ThemLichSu({
-          doing: "Tăng số lượng",
-          olddata: {
-            old: {
-              soluong: dv.soluong,
-            },
-          },
-          newdata: {
-            new: {
-              soluong: dv.soluong - 1,
-            },
-          },
-          tbl: "Dịch vụ",
-        });
-        hi.push("/quan-ly/phong/tinh-trang");
-        hi.push(`/quan-ly/phong/tinh-trang/${phongid}/su-dung-dich-vu`);
-      } else {
-        const res = await DatPhongFinder.put("/giam-so-luong", { id: dv.id });
-        if (res.data.status === "ok") {
-          ThemLichSu({
-            doing: "Giảm số lượng",
-            olddata: {
-              old: {
-                soluong: dv.soluong,
-              },
-            },
-            newdata: {
-              new: {
-                soluong: dv.soluong - 1,
-              },
-            },
-            tbl: "Dịch vụ",
-          });
-          hi.push("/quan-ly/phong/tinh-trang");
-          hi.push(`/quan-ly/phong/tinh-trang/${phongid}/su-dung-dich-vu`);
-        }
+        themDvSd(res_dpchitiet.data.data.datphong_chitiet);
       }
     } catch (err) {
       console.log(err.message);
@@ -205,6 +117,13 @@ const SuDungDichVu = () => {
 
   return (
     <div>
+      {" "}
+      <h2 className="text-center">Sử dụng dịch vụ phòng {phongid}</h2>
+      <div className="text-center">
+        <u>
+          Khách hàng: {khName} - {khSdt}
+        </u>
+      </div>
       <div className="row mt-5">
         <div className="col-6 border border-dark">
           <div style={{ height: "550px", overflow: "auto" }}>
@@ -231,7 +150,7 @@ const SuDungDichVu = () => {
                 })}
               </select>
             </div>
-            <p className="text-danger">{msgError}</p>
+
             <p className="text-success">{msgSuccess}</p>
             {/* Danh sách dịch vụ */}
             <div className="row mt-3 ">
@@ -271,8 +190,8 @@ const SuDungDichVu = () => {
               <thead>
                 <tr>
                   <th>Tên dịch vụ</th>
-                  <th className="text-right">Đơn giá</th>
-                  <th className="text-center align-middle">Số lượng</th>
+                  <th>Đơn giá</th>
+                  <th>Ngày sử dụng</th>
                 </tr>
               </thead>
               <tbody>
@@ -283,34 +202,12 @@ const SuDungDichVu = () => {
                       key={dvsd.id}
                     >
                       <td className="align-middle">{dvsd.dvname}</td>
-                      <td
-                        className="align-middle text-right"
-                        style={{ width: "30%" }}
-                      >
-                        {NumberFormat(dvsd.gia)} VND
+                      <td className="align-middle ">
+                        <strong>{NumberFormat(dvsd.gia)}</strong> VND
                       </td>
-
-                      <td
-                        className="align-middle text-center"
-                        style={{ width: "30%" }}
-                      >
-                        <button
-                          type="button"
-                          className="btn btn-secondary px-3"
-                          onClick={(e) => handleDecrease(e, dvsd)}
-                        >
-                          <strong>-</strong>
-                        </button>
-                        &nbsp;&nbsp;
-                        {dvsd.soluong}
-                        &nbsp;&nbsp;
-                        <button
-                          type="button"
-                          className="btn btn-info"
-                          onClick={(e) => handleIncrease(e, dvsd, dvsd.soluong)}
-                        >
-                          <strong>+</strong>
-                        </button>
+                      <td className="align-middle ">
+                        {NormalizeDate(dvsd.ngaysd)}&nbsp;
+                        {convertTime(dvsd.ngaysd)}
                       </td>
                     </tr>
                   );

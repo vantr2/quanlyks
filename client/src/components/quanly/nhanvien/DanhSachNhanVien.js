@@ -64,7 +64,7 @@ const DanhSachNhanVien = () => {
           {dsNhanVien.map((nhanvien) => {
             return (
               <tr key={nhanvien.id}>
-                <td>{nhanvien.id}</td>
+                <td>{nhanvien.ma_nhan_vien}</td>
                 <td>{nhanvien.name}</td>
                 <td>{NormalizeDate(nhanvien.ngayvaolam)}</td>
 

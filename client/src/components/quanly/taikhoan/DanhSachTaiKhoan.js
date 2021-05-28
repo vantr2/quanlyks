@@ -73,7 +73,6 @@ const DanhSachTaiKhoan = () => {
         <thead className="thead-dark text-center">
           <tr>
             <th style={{ borderRight: "0.5px solid white" }}>Tên người dùng</th>
-            <th style={{ borderRight: "0.5px solid white" }}>Mật khẩu</th>
             <th style={{ borderRight: "0.5px solid white" }}>Tên hiển thị</th>
             <th style={{ borderRight: "0.5px solid white" }}>Trạng thái</th>
             <th style={{ borderRight: "0.5px solid white" }}>Vai trò</th>
@@ -89,9 +88,7 @@ const DanhSachTaiKhoan = () => {
                 <td style={{ borderRight: "0.5px solid #515151" }}>
                   {nguoidung.ten}
                 </td>
-                <td style={{ borderRight: "0.5px solid #515151" }}>
-                  {nguoidung.mk}
-                </td>
+
                 <td style={{ borderRight: "0.5px solid #515151" }}>
                   {nguoidung.ten_hienthi}
                 </td>

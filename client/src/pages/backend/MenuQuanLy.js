@@ -55,6 +55,8 @@ import ChiTietKhachHangPage from "./qlkhachhang/ChiTietKhachHangPage";
 import ChiTietLichSuPage from "./lshoatdong/ChiTietLichSuPage";
 import PhieuThuPage from "./thuchi/PhieuThuPage";
 import PhieuChiPage from "./thuchi/PhieuChiPage";
+import PhieuThuChiTietPage from "./thuchi/PhieuThuChiTietPage";
+import InHoaDonPage from "./phong/hoadon/InHoaDonPage";
 
 const MenuQuanLy = () => {
   return (
@@ -122,6 +124,11 @@ const MenuQuanLy = () => {
             path="/quan-ly/phong/hoa-don/:id"
             exact
             component={ChiTietHoaDonPage}
+          />
+          <Route
+            path="/quan-ly/phong/hoa-don/:id/in"
+            exact
+            component={InHoaDonPage}
           />
           {/* Danh muc */}
           <Route
@@ -272,6 +279,11 @@ const MenuQuanLy = () => {
             path="/quan-ly/thu-chi/phieu-thu"
             exact
             component={PhieuThuPage}
+          />
+          <Route
+            path="/quan-ly/thu-chi/phieu-thu/:id"
+            exact
+            component={PhieuThuChiTietPage}
           />
           <Route
             path="/quan-ly/thu-chi/phieu-chi"

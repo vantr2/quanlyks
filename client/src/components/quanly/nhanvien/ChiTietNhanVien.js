@@ -75,7 +75,9 @@ const ChiTietNhanVien = () => {
         </div> */}
       </div>
       <p className="text-center text-success">{msgNhanVienActionSuccess}</p>
-      <h4 className="mt-3 mb-3">{nhanvienSelected.name}</h4>
+      <h4 className="mt-3 mb-3">
+        MÃ NHÂN VIÊN: {nhanvienSelected.ma_nhan_vien}
+      </h4>
       <table className="table table-striped table-hover table-bordered mb-5">
         <tbody>
           <tr className="d-flex">
@@ -94,12 +96,12 @@ const ChiTietNhanVien = () => {
               {NormalizeDate(nhanvienSelected.ngayvaolam)}
             </td>
           </tr>
-          <tr className="d-flex">
+          {/* <tr className="d-flex">
             <td className="col-4 pl-2 font-weight-bold">Lương cơ bản</td>
             <td className="col-8 pl-2">
               <strong> {NumberFormat(nhanvienSelected.luongcoban)}</strong> VND
             </td>
-          </tr>
+          </tr> */}
           <tr className="d-flex">
             <td className="col-4 pl-2 font-weight-bold">Ngày sinh</td>
             <td className="col-8 pl-2">

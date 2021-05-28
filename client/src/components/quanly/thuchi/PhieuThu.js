@@ -17,13 +17,17 @@ const PhieuThu = () => {
     fetchData();
   }, []);
 
-  const handlePhieuThuSelected = (e, id) => {};
+  const handlePhieuThuSelected = (e, id) => {
+    e.stopPropagation();
+    hi.push(`/quan-ly/thu-chi/phieu-thu/${id}`);
+  };
 
   return (
     <div className="mt-5">
       <table className="table table-hover table-striped table-bordered ">
         <thead className="thead-dark text-center">
           <tr>
+            <th>Mã phiếu</th>
             <th>Khoản thu</th>
             <th>Ngày thu</th>
             <th>Người thu</th>
@@ -38,6 +42,7 @@ const PhieuThu = () => {
           {dsPhieuThu.map((phieuthu) => {
             return (
               <tr key={phieuthu.id}>
+                <td className="align-middle text-center">{phieuthu.id}</td>
                 <td className="align-middle text-center">
                   {phieuthu.khoanthu}
                 </td>

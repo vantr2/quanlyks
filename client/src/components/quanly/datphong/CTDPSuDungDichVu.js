@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import DatPhongFinder from "../../../apis/DatPhongFinder";
-import { NumberFormat } from "../../../utils/DataHandler";
+import {
+  convertTime,
+  NormalizeDate,
+  NumberFormat,
+} from "../../../utils/DataHandler";
 const CTDPSuDungDichVu = ({ id }) => {
   const [dsDichVu, setDsDichVu] = useState([]);
   const handleClick = async () => {
@@ -39,7 +43,7 @@ const CTDPSuDungDichVu = ({ id }) => {
                 <tr>
                   <th>Tên dịch vụ</th>
                   <th className="text-right">Đơn giá</th>
-                  <th className="text-center align-middle">Số lượng</th>
+                  <th className="text-center align-middle">Ngày sử dụng</th>
                 </tr>
               </thead>
               <tbody>
@@ -55,7 +59,8 @@ const CTDPSuDungDichVu = ({ id }) => {
                       </td>
 
                       <td className="align-middle text-center">
-                        {dvsd.soluong}
+                        {NormalizeDate(dvsd.ngaysd)}&nbsp;
+                        {convertTime(dvsd.ngaysd)}
                       </td>
                     </tr>
                   );

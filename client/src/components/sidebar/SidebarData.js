@@ -9,7 +9,7 @@ import * as RiIcons from "react-icons/ri";
 import * as GiIcons from "react-icons/gi";
 import * as ImIcons from "react-icons/im";
 import * as MdIcons from "react-icons/md";
-import * as VscIcons from "react-icons/vsc";
+// import * as VscIcons from "react-icons/vsc";
 export const SidebarData = [
   //lich su hoat dong
   {
@@ -110,12 +110,12 @@ export const SidebarData = [
         icon: <FiIcons.FiHome />,
         cName: "sub-nav",
       },
-      {
-        title: "Loại",
-        path: "/quan-ly/danh-muc/loai",
-        icon: <FaIcons.FaListUl />,
-        cName: "sub-nav",
-      },
+      //   {
+      //     title: "Loại",
+      //     path: "/quan-ly/danh-muc/loai",
+      //     icon: <FaIcons.FaListUl />,
+      //     cName: "sub-nav",
+      //   },
     ],
   },
 
@@ -222,26 +222,26 @@ export const SidebarData = [
     ],
   },
   // Thu chi
-  {
-    title: "Thu chi",
-    icon: <BiIcons.BiNotepad />,
-    role: ["Admin", "QL"],
-    iconClosed: <RiIcons.RiArrowDownSFill />,
-    iconOpened: <RiIcons.RiArrowUpSFill />,
+  //   {
+  //     title: "Thu chi",
+  //     icon: <BiIcons.BiNotepad />,
+  //     role: ["Admin", "QL"],
+  //     iconClosed: <RiIcons.RiArrowDownSFill />,
+  //     iconOpened: <RiIcons.RiArrowUpSFill />,
 
-    subNav: [
-      {
-        title: "Phiếu thu",
-        path: "/quan-ly/thu-chi/phieu-thu",
-        icon: <VscIcons.VscOutput />,
-        cName: "sub-nav",
-      },
-      {
-        title: "Phiếu chi",
-        path: "/quan-ly/thu-chi/phieu-chi",
-        icon: <VscIcons.VscOutput />,
-        cName: "sub-nav",
-      },
-    ],
-  },
+  //     subNav: [
+  //       {
+  //         title: "Phiếu thu",
+  //         path: "/quan-ly/thu-chi/phieu-thu",
+  //         icon: <VscIcons.VscOutput />,
+  //         cName: "sub-nav",
+  //       },
+  //       {
+  //         title: "Phiếu chi",
+  //         path: "/quan-ly/thu-chi/phieu-chi",
+  //         icon: <VscIcons.VscOutput />,
+  //         cName: "sub-nav",
+  //       },
+  //     ],
+  //   },
 ];

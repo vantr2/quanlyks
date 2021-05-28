@@ -132,6 +132,9 @@ export const AccountContextProvider = (props) => {
   const [msgKHActionSuccess, setMsgKHActionSuccess] = useState("");
   const [msgKHActionError, setMsgKHActionError] = useState("");
 
+  //PHIEU CHI
+  const [msgPhieuChiActionSuccess, setMsgPhieuChiActionSuccess] = useState("");
+
   //lich su
   const [dsLichSu, setDsLichSu] = useState([]);
   return (
@@ -254,6 +257,10 @@ export const AccountContextProvider = (props) => {
         //lich su
         dsLichSu,
         setDsLichSu,
+
+        //
+        msgPhieuChiActionSuccess,
+        setMsgPhieuChiActionSuccess,
       }}
     >
       {props.children}

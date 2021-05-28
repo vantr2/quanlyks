@@ -178,7 +178,9 @@ const ThongTinDatPhong = () => {
   return (
     <div>
       <h3 className="text-center">Thông tin đặt phòng</h3>
+
       <form className="mt-5">
+        <h5 className="form-group">PHÒNG THUÊ : {phongid}</h5>
         <div className="form-group input-group">
           <div className="input-group-prepend">
             <label htmlFor="htdatphong" className="input-group-text">
