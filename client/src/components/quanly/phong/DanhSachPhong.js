@@ -43,6 +43,7 @@ const DanhSachPhong = () => {
             <th>Tiêu đề</th>
             <th>Giá phòng (/ngày)</th>
             <th>Giá phòng (/giờ)</th>
+            <th>Loại phòng</th>
             <th>Xem</th>
             <th>Sửa</th>
             <th>Xóa</th>
@@ -63,6 +64,7 @@ const DanhSachPhong = () => {
                 <td className="text-right align-middle">
                   {NumberFormat(phong.giaphongtheogio)} <b>VND</b>
                 </td>
+                <td className="align-middle">{phong.loaiphong}</td>
                 <td className="align-middle" style={{ cursor: "pointer" }}>
                   {" "}
                   <i

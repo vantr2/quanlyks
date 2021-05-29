@@ -96,7 +96,10 @@ const ChiTietPhong = () => {
               {NumberFormat(phongSelected.giaphongtheogio)}&nbsp;<b>VND</b>
             </td>
           </tr>
-
+          <tr className="d-flex">
+            <td className="col-3 pl-2 font-weight-bold">Loại phòng</td>
+            <td className="col-9 pl-2">{phongSelected.loaiphong}</td>
+          </tr>
           <tr className="d-flex">
             <td className="col-3 pl-2 font-weight-bold">Ảnh phòng</td>
             <td className="col-9 pl-2">

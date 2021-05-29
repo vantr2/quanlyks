@@ -976,9 +976,10 @@ app.post("/api/v1/phong/them-phong", async (req, res) => {
       giaphongtheongay,
       giaphongtheogio,
       filename,
+      loaiphong,
     } = req.body;
     const result = await db.query(
-      "insert into tbl_phong (ten, trangthai,anh,tieude,mota_ngangon,mota_chitiet,giaphongtheongay,giaphongtheogio,filename) values($1,$2,$3,$4,$5,$6,$7,$8,$9) returning *",
+      "insert into tbl_phong (ten, trangthai,anh,tieude,mota_ngangon,mota_chitiet,giaphongtheongay,giaphongtheogio,filename,loaiphong) values($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) returning *",
       [
         ten,
         trangthai,
@@ -989,6 +990,7 @@ app.post("/api/v1/phong/them-phong", async (req, res) => {
         giaphongtheongay,
         giaphongtheogio,
         filename,
+        loaiphong,
       ]
     );
 
@@ -1024,10 +1026,11 @@ app.put("/api/v1/phong/sua-phong", async (req, res) => {
       giaphongtheongay,
       giaphongtheogio,
       filename,
+      loaiphong,
     } = req.body;
 
     const result = await db.query(
-      "update tbl_phong set trangthai=$2,anh=$3,filename=$4,tieude=$5,mota_ngangon=$6,mota_chitiet=$7,giaphongtheongay=$8,giaphongtheogio=$9 where ten=$1",
+      "update tbl_phong set trangthai=$2,anh=$3,filename=$4,tieude=$5,mota_ngangon=$6,mota_chitiet=$7,giaphongtheongay=$8,giaphongtheogio=$9,loaiphong=$10 where ten=$1",
       [
         ten,
         trangthai,
@@ -1038,6 +1041,7 @@ app.put("/api/v1/phong/sua-phong", async (req, res) => {
         mtchitiet,
         giaphongtheongay,
         giaphongtheogio,
+        loaiphong,
       ]
     );
     res.status(200).json({

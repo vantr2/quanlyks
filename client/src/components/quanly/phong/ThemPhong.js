@@ -16,8 +16,9 @@ const ThemPhong = () => {
   const [giaphongtheogio, setGiaPhongTheoGio] = useState("");
   const [tieude, setTieuDe] = useState("");
   const [motangangon, setMoTaNganGon] = useState("");
-  const [motachitiet, setMoTaChiTiet] = useState("");
 
+  const [motachitiet, setMoTaChiTiet] = useState("");
+  const [loaiphong, setLoaiPhong] = useState("Phòng đơn");
   const [msgError, setMsgError] = useState("");
 
   const [image, setImage] = useState("");
@@ -91,6 +92,7 @@ const ThemPhong = () => {
           giaphongtheongay: giaphongtheongay,
           giaphongtheogio: giaphongtheogio,
           filename: filename,
+          loaiphong: loaiphong,
         });
         // console.log(res);
         if (res.data.status === "ok") {
@@ -190,15 +192,7 @@ const ThemPhong = () => {
                   <div className="col">
                     <div className="form-group">
                       <label htmlFor="giaphong">Giá phòng theo ngày</label>
-                      {/* <input
-                        type="number"
-                        min="10000"
-                        step="1000"
-                        id="giaphong"
-                        className="form-control text-right"
-                        value={giaphongtheongay}
-                        onChange={(e) => setGiaPhongTheoNgay(e.target.value)}
-                      /> */}
+
                       <CurrencyInput
                         id="giaphong"
                         value={giaphongtheongay}
@@ -217,15 +211,7 @@ const ThemPhong = () => {
                     {" "}
                     <div className="form-group">
                       <label htmlFor="giacanhtranh">Giá phòng theo giờ</label>
-                      {/* <input
-                        id="giacanhtranh"
-                        type="number"
-                        min="10000"
-                        step="1000"
-                        className="form-control text-right"
-                        value={giaphongtheogio}
-                        onChange={(e) => setGiaPhongTheoGio(e.target.value)}
-                      /> */}
+
                       <CurrencyInput
                         id="giacanhtranh"
                         value={giaphongtheogio}
@@ -238,6 +224,21 @@ const ThemPhong = () => {
                         step="1000"
                         maxLength="9"
                       />
+                    </div>
+                  </div>
+                  <div className="col">
+                    <div className="form-group">
+                      <label htmlFor="loaiphong">Loại phòng</label>
+                      <select
+                        id="loaiphong"
+                        className="form-control"
+                        value={loaiphong}
+                        onChange={(e) => setLoaiPhong(e.target.value)}
+                      >
+                        <option value="Phòng đơn">Phòng đơn</option>
+                        <option value="Phòng đôi">Phòng đôi</option>
+                        <option value="Gia đình">Gia đình</option>
+                      </select>
                     </div>
                   </div>
                 </div>
