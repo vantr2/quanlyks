@@ -1,5 +1,6 @@
 import axios from "axios";
+import Server from "../hosts/Server";
 
 export default axios.create({
-  baseURL: "http://localhost:3005/api/v1/khach-hang",
+  baseURL: Server + "/api/v1/khach-hang",
 });
