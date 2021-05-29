@@ -71,6 +71,48 @@ app.post("/api/v1/kiem-tra-dang-nhap-backend", async (req, res) => {
   }
 });
 
+// Kiem tra nguoi dung frontend
+app.post("/api/v1/kiem-tra-dang-nhap-frontend", async (req, res) => {
+  try {
+    const { ten, mk } = req.body;
+
+    const passAndiv = await db.query(
+      "select mk,iv from tbl_nguoidung where ten = $1",
+      [ten]
+    );
+    const encryption = {
+      iv: passAndiv.rows[0].iv,
+      password: passAndiv.rows[0].mk,
+    };
+    const checkpass = decrypt(encryption);
+    if (mk === checkpass) {
+      const result = await db.query(
+        "select ten,ten_hienthi,vaitro,avt from tbl_nguoidung where ten=$1 and trangthai='t'",
+        [ten]
+      );
+
+      res.status(200).json({
+        status: "ok",
+        data: {
+          ten: result.rows[0].ten,
+          ten_ht: result.rows[0].ten_hienthi,
+          vaitro: result.rows[0].vaitro,
+          avt: result.rows[0].avt,
+        },
+      });
+    } else {
+      res.json({
+        status: "Tài khoản hoặc mật khẩu không chính xác",
+      });
+    }
+  } catch (err) {
+    res.json({
+      status: "Tài khoản hoặc mật khẩu không chính xác",
+    });
+    console.error("Kiem tra dang nhap: " + err.message);
+  }
+});
+
 //Them tai khoan
 app.post("/api/v1/tai-khoan/them-tai-khoan", async (req, res) => {
   try {
@@ -317,28 +359,6 @@ app.put("/api/v1/tai-khoan/doi-mat-khau", async (req, res) => {
     }
   } catch (err) {
     console.log("change pw:" + err.message);
-  }
-});
-
-// Kiem tra nguoi dung frontend
-app.post("/api/v1/kiem-tra-dang-nhap-frontend", async (req, res) => {
-  try {
-    const result = await db.query(
-      "select ten,ten_hienthi from tbl_nguoidung where ten=$1 and mk=$2 and trangthai=$3 and vaitro = $4",
-      [req.body.ten, req.body.mk, req.body.trangthai, req.body.vaitro]
-    );
-
-    res.status(200).json({
-      status: "ok",
-      data: {
-        ten: result.rows[0].ten,
-        ten_ht: result.rows[0].ten_hienthi,
-      },
-    });
-  } catch (err) {
-    res.json({
-      status: "Tài khoản hoặc mật khẩu không chính xác",
-    });
   }
 });
 

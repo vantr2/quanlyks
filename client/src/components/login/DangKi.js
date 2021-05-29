@@ -1,6 +1,7 @@
 import React from "react";
-const FrontEnd = () => {
+
+const DangKi = () => {
   return <div></div>;
 };
 
-export default FrontEnd;
+export default DangKi;

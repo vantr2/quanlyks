@@ -66,7 +66,7 @@ const MenuQuanLy = () => {
         <div className="container pt-5">
           {/* <Route path="/quan-ly/*" component={LichSuHoatDongPage} /> */}
           {/* lich su hoat dong */}
-          <Route path="/quan-ly/" exact component={LichSuHoatDongPage} />
+          <Route path="/" exact component={LichSuHoatDongPage} />
           <Route
             path="/quan-ly/lich-su-hoat-dong/:id"
             exact

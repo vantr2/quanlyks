@@ -107,7 +107,7 @@ const Sidebar = () => {
   const { userDisplayName, userAvatar } = useContext(AccountContext);
 
   const handleGoHome = () => {
-    history.push("/quan-ly");
+    history.push("/");
     if (sidebar) showSidebar();
   };
 
@@ -119,7 +119,7 @@ const Sidebar = () => {
       tbl: "Người dùng",
     });
     window.localStorage.setItem("dangnhap", false);
-    history.push("/quan-ly");
+    history.push("/");
     window.location.reload();
   };
 

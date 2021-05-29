@@ -74,7 +74,7 @@ const LoginBackEnd = () => {
             tbl: "Người dùng",
           });
 
-          window.location.href = "/quan-ly";
+          window.location.href = "/";
         }
       } catch (err) {
         console.error(err.message);

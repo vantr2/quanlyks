@@ -16,7 +16,7 @@ export const SidebarData = [
     title: "Lịch sử hoạt động",
     icon: <FaIcons.FaHistory />,
     role: ["Admin", "NVLT", "NVK", "QL", "NVDP"],
-    path: "/quan-ly/",
+    path: "/",
   },
   // Admin
   {
