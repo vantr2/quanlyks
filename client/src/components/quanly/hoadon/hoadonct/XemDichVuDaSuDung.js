@@ -5,7 +5,7 @@ const XemDichVuDaSuDung = ({ id, phong }) => {
   const [dsDichVu, setDsDichVu] = useState([]);
   const handleClick = async () => {
     try {
-      const res = await DatPhongFinder.get(`/danh-sach-dich-vu/${id}`);
+      const res = await DatPhongFinder.get(`/danh-sach-dich-vu-so-luong/${id}`);
       setDsDichVu(res.data.data.datphong_chitiet);
     } catch (er) {
       console.log(er.message);
@@ -49,9 +49,9 @@ const XemDichVuDaSuDung = ({ id, phong }) => {
                   return (
                     <tr
                       className="border border-left-0 border-right-0 border-top-0 "
-                      key={dvsd.id}
+                      key={dvsd.dichvu_id}
                     >
-                      <td className="align-middle">{dvsd.dvname}</td>
+                      <td className="align-middle">{dvsd.dv_name}</td>
                       <td className="align-middle text-right">
                         {NumberFormat(dvsd.gia)} VND
                       </td>

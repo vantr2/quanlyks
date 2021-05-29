@@ -1,7 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router";
 import HoaDonFinder from "../../../apis/HoaDonFinder";
-import ReactToPrint from "react-to-print";
 import {
   NormalizeDate,
   convertTime,
@@ -13,7 +12,7 @@ import XemDichVuDaSuDung from "./hoadonct/XemDichVuDaSuDung";
 
 const HoaDonChiTiet = () => {
   let hi = useHistory();
-  const componentRef = useRef();
+
   const { id } = useParams();
   const [hoadonSelected, setHoaDonSelected] = useState([]);
   const [dsDPTheoHoaDon, setDPTheoHoaDon] = useState([]);
@@ -109,13 +108,14 @@ const HoaDonChiTiet = () => {
         ) : (
           ""
         )}
-        <div>
-          <ReactToPrint
-            trigger={() => <button className="btn btn-info">In Hóa đơn</button>}
-            content={() => componentRef.current}
-          />
-          <Bill ref={componentRef} />
-        </div>
+        <button
+          className="btn btn-info ml-2"
+          onClick={() => {
+            window.location.href = `/quan-ly/phong/hoa-don/${id}/in`;
+          }}
+        >
+          Xem hóa đơn
+        </button>
       </div>
 
       <h4 className="mt-3">Thông tin hóa đơn</h4>
@@ -219,7 +219,7 @@ const HoaDonChiTiet = () => {
             <td className="col-9 pl-2">
               {NumberFormat(hoadonSelected.kh_cmnd)}
             </td>
-          </tr>{" "}
+          </tr>
         </tbody>
       </table>
 
@@ -241,46 +241,11 @@ const HoaDonChiTiet = () => {
               Tài khoản đang sử dụng
             </td>
             <td className="col-9 pl-2">{hoadonSelected.nv_account}</td>
-          </tr>{" "}
+          </tr>
         </tbody>
       </table>
     </div>
   );
 };
-
-class Bill extends React.Component {
-  render() {
-    return (
-      <div className="printbill">
-        <table>
-          <thead>
-            <tr>
-              <th>column 1</th>
-              <th>column 2</th>
-              <th>column 3</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>data 1</td>
-              <td>data 2</td>
-              <td>data 3</td>
-            </tr>
-            <tr>
-              <td>data 1</td>
-              <td>data 2</td>
-              <td>data 3</td>
-            </tr>
-            <tr>
-              <td>data 1</td>
-              <td>data 2</td>
-              <td>data 3</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    );
-  }
-}
 
 export default HoaDonChiTiet;

@@ -5,7 +5,7 @@ import { AccountContext } from "../../../contexts/AccountContext";
 // import XoaNhanVien from "./XoaNhanVien";
 import {
   NormalizeDate,
-  NumberFormat,
+  //   NumberFormat,
   RenderGioiTinh,
 } from "../../../utils/DataHandler";
 

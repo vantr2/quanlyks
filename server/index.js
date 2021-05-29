@@ -2542,6 +2542,31 @@ app.get("/api/v1/dat-phong/danh-sach-dich-vu/:dpid", async (req, res) => {
   }
 });
 
+//danh sach dich vu dat phong su dung
+app.get(
+  "/api/v1/dat-phong/danh-sach-dich-vu-so-luong/:dpid",
+  async (req, res) => {
+    try {
+      const { dpid } = req.params;
+      const result = await db.query(
+        "SELECT tbl_datphong_sddichvu.dichvu_id,tbl_datphong_sddichvu.gia,tbl_dichvu.ten as dv_name,count(tbl_datphong_sddichvu.dichvu_id) as soluong FROM tbl_datphong_sddichvu JOIN tbl_dichvu ON tbl_dichvu.id = tbl_datphong_sddichvu.dichvu_id where datphong_id = $1 group by ( tbl_datphong_sddichvu.dichvu_id,dv_name,tbl_datphong_sddichvu.gia)",
+        [dpid]
+      );
+
+      res.status(200).json({
+        status: "ok",
+        data: {
+          datphong_chitiet: result.rows,
+        },
+      });
+    } catch (err) {
+      console.error(
+        "Lay danh sach dich vu theo datphong id co so luong: " + err.message
+      );
+    }
+  }
+);
+
 //lay 1 dp chitiet
 app.get("/api/v1/dat-phong/danh-sach-dich-vu-theo-id/:id", async (req, res) => {
   try {
@@ -2727,6 +2752,28 @@ app.get("/api/v1/hoa-don/danh-sach-theo-hoa-don/:id", async (req, res) => {
     const { id } = req.params;
     const result = await db.query(
       "select * from v_hoadonct where hoadon_id = $1 order by phong asc",
+      [id]
+    );
+
+    res.status(200).json({
+      status: "ok",
+      data: {
+        hoadon_chitiet: result.rows,
+      },
+    });
+  } catch (err) {
+    console.error(
+      "danh sach hoa don chi tiet theo  hoa don id: " + err.message
+    );
+  }
+});
+
+// lay hoa don chi tiet theo hoa don id
+app.get("/api/v1/hoa-don/danh-sach-theo-hoa-don-2/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await db.query(
+      "select * from v_hoadonct2 where hoadon_id = $1 order by phong desc",
       [id]
     );
 
