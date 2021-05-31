@@ -68,15 +68,26 @@ const ThongTinDatPhong = () => {
     setHtThue(e.target.value);
     if (e.target.value === "Thuê theo ngày") {
       setThueTheoNgay("");
+      setSoTgThue("1");
+
       setThueTheoGio("d-none");
       setGiaThue(phongSelected.giaphongtheongay);
+      let tc = parseInt(phongSelected.giaphongtheongay / 5);
+      setTienCoc(Math.round(tc / 1000) * 1000);
     } else if (e.target.value === "Thuê theo giờ") {
       setThueTheoGio("");
+      setSoTgThue("1");
       setThueTheoNgay("d-none");
+
       setGiaThue(phongSelected.giaphongtheogio);
+      let tc = parseInt(phongSelected.giaphongtheogio / 5);
+      setTienCoc(Math.round(tc / 1000) * 1000);
     } else {
       setThueTheoNgay("d-none");
       setThueTheoGio("d-none");
+      setGiaThue("");
+      setSoTgThue("");
+      setTienCoc("");
       setGiaThue("");
     }
   };
@@ -272,7 +283,11 @@ const ThongTinDatPhong = () => {
                 value={sotgThue}
                 min="1"
                 max="100"
-                onChange={(e) => setSoTgThue(e.target.value)}
+                onChange={(e) => {
+                  setSoTgThue(e.target.value);
+                  let tc = (parseInt(e.target.value) * parseInt(giathue)) / 5;
+                  setTienCoc(Math.round(tc / 1000) * 1000);
+                }}
               />
             </div>
           </div>
@@ -305,13 +320,17 @@ const ThongTinDatPhong = () => {
                 value={sotgThue}
                 min="1"
                 max="24"
-                onChange={(e) => setSoTgThue(e.target.value)}
+                onChange={(e) => {
+                  setSoTgThue(e.target.value);
+                  let tc = (parseInt(e.target.value) * parseInt(giathue)) / 5;
+                  setTienCoc(Math.round(tc / 1000) * 1000);
+                }}
               />
             </div>
           </div>
         </div>
         <div className="form-group">
-          <label htmlFor="tiencoc">Tiền cọc</label>
+          <label htmlFor="tiencoc">Tiền cọc (20% tiền phòng)</label>
           <CurrencyInput
             id="tiencoc"
             value={tiencoc}

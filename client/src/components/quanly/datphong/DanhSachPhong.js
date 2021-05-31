@@ -5,6 +5,7 @@ import PhongFinder from "../../../apis/PhongFinder";
 import DatPhongFinder from "../../../apis/DatPhongFinder";
 import Select from "react-select";
 import { ContextMenu, MenuItem, ContextMenuTrigger } from "react-contextmenu";
+import { NumberFormat } from "../../../utils/DataHandler";
 
 const DanhSachPhong = () => {
   const [dsPhong, setDsPhong] = useState([]);
@@ -188,8 +189,8 @@ const DanhSachPhong = () => {
       </div>
       {dsPhong.map((phong) => {
         return (
-          <div className="col-2 mb-4" key={phong.ten}>
-            <ContextMenuTrigger id={phong.trangthai !== 0 ? phong.ten : ""}>
+          <div className="col-2 mb-4 " key={phong.ten}>
+            <ContextMenuTrigger id={phong.ten}>
               <button
                 className="btn btn-block"
                 style={renderStyle(phong.trangthai)}
@@ -197,6 +198,15 @@ const DanhSachPhong = () => {
               >
                 {phong.ten}
               </button>
+              <p
+                className="text-center "
+                style={{ fontSize: "0.8rem", margin: "0" }}
+              >
+                <strong>{NumberFormat(phong.giaphongtheongay)}</strong> VND
+              </p>
+              <p className="text-center " style={{ fontSize: "0.75rem" }}>
+                <strong>{NumberFormat(phong.giaphongtheogio)}</strong> VND
+              </p>
             </ContextMenuTrigger>
             <ContextMenu
               id={phong.ten}
@@ -208,19 +218,32 @@ const DanhSachPhong = () => {
                 border: "1px solid #191919",
               }}
             >
-              <MenuItem
-                onClick={async () => {
-                  const res = await DatPhongFinder.get(
-                    `/danh-sach/${phong.ten}`
-                  );
-                  if (res.data.data.datphong.id) {
-                    hi.push(
-                      `/quan-ly/phong/dat-phong/${res.data.data.datphong.id}`
+              {phong.trangthai === 0 ? (
+                ""
+              ) : (
+                <MenuItem
+                  className="border border-dark border-top-0 border-left-0 border-right-0 p-1"
+                  onClick={async () => {
+                    const res = await DatPhongFinder.get(
+                      `/danh-sach/${phong.ten}`
                     );
-                  }
+                    if (res.data.data.datphong.id) {
+                      hi.push(
+                        `/quan-ly/phong/dat-phong/${res.data.data.datphong.id}`
+                      );
+                    }
+                  }}
+                >
+                  Phiếu thuê phòng
+                </MenuItem>
+              )}
+              <MenuItem
+                className="border border-dark border-top-0 border-left-0 border-right-0 p-1"
+                onClick={async () => {
+                  hi.push(`/quan-ly/ql-tai-san/thong-tin/`);
                 }}
               >
-                Phiếu thuê chi tiết
+                Tài sản
               </MenuItem>
             </ContextMenu>
           </div>
