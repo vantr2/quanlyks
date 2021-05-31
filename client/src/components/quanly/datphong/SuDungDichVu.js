@@ -21,7 +21,7 @@ const SuDungDichVu = () => {
 
   const { dsDvSuDung, setDsDvSuDung, themDvSd } = useContext(AccountContext);
 
-  const [msgSuccess, setMsgSuccess] = useState("");
+  //   const [msgSuccess, setMsgSuccess] = useState("");
   const [khName, setKhName] = useState("");
   const [khSdt, setKhSdt] = useState("");
   const { phongid } = useParams();
@@ -96,10 +96,10 @@ const SuDungDichVu = () => {
           newdata: { new: res.data.data.datphong_chitiet },
           tbl: "Dịch vụ",
         });
-        setMsgSuccess("Thêm thành công");
-        setTimeout(() => {
-          setMsgSuccess("");
-        }, 2000);
+        // setMsgSuccess("Thêm thành công");
+        // setTimeout(() => {
+        //   setMsgSuccess("");
+        // }, 2000);
         const res_dpchitiet = await DatPhongFinder.get(
           `/danh-sach-dich-vu-theo-id/${res.data.data.datphong_chitiet.id}`
         );
@@ -113,6 +113,20 @@ const SuDungDichVu = () => {
 
   const goBack = () => {
     hi.push("/quan-ly/phong/tinh-trang");
+  };
+
+  const handleDelete = async (e, id) => {
+    e.stopPropagation();
+    try {
+      await DatPhongFinder.delete(`/xoa-chi-tiet/${id}`);
+      setDsDvSuDung(
+        dsDvSuDung.filter((dv) => {
+          return dv.id !== id;
+        })
+      );
+    } catch (err) {
+      console.log(err.message);
+    }
   };
 
   return (
@@ -151,7 +165,7 @@ const SuDungDichVu = () => {
               </select>
             </div>
 
-            <p className="text-success">{msgSuccess}</p>
+            {/* <p className="text-success">{msgSuccess}</p> */}
             {/* Danh sách dịch vụ */}
             <div className="row mt-3 ">
               {dsDichVu.map((dv) => {
@@ -192,6 +206,7 @@ const SuDungDichVu = () => {
                   <th>Tên dịch vụ</th>
                   <th>Đơn giá</th>
                   <th>Ngày sử dụng</th>
+                  <th>Xóa</th>
                 </tr>
               </thead>
               <tbody>
@@ -208,6 +223,14 @@ const SuDungDichVu = () => {
                       <td className="align-middle ">
                         {NormalizeDate(dvsd.ngaysd)}&nbsp;
                         {convertTime(dvsd.ngaysd)}
+                      </td>
+                      <td style={{ cursor: "pointer" }}>
+                        <i
+                          className="fas fa-trash text-danger"
+                          onClick={(e) => handleDelete(e, dvsd.id)}
+                        >
+                          &nbsp;Xóa
+                        </i>
                       </td>
                     </tr>
                   );
