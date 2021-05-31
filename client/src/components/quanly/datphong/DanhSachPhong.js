@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import chroma from "chroma-js";
 import { useHistory } from "react-router";
 import PhongFinder from "../../../apis/PhongFinder";
@@ -6,6 +6,7 @@ import DatPhongFinder from "../../../apis/DatPhongFinder";
 import Select from "react-select";
 import { ContextMenu, MenuItem, ContextMenuTrigger } from "react-contextmenu";
 import { NumberFormat } from "../../../utils/DataHandler";
+import { AccountContext } from "../../../contexts/AccountContext";
 
 const DanhSachPhong = () => {
   const [dsPhong, setDsPhong] = useState([]);
@@ -168,6 +169,8 @@ const DanhSachPhong = () => {
         break;
     }
   };
+
+  const { setViTriTk } = useContext(AccountContext);
   return (
     <div className="row mt-5">
       <div className="col-12 mb-4">
@@ -240,6 +243,7 @@ const DanhSachPhong = () => {
               <MenuItem
                 className="border border-dark border-top-0 border-left-0 border-right-0 p-1"
                 onClick={async () => {
+                  setViTriTk(phong.ten);
                   hi.push(`/quan-ly/ql-tai-san/thong-tin/`);
                 }}
               >

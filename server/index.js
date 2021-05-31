@@ -1390,6 +1390,26 @@ app.get("/api/v1/tai-san/trong-bd-chi-tiet/:id", async (req, res) => {
   }
 });
 
+//tim kiem tai san
+app.get("/api/v1/tai-san/tim-kiem-tai-san/:ten/:vitri", async (req, res) => {
+  try {
+    const { ten, vitri } = req.params;
+    const result = await db.query(
+      "select * from tbl_taisan where vitri like $1 and ten like $2",
+      [vitri, ten]
+    );
+
+    res.status(200).json({
+      status: "ok",
+      data: {
+        taisan: result.rows,
+      },
+    });
+  } catch (err) {
+    console.error("tim kiem tai san: " + err.message);
+  }
+});
+
 //them tai san
 app.post("/api/v1/tai-san/them-tai-san", async (req, res) => {
   try {

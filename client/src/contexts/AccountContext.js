@@ -64,6 +64,7 @@ export const AccountContextProvider = (props) => {
   const themTaiSan = (taisan) => {
     setDsTaiSan([...dsTaiSan, taisan]);
   };
+  const [vitritk, setViTriTk] = useState("");
 
   const [msgTaiSanActionSuccess, setMsgTaiSanActionSuccess] = useState("");
 
@@ -188,6 +189,8 @@ export const AccountContextProvider = (props) => {
         setDsTaiSan,
         msgTaiSanActionSuccess,
         setMsgTaiSanActionSuccess,
+        vitritk,
+        setViTriTk,
 
         // tai san bao duong
         msgBaoDuongActionSuccess,

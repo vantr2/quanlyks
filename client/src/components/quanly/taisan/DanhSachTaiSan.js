@@ -4,6 +4,7 @@ import TaiSanFinder from "../../../apis/TaiSanFinder";
 import { useHistory } from "react-router";
 import { NormalizeDate, NumberFormat } from "../../../utils/DataHandler";
 import XoaTaiSan from "./XoaTaiSan";
+import TimKiemTaiSan from "./TimKiemTaiSan";
 
 const DanhSachTaiSan = () => {
   const { dsTaiSan, setDsTaiSan, msgTaiSanActionSuccess } =
@@ -54,6 +55,7 @@ const DanhSachTaiSan = () => {
   return (
     <div>
       <div className="mt-5 mb-5">
+        <TimKiemTaiSan />
         <p className="text-center text-success">{msgTaiSanActionSuccess}</p>
         <table className="table table-hover table-striped table-bordered ">
           <thead className="thead-dark text-center">
