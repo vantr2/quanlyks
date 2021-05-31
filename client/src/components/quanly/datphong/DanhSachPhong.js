@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import chroma from "chroma-js";
 import { useHistory } from "react-router";
 import PhongFinder from "../../../apis/PhongFinder";
+import DatPhongFinder from "../../../apis/DatPhongFinder";
 import Select from "react-select";
 import { ContextMenu, MenuItem, ContextMenuTrigger } from "react-contextmenu";
 
@@ -188,7 +189,7 @@ const DanhSachPhong = () => {
       {dsPhong.map((phong) => {
         return (
           <div className="col-2 mb-4" key={phong.ten}>
-            <ContextMenuTrigger id={phong.ten}>
+            <ContextMenuTrigger id={phong.trangthai !== 0 ? phong.ten : ""}>
               <button
                 className="btn btn-block"
                 style={renderStyle(phong.trangthai)}
@@ -200,15 +201,27 @@ const DanhSachPhong = () => {
             <ContextMenu
               id={phong.ten}
               style={{
+                cursor: "pointer",
                 background: "white",
                 zIndex: 1,
-                padding: "1rem",
+                padding: "0.5rem",
                 border: "1px solid #191919",
               }}
             >
-              <MenuItem data={{ foo: "bar" }}>Rename</MenuItem>
-              <MenuItem data={{ foo: "bar" }}>Edit</MenuItem>
-              <MenuItem data={{ foo: "bar" }}>Delete</MenuItem>
+              <MenuItem
+                onClick={async () => {
+                  const res = await DatPhongFinder.get(
+                    `/danh-sach/${phong.ten}`
+                  );
+                  if (res.data.data.datphong.id) {
+                    hi.push(
+                      `/quan-ly/phong/dat-phong/${res.data.data.datphong.id}`
+                    );
+                  }
+                }}
+              >
+                Phiếu thuê chi tiết
+              </MenuItem>
             </ContextMenu>
           </div>
         );
