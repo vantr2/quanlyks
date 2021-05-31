@@ -4,6 +4,7 @@ import { AccountContext } from "../../../contexts/AccountContext";
 import ResetPassword from "./ResetPassword";
 import SuaThongTinNguoiDung from "./SuaThongTinNguoiDung";
 import ThayDoiTrangThaiTaiKhoan from "./ThayDoiTrangThaiTaiKhoan";
+import TimKiemNguoiDung from "./TimKiemNguoiDung";
 // import XoaNguoiDung from "./XoaNguoiDung";
 
 const DanhSachTaiKhoan = () => {
@@ -63,9 +64,11 @@ const DanhSachTaiKhoan = () => {
   };
   return (
     <div className="list-group">
+      <TimKiemNguoiDung />
       <p className="text-center text-success">
         <u>{msgUserActionSuccess}</u>
       </p>
+
       <table
         className="table table-hover "
         style={{ border: "2.4px solid black", color: "black" }}

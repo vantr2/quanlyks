@@ -22,6 +22,8 @@ const ThongTinKhachHang = () => {
   const [cmnd, setCMND] = useState("");
   const [sdt, setSdt] = useState("");
   const [acc, setAcc] = useState("");
+  const [stk, setStk] = useState("");
+
   const [msg, setMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
   const [buttonThem, setButtonThem] = useState("");
@@ -41,6 +43,20 @@ const ThongTinKhachHang = () => {
   });
 
   const [old, setOld] = useState({});
+  //   const validateData = async (data, type) => {
+  //     if (type === "SDT") {
+  //       const res = await KhachHangFinder.get(`/kiem-tra-sdt/${data}`);
+  //       if (res.data.data.khachhang.count === 0) return true;
+  //     } else if (type === "CMND") {
+  //       const res = await KhachHangFinder.get(`/kiem-tra-cmnd/${data}`);
+  //       console.log(res.data.data.khachhang);
+  //       if (res.data.data.khachhang.count === 0) return true;
+  //     } else if (type === "STK") {
+  //       const res = await KhachHangFinder.get(`/kiem-tra-stk/${data}`);
+  //       if (res.data.data.khachhang.count === 0) return true;
+  //     }
+  //     return false;
+  //   };
 
   const getKieuKhachHang = async () => {
     try {
@@ -92,6 +108,7 @@ const ThongTinKhachHang = () => {
       setSdt(khachhangSelected.sdt);
       setAcc(khachhangSelected.account);
       setKieuKhID(khachhangSelected.kieukhachhang_id);
+      setStk(khachhangSelected.stk);
       setKieuKHSelected({
         value: khachhangSelected.kieukhachhang_id,
         label: khachhangSelected.kieukhachhang_name,
@@ -107,6 +124,7 @@ const ThongTinKhachHang = () => {
         diachi: khachhangSelected.diachi,
         sdt: khachhangSelected.sdt,
         kieukhachhang_id: khachhangSelected.kieukhachhang_id,
+        stk: khachhangSelected.stk,
       });
     } catch (err) {
       console.log(err.message);
@@ -172,6 +190,7 @@ const ThongTinKhachHang = () => {
         setCMND("");
         setSdt("");
         setAcc("");
+        setStk("");
         setButtonSua("d-none");
         setButtonThem("");
         setDisableAccount(false);
@@ -254,6 +273,11 @@ const ThongTinKhachHang = () => {
         setMsg("");
       }, 3000);
       //
+    } else if (stk.length < 9 || sdt.length > 15) {
+      setMsg("Số tài khoản không hợp lệ.");
+      setTimeout(() => {
+        setMsg("");
+      }, 5000);
     } else if (!kieukhID) {
       setMsg("Kiểu khách hàng không được để trống");
       setTimeout(() => {
@@ -268,72 +292,97 @@ const ThongTinKhachHang = () => {
       //
     } else {
       try {
-        const res = await TaiKhoanFinder.post("/them-tai-khoan-khach-hang", {
-          ten: acc,
-          mk: "12345678",
-          ten_hienthi: NormalizeString(tenKH),
-        });
-        if (res.data.status === "ok") {
-          ThemLichSu({
-            doing: "Thêm",
-            olddata: {},
-            newdata: {
-              new: {
-                ten: res.data.data.acc.ten,
-                ten_hienthi: res.data.data.acc.ten_hienthi,
-                vaitro: res.data.data.acc.vaitro,
-              },
-            },
-            tbl: "Người dùng",
+        const res_check_cmnd = await KhachHangFinder.get(
+          `/kiem-tra-cmnd/${cmnd}`
+        );
+        const res_check_sdt = await KhachHangFinder.get(`/kiem-tra-sdt/${sdt}`);
+        const res_check_stk = await KhachHangFinder.get(`/kiem-tra-stk/${stk}`);
+        console.log(res_check_stk.data.data.khachhang.count);
+        if (res_check_cmnd.data.data.khachhang.count === "1") {
+          setMsg("Chứng minh nhân dân đã tồn tại.  ");
+          setTimeout(() => {
+            setMsg("");
+          }, 3500);
+        } else if (res_check_sdt.data.data.khachhang.count === "1") {
+          setMsg("Số điện thoại đã tồn tại.  ");
+          setTimeout(() => {
+            setMsg("");
+          }, 3500);
+        } else if (res_check_stk.data.data.khachhang.count === "1") {
+          setMsg("Số tài khoản đã tồn tại.  ");
+          setTimeout(() => {
+            setMsg("");
+          }, 3500);
+        } else {
+          const res = await TaiKhoanFinder.post("/them-tai-khoan-khach-hang", {
+            ten: acc,
+            mk: "12345678",
+            ten_hienthi: NormalizeString(tenKH),
           });
-          const r = await KhachHangFinder.post("/them", {
-            ten: NormalizeString(tenKH),
-            cmnd: cmnd,
-            gioitinh: gioitinh,
-            ngaysinh: ngaysinh,
-            diachi: NormalizeString(diachi),
-            sdt: sdt,
-            kieukhachhang_id: kieukhID,
-            account: acc,
-          });
-          if (r.data.status === "ok") {
+          if (res.data.status === "ok") {
             ThemLichSu({
               doing: "Thêm",
               olddata: {},
               newdata: {
-                new: r.data.data.khachhang,
+                new: {
+                  ten: res.data.data.acc.ten,
+                  ten_hienthi: res.data.data.acc.ten_hienthi,
+                  vaitro: res.data.data.acc.vaitro,
+                },
               },
-              tbl: "Khách hàng",
+              tbl: "Người dùng",
             });
-
-            getListKh();
-            setKHID(r.data.data.khachhang.id);
-            setKhId(r.data.data.khachhang.id);
-            setValueKh({
-              label:
-                r.data.data.khachhang.sdt + " - " + r.data.data.khachhang.ten,
-              value: r.data.data.khachhang.id,
+            const r = await KhachHangFinder.post("/them", {
+              ten: NormalizeString(tenKH),
+              cmnd: cmnd,
+              gioitinh: gioitinh,
+              ngaysinh: ngaysinh,
+              diachi: NormalizeString(diachi),
+              sdt: sdt,
+              kieukhachhang_id: kieukhID,
+              account: res.data.data.acc.ten,
+              stk: stk,
             });
-            getMotKH(r.data.data.khachhang.id);
-            setButtonThem("d-none");
-            setButtonSua("");
-            setDisableAccount(true);
-            setSuccessMsg("Thêm thành công");
-            setTimeout(() => {
-              setSuccessMsg("");
-            }, 3000);
+            console.log(r);
+            if (r.data.status === "ok") {
+              ThemLichSu({
+                doing: "Thêm",
+                olddata: {},
+                newdata: {
+                  new: r.data.data.khachhang,
+                },
+                tbl: "Khách hàng",
+              });
+              getListKh();
+              setKHID(r.data.data.khachhang.id);
+              setKhId(r.data.data.khachhang.id);
+              setValueKh({
+                label:
+                  r.data.data.khachhang.sdt + " - " + r.data.data.khachhang.ten,
+                value: r.data.data.khachhang.id,
+              });
+              getMotKH(r.data.data.khachhang.id);
+              setButtonThem("d-none");
+              setButtonSua("");
+              setDisableAccount(true);
+              setSuccessMsg("Thêm thành công");
+              setTimeout(() => {
+                setSuccessMsg("");
+              }, 3000);
+            } else {
+              setMsg(r.data.status);
+              setTimeout(() => {
+                setMsg("");
+              }, 3000);
+            }
           }
-        } else {
-          setMsg(res.data.status);
-          setTimeout(() => {
-            setMsg("");
-          }, 3000);
         }
       } catch (err) {
         console.log(err.message);
       }
     }
   };
+
   const handleUpdateKh = async () => {
     if (!tenKH) {
       setMsg("Tên khách hàng không được để trống");
@@ -383,6 +432,11 @@ const ThongTinKhachHang = () => {
         setMsg("");
       }, 3000);
       //
+    } else if (stk.length < 9 || sdt.length > 15) {
+      setMsg("Số tài khoản không hợp lệ.");
+      setTimeout(() => {
+        setMsg("");
+      }, 5000);
     } else if (!kieukhID) {
       setMsg("Kiểu khách hàng không được để trống");
       setTimeout(() => {
@@ -391,7 +445,6 @@ const ThongTinKhachHang = () => {
       //
     } else {
       try {
-        // console.log(tenKH, gioitinh, ngaysinh, cmnd, sdt, diachi, kieukhID);
         const res = await KhachHangFinder.put("/sua", {
           id: khID,
           ten: NormalizeString(tenKH),
@@ -401,8 +454,9 @@ const ThongTinKhachHang = () => {
           diachi: NormalizeString(diachi),
           sdt: sdt,
           kieukhachhang_id: kieukhID,
+          stk: stk,
         });
-        // console.log(res);
+        console.log(res);
         if (res.data.status === "ok") {
           const newd = {
             id: khID,
@@ -413,6 +467,7 @@ const ThongTinKhachHang = () => {
             diachi: NormalizeString(diachi),
             sdt: sdt,
             kieukhachhang_id: kieukhID,
+            stk: stk,
           };
           if (JSON.stringify(old) !== JSON.stringify(newd)) {
             ThemLichSu({
@@ -429,6 +484,11 @@ const ThongTinKhachHang = () => {
           setSuccessMsg("Sửa thành công");
           setTimeout(() => {
             setSuccessMsg("");
+          }, 3000);
+        } else {
+          setMsg(res.data.status);
+          setTimeout(() => {
+            setMsg("");
           }, 3000);
         }
       } catch (err) {
@@ -546,6 +606,16 @@ const ThongTinKhachHang = () => {
             onChange={(e) => setDiaChi(e.target.value)}
             value={diachi}
           ></textarea>
+        </div>
+        <div className="form-group">
+          <label htmlFor="stk">Số tài khoản</label>
+          <input
+            type=""
+            className="form-control"
+            id="stk"
+            onChange={(e) => setStk(e.target.value)}
+            value={stk}
+          />
         </div>
         <div className="form-row">
           <div className="col">

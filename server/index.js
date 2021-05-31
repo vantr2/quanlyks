@@ -189,6 +189,26 @@ app.get("/api/v1/tai-khoan/danh-sach-nguoi-dung", async (req, res) => {
   }
 });
 
+// tim kiem nguoidung
+app.get("/api/v1/tai-khoan/tim-kiem-nguoi-dung/:kitu", async (req, res) => {
+  try {
+    const { kitu } = req.params;
+    const result = await db.query(
+      "select ten,mk,ten_hienthi,trangthai,vaitro from tbl_nguoidung where ten <> $1 and (ten like $2 or ten_hienthi like $2) order by vaitro asc",
+      ["trongvan", kitu]
+    );
+
+    res.status(200).json({
+      status: "ok",
+      data: {
+        nguoidung: result.rows,
+      },
+    });
+  } catch (err) {
+    console.error("Lay danh sach nguoi dung" + err.message);
+  }
+});
+
 // lay thong tin 1 nguoi dung
 app.get("/api/v1/tai-khoan/thong-tin-nguoi-dung/:ten", async (req, res) => {
   try {
@@ -2150,6 +2170,67 @@ app.post("/api/v1/phieu-mua/them-loai-hang-hoa", async (req, res) => {
 //#endregion
 
 //#region Khach hang
+
+// kiem tra cmnd
+app.get("/api/v1/khach-hang/kiem-tra-cmnd/:cmnd", async (req, res) => {
+  try {
+    const { cmnd } = req.params;
+    const result = await db.query(
+      "select count(*) from v_khachhang where cmnd = $1",
+      [cmnd]
+    );
+
+    res.status(200).json({
+      status: "ok",
+      data: {
+        khachhang: result.rows[0],
+      },
+    });
+  } catch (err) {
+    console.error("Kiem tra cmnd: " + err.message);
+  }
+});
+
+// kiem tra sdt
+app.get("/api/v1/khach-hang/kiem-tra-sdt/:sdt", async (req, res) => {
+  try {
+    const { sdt } = req.params;
+    const result = await db.query(
+      "select count(*) from v_khachhang where sdt = $1",
+      [sdt]
+    );
+
+    res.status(200).json({
+      status: "ok",
+      data: {
+        khachhang: result.rows[0],
+      },
+    });
+  } catch (err) {
+    console.error("Kiem tra sdt: " + err.message);
+  }
+});
+
+// kiem tra stk
+app.get("/api/v1/khach-hang/kiem-tra-stk/:stk", async (req, res) => {
+  try {
+    const { stk } = req.params;
+    const result = await db.query(
+      "select count(*) from v_khachhang where stk = $1",
+      [stk]
+    );
+
+    res.status(200).json({
+      status: "ok",
+      data: {
+        khachhang: result.rows[0],
+      },
+    });
+  } catch (err) {
+    console.error("Kiem tra stk: " + err.message);
+  }
+});
+
 //them khach hang
 app.post("/api/v1/khach-hang/them", async (req, res) => {
   try {
@@ -2162,10 +2243,21 @@ app.post("/api/v1/khach-hang/them", async (req, res) => {
       sdt,
       kieukhachhang_id,
       account,
+      stk,
     } = req.body;
     const result = await db.query(
-      "insert into tbl_khachhang (ten,cmnd,gioitinh,ngaysinh,diachi,sdt, kieukhachhang_id,account) values($1,$2,$3,$4,$5,$6,$7,$8) returning *",
-      [ten, cmnd, gioitinh, ngaysinh, diachi, sdt, kieukhachhang_id, account]
+      "insert into tbl_khachhang (ten,cmnd,gioitinh,ngaysinh,diachi,sdt, kieukhachhang_id,account,stk) values($1,$2,$3,$4,$5,$6,$7,$8,$9) returning *",
+      [
+        ten,
+        cmnd,
+        gioitinh,
+        ngaysinh,
+        diachi,
+        sdt,
+        kieukhachhang_id,
+        account,
+        stk,
+      ]
     );
 
     res.status(201).json({
@@ -2175,7 +2267,8 @@ app.post("/api/v1/khach-hang/them", async (req, res) => {
       },
     });
   } catch (err) {
-    console.error("Them khach hang:", err.message);
+    // console.error("Them khach hang:", err.message);
+    res.json(err.message);
   }
 });
 //danh sach kh
@@ -2209,25 +2302,49 @@ app.get("/api/v1/khach-hang/danh-sach/:id", async (req, res) => {
       },
     });
   } catch (err) {
-    console.error("Lay 1 khach hàng: " + err.message);
+    console.log("Lay 1 khach hang" + err.message);
   }
 });
 
 //sua kh
 app.put("/api/v1/khach-hang/sua", async (req, res) => {
   try {
-    const { id, ten, cmnd, gioitinh, ngaysinh, diachi, sdt, kieukhachhang_id } =
-      req.body;
+    const {
+      id,
+      ten,
+      cmnd,
+      gioitinh,
+      ngaysinh,
+      diachi,
+      sdt,
+      kieukhachhang_id,
+      stk,
+    } = req.body;
 
     const result = await db.query(
-      "update tbl_khachhang set ten=$2,cmnd=$3,gioitinh=$4,ngaysinh=$5,diachi=$6,sdt=$7,kieukhachhang_id=$8 where id=$1",
-      [id, ten, cmnd, gioitinh, ngaysinh, diachi, sdt, kieukhachhang_id]
+      "update tbl_khachhang set ten=$2,cmnd=$3,gioitinh=$4,ngaysinh=$5,diachi=$6,sdt=$7,kieukhachhang_id=$8,stk=$9 where id=$1",
+      [id, ten, cmnd, gioitinh, ngaysinh, diachi, sdt, kieukhachhang_id, stk]
     );
     res.status(200).json({
       status: "ok",
     });
   } catch (err) {
-    console.log("Sua khach hang:  " + err.message);
+    let msg;
+    console.log("Sua kh: " + err.message);
+    switch (err.message) {
+      case 'duplicate key value violates unique constraint "u_cmnd"':
+        msg = "Chứng minh nhân dân đã tồn tại";
+        break;
+      case 'duplicate key value violates unique constraint "u_khachhang_sdt"':
+        msg = "Số tài khoản đã tồn tại";
+        break;
+      case 'duplicate key value violates unique constraint "u_sdt"':
+        msg = "Số điện thoại đã tồn tại";
+        break;
+    }
+    res.status(200).json({
+      status: msg,
+    });
   }
 });
 
