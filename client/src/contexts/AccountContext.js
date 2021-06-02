@@ -138,6 +138,9 @@ export const AccountContextProvider = (props) => {
 
   //lich su
   const [dsLichSu, setDsLichSu] = useState([]);
+
+  // dp online
+  const [dsDpOnline, setDsDpOnline] = useState([]);
   return (
     <AccountContext.Provider
       value={{
@@ -264,6 +267,10 @@ export const AccountContextProvider = (props) => {
         //
         msgPhieuChiActionSuccess,
         setMsgPhieuChiActionSuccess,
+
+        // dp online
+        dsDpOnline,
+        setDsDpOnline,
       }}
     >
       {props.children}

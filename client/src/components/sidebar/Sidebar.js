@@ -19,14 +19,14 @@ const Nav = styled.div`
   background: #15171c;
   height: 4rem;
   display: flex;
-  justify-content: space-between;
+  justify-content: start;
   align-items: center;
 `;
 
 const NavIcon = styled(Link)`
   margin-left: 2rem;
   font-size: 2rem;
-  height: 80px;
+  height: 4rem;
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -68,10 +68,17 @@ const SidebarWrap = styled.div`
 const Title = styled.div`
   font-size: 1.6rem;
   font-weight: 600;
-  margin-right: 60rem;
   color: white;
   cursor: pointer;
+  margin-left: 1rem;
+`;
+
+const InfoContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  height: 4rem;
   line-height: 4rem;
+  width: 100%;
 `;
 
 const Account = styled.div`
@@ -134,29 +141,31 @@ const Sidebar = () => {
               }}
             />
           </NavIcon>
-          <Title onClick={handleGoHome}>QUẢN LÝ KHÁCH SẠN</Title>
-          <Account>
-            <Avatar
-              onClick={() => {
-                if (userrole !== "Admin" && userrole !== "QL") {
-                  history.push("/quan-ly/nhan-vien/thong-tin");
-                }
-              }}
-              src={userAvatar}
-              alt="avatar"
-            />
-            <UserDisplayName
-              onClick={() => {
-                if (userrole !== "Admin" && userrole !== "QL") {
-                  history.push("/quan-ly/nhan-vien/thong-tin");
-                }
-              }}
-            >
-              {userDisplayName}
-            </UserDisplayName>
-            &nbsp;
-            <Logout onClick={handleLogout}>(Đăng xuất)</Logout>
-          </Account>
+          <InfoContainer>
+            <Title onClick={handleGoHome}>QUẢN LÝ KHÁCH SẠN</Title>
+            <Account>
+              <Avatar
+                onClick={() => {
+                  if (userrole !== "Admin" && userrole !== "QL") {
+                    history.push("/quan-ly/nhan-vien/thong-tin");
+                  }
+                }}
+                src={userAvatar}
+                alt="avatar"
+              />
+              <UserDisplayName
+                onClick={() => {
+                  if (userrole !== "Admin" && userrole !== "QL") {
+                    history.push("/quan-ly/nhan-vien/thong-tin");
+                  }
+                }}
+              >
+                {userDisplayName}
+              </UserDisplayName>
+              &nbsp;
+              <Logout onClick={handleLogout}>(Đăng xuất)</Logout>
+            </Account>
+          </InfoContainer>
         </Nav>
 
         <SidebarNav sidebar={sidebar}>

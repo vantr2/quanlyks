@@ -77,8 +77,8 @@ app.post("/api/v1/kiem-tra-dang-nhap-frontend", async (req, res) => {
     const { ten, mk } = req.body;
 
     const passAndiv = await db.query(
-      "select mk,iv from tbl_nguoidung where ten = $1",
-      [ten]
+      "select mk,iv from tbl_nguoidung where ten = $1 and vaitro=$2",
+      [ten, "KH"]
     );
     const encryption = {
       iv: passAndiv.rows[0].iv,
@@ -186,6 +186,26 @@ app.get("/api/v1/tai-khoan/danh-sach-nguoi-dung", async (req, res) => {
     });
   } catch (err) {
     console.error("Lay danh sach nguoi dung" + err.message);
+  }
+});
+
+// Lay mk kh
+app.get("/api/v1/tai-khoan/mk-khach-hang/:ten", async (req, res) => {
+  try {
+    const { ten } = req.params;
+    const result = await db.query(
+      "select mk,iv from tbl_nguoidung where ten=$1 and vaitro=$2",
+      [ten, "KH"]
+    );
+
+    res.status(200).json({
+      status: "ok",
+      data: {
+        nguoidung: result.rows[0],
+      },
+    });
+  } catch (err) {
+    console.error("Lay mat khau kh" + err.message);
   }
 });
 
@@ -934,6 +954,26 @@ app.put("/api/v1/xin-nghi/ql-duyet", async (req, res) => {
 app.get("/api/v1/phong/danh-sach-phong", async (req, res) => {
   try {
     const result = await db.query("select * from tbl_phong order by ten asc");
+
+    res.status(200).json({
+      status: "ok",
+      data: {
+        phong: result.rows,
+      },
+    });
+  } catch (err) {
+    console.error("Lay danh sach phong: " + err.message);
+  }
+});
+
+//lay danh sach phong limit4
+app.get("/api/v1/phong/danh-sach-phong-limit/:limit", async (req, res) => {
+  try {
+    const { limit } = req.params;
+    const result = await db.query(
+      "select * from tbl_phong order by ten asc limit $1",
+      [limit]
+    );
 
     res.status(200).json({
       status: "ok",
@@ -2326,6 +2366,26 @@ app.get("/api/v1/khach-hang/danh-sach/:id", async (req, res) => {
   }
 });
 
+// lay 1 kh theo account
+app.get("/api/v1/khach-hang/get-account/:acc", async (req, res) => {
+  try {
+    const { acc } = req.params;
+    const result = await db.query(
+      "select * from v_khachhang where account = $1",
+      [acc]
+    );
+
+    res.status(200).json({
+      status: "ok",
+      data: {
+        khachhang: result.rows[0],
+      },
+    });
+  } catch (err) {
+    console.log("Lay 1 khach hang" + err.message);
+  }
+});
+
 //sua kh
 app.put("/api/v1/khach-hang/sua", async (req, res) => {
   try {
@@ -2344,6 +2404,38 @@ app.put("/api/v1/khach-hang/sua", async (req, res) => {
     const result = await db.query(
       "update tbl_khachhang set ten=$2,cmnd=$3,gioitinh=$4,ngaysinh=$5,diachi=$6,sdt=$7,kieukhachhang_id=$8,stk=$9 where id=$1",
       [id, ten, cmnd, gioitinh, ngaysinh, diachi, sdt, kieukhachhang_id, stk]
+    );
+    res.status(200).json({
+      status: "ok",
+    });
+  } catch (err) {
+    let msg;
+    console.log("Sua kh: " + err.message);
+    switch (err.message) {
+      case 'duplicate key value violates unique constraint "u_cmnd"':
+        msg = "Chứng minh nhân dân đã tồn tại";
+        break;
+      case 'duplicate key value violates unique constraint "u_khachhang_sdt"':
+        msg = "Số tài khoản đã tồn tại";
+        break;
+      case 'duplicate key value violates unique constraint "u_sdt"':
+        msg = "Số điện thoại đã tồn tại";
+        break;
+    }
+    res.status(200).json({
+      status: msg,
+    });
+  }
+});
+
+//sua kh it
+app.put("/api/v1/khach-hang/sua-short", async (req, res) => {
+  try {
+    const { id, ten, cmnd, diachi, sdt, stk } = req.body;
+
+    const result = await db.query(
+      "update tbl_khachhang set ten=$2,cmnd=$3,diachi=$4,sdt=$5,stk=$6 where id=$1",
+      [id, ten, cmnd, diachi, sdt, stk]
     );
     res.status(200).json({
       status: "ok",
@@ -2485,6 +2577,24 @@ app.delete("/api/v1/khach-hang/xoa/:id", async (req, res) => {
 app.get("/api/v1/dat-phong/danh-sach-full", async (req, res) => {
   try {
     const result = await db.query("select * from v_datphong order by id desc ");
+
+    res.status(200).json({
+      status: "ok",
+      data: {
+        datphong: result.rows,
+      },
+    });
+  } catch (err) {
+    console.error("danh sach dat phong full: " + err.message);
+  }
+});
+
+// danh sach dat phong
+app.get("/api/v1/dat-phong/danh-sach-dang-hoat-dong", async (req, res) => {
+  try {
+    const result = await db.query(
+      "select * from v_datphong where trangthai=1 order by id desc "
+    );
 
     res.status(200).json({
       status: "ok",
@@ -3385,4 +3495,225 @@ app.put("/api/v1/thu-chi/phieu-chi", async (req, res) => {
     console.error("Sửa phieu chi: " + err.message);
   }
 });
+//#endregion
+
+//#region Datphong Online
+//them dp online
+app.post("/api/v1/dp-online/them", async (req, res) => {
+  try {
+    const {
+      khachhang_id,
+      nguoilon,
+      soluongphong,
+      checkin,
+      checkout,
+      trecon,
+      loaiphong,
+    } = req.body;
+    const result = await db.query(
+      "insert into tbl_datphong_online(khachhang_id,nguoilon,soluongphong,checkin,checkout,trecon,loaiphong) values ($1,$2,$3,$4,$5,$6,$7) returning *",
+      [
+        khachhang_id,
+        nguoilon,
+        soluongphong,
+        checkin,
+        checkout,
+        trecon,
+        loaiphong,
+      ]
+    );
+    res.status(201).json({
+      status: "ok",
+      data: {
+        dponline: result.rows[0],
+      },
+    });
+  } catch (err) {
+    console.log("Them dp online: " + err.message);
+  }
+});
+
+//danh sach full
+app.get("/api/v1/dp-online/danh-sach", async (req, res) => {
+  try {
+    const result = await db.query("select * from v_dponline order by id desc");
+    res.status(201).json({
+      status: "ok",
+      data: {
+        dponline: result.rows,
+      },
+    });
+  } catch (err) {
+    console.log("danh sach full: " + err.message);
+  }
+});
+
+//danh sach full theo id
+app.get("/api/v1/dp-online/danh-sach/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await db.query("select * from v_dponline where id = $1", [
+      id,
+    ]);
+    res.status(201).json({
+      status: "ok",
+      data: {
+        dponline: result.rows[0],
+      },
+    });
+  } catch (err) {
+    console.log("danh sach full theo id: " + err.message);
+  }
+});
+
+//danh sach theo kh dag cho
+app.get("/api/v1/dp-online/kh-dp/:kh", async (req, res) => {
+  try {
+    const { kh } = req.params;
+    const result = await db.query(
+      "select * from v_dponline where khid = $1 order by id desc",
+      [kh]
+    );
+
+    res.status(201).json({
+      status: "ok",
+      data: {
+        dponline: result.rows,
+      },
+    });
+  } catch (err) {
+    console.log("danh sach theo kh dang cho: " + err.message);
+  }
+});
+
+//xoa don
+app.delete("/api/v1/dp-online/xoa/:id/:trangthai", async (req, res) => {
+  try {
+    const { id, trangthai } = req.params;
+    const result = await db.query(
+      "delete from tbl_datphong_online where id = $1 and trangthai = $2",
+      [id, trangthai]
+    );
+    res.status(201).json({
+      status: "ok",
+      data: {
+        dponline: result.rows[0],
+      },
+    });
+  } catch (err) {
+    console.log("xoa don online: " + err.message);
+  }
+});
+
+// confirm dp online
+app.put("/api/v1/dp-online/confirm/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { tt } = req.body;
+    const result = await db.query(
+      "update tbl_datphong_online set trangthai = $1 where id = $2",
+      [tt, id]
+    );
+    res.status(201).json({
+      status: "ok",
+    });
+  } catch (err) {
+    console.log("cap nhat dp online: " + err.message);
+  }
+});
+
+//#endregion
+
+//#region LUong nhan vien
+app.post("/CheckRaVaoNhanVien", async (req, res) => {
+  try {
+    const { ngay_gio_hien_tai, e, check } = req.body;
+    console.log({ ngay_gio_hien_tai, e, check });
+    // ngay_gio_hien_tai '2021-2-11 0:59:33'
+    // e giá trị mã nhân viên nhập từ trên client
+    const newTodo = await db.query(`
+		select * from tbl_gio_cong,tbl_lich_nhan_vien
+		where tbl_gio_cong.gio_cong_id = tbl_lich_nhan_vien.gio_cong_id
+		and date_part('day', ngay) = ${ngay_gio_hien_tai.split(" ")[0].split("-")[2]}
+		and date_part('month', ngay) = ${ngay_gio_hien_tai.split(" ")[0].split("-")[1]}
+		and date_part('year', ngay) = ${ngay_gio_hien_tai.split(" ")[0].split("-")[0]}
+		and tbl_lich_nhan_vien.nhan_vien_id = (
+			select nhan_vien_id from tbl_nhanvien where ma_nhan_vien= N'${e}'
+		)
+		`);
+    const TenNV = await db.query(`
+		select ten_nhan_vien from tbl_nhanvien where ma_nhan_vien = N'${e}'
+		`);
+    if (newTodo.rows.length > 0) {
+      console.log(newTodo.rows);
+      const CapNhapGioVaoRaNhanVien = await db.query(
+        check
+          ? `update tbl_gio_cong set gio_vao = '${ngay_gio_hien_tai}' where gio_cong_id = ${newTodo.rows[0].gio_cong_id}`
+          : `update tbl_gio_cong set gio_ra = '${ngay_gio_hien_tai}' where gio_cong_id = ${newTodo.rows[0].gio_cong_id}`
+      );
+      res.json(
+        "Check " +
+          (check ? "vào" : "ra") +
+          " thành công !\n" +
+          "Xin chào nhân viên : " +
+          TenNV.rows[0].ten_nhan_vien
+      );
+    } else {
+      res.json("Lỗi nhân viên chưa thiết lập trên lịch làm !");
+    }
+    // console.log(TenNV.rows[0].ten_nhan_vien)
+    console.log(newTodo.rows.length > 0);
+    // res.json(newTodo.rows)
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+app.get("/ChotLuongNhanVien", async (req, res) => {
+  try {
+    const newTodo = await db.query(`
+		select * from tbl_lich_nhan_vien,tbl_gio_cong,tbl_nhanvien
+		where tbl_lich_nhan_vien.gio_cong_id = tbl_gio_cong.gio_cong_id
+		and tbl_lich_nhan_vien.nhan_vien_id = tbl_nhanvien.nhan_vien_id
+		`);
+    // console.log(newTodo.rows)
+
+    const DuLieuTruyenLen = [];
+    newTodo.rows.map((x) => {
+      _ngay =
+        new Date(Date.parse(x.ngay)).getDate() +
+        "-" +
+        (new Date(Date.parse(x.ngay)).getMonth() + 1) +
+        "-" +
+        new Date(Date.parse(x.ngay)).getFullYear();
+      DuLieuTruyenLen.push({
+        lich_nhan_vien_id: x.lich_nhan_vien_id,
+        ma_nhan_vien: x.ma_nhan_vien,
+        ten_nhan_vien: x.ten_nhan_vien,
+        ngay: _ngay,
+        ngay_ca_lam_viec:
+          GioVaoRaCaLamViec(x.ca_lam_viec, true) +
+          "->" +
+          GioVaoRaCaLamViec(x.ca_lam_viec, false),
+        gio_vao:
+          new Date(Date.parse(x.gio_vao)).getHours() +
+          ":" +
+          new Date(Date.parse(x.gio_vao)).getMinutes() +
+          ":" +
+          new Date(Date.parse(x.gio_vao)).getSeconds(),
+        gio_ra:
+          new Date(Date.parse(x.gio_ra)).getHours() +
+          ":" +
+          new Date(Date.parse(x.gio_ra)).getMinutes() +
+          ":" +
+          new Date(Date.parse(x.gio_ra)).getSeconds(),
+      });
+    });
+    console.log(DuLieuTruyenLen);
+    res.json(DuLieuTruyenLen);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 //#endregion

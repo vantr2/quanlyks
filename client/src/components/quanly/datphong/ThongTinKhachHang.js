@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+	import React, { useContext, useEffect, useState } from "react";
 import KhachHangFinder from "../../../apis/KhachHangFinder";
 import TaiKhoanFinder from "../../../apis/TaiKhoanFinder";
 import { AccountContext } from "../../../contexts/AccountContext";
@@ -273,7 +273,7 @@ const ThongTinKhachHang = () => {
         setMsg("");
       }, 3000);
       //
-    } else if (stk.length < 9 || sdt.length > 15) {
+    } else if (stk.length < 9 || stk.length > 15) {
       setMsg("Số tài khoản không hợp lệ.");
       setTimeout(() => {
         setMsg("");

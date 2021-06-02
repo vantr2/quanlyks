@@ -10,6 +10,7 @@ import { AccountContext } from "../../../contexts/AccountContext";
 
 const DanhSachPhong = () => {
   const [dsPhong, setDsPhong] = useState([]);
+  //   const [phieuthue, setPhieuThue] = useState([]);
   const [timkiem, setTimKiem] = useState({
     value: "%25%25",
     label: "-- Tất cả --",
@@ -80,7 +81,10 @@ const DanhSachPhong = () => {
       try {
         const res = await PhongFinder.get("/danh-sach-phong");
         setDsPhong(res.data.data.phong);
-        // console.log(res);
+
+        // const res_pt = await DatPhongFinder.get("/danh-sach-dang-hoat-dong");
+        // setPhieuThue(res_pt.data.data.datphong);
+        // // console.log(res);
       } catch (err) {
         console.log(err.message);
       }
@@ -249,6 +253,7 @@ const DanhSachPhong = () => {
               >
                 Tài sản
               </MenuItem>
+              <MenuItem divider />
             </ContextMenu>
           </div>
         );
