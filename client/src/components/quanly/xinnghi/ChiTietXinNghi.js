@@ -88,11 +88,15 @@ const ChiTietXinNghi = () => {
         <button className="btn btn-primary mt-5" onClick={goBack}>
           Quay lại
         </button>
-        <div className="mt-5 ml-2">
-          <button className="btn btn-warning px-4" onClick={handleUpdate}>
-            Sửa
-          </button>
-        </div>
+        {donSelected.trangthai === 0 ? (
+          <div className="mt-5 ml-2">
+            <button className="btn btn-warning px-4" onClick={handleUpdate}>
+              Sửa
+            </button>
+          </div>
+        ) : (
+          ""
+        )}
       </div>
       <p className="text-center text-success">{msgDonActionSuccess}</p>
       <h4 className="mt-3 mb-3">{donSelected.tennv}</h4>
@@ -102,6 +106,15 @@ const ChiTietXinNghi = () => {
           <tr className="d-flex">
             <td className="col-3 pl-2 font-weight-bold">Tên nhân viên</td>
             <td className="col-9 pl-2">{donSelected.tennv}</td>
+          </tr>
+          <tr className="d-flex">
+            <td className="col-3 pl-2 font-weight-bold">
+              Thời gian viết/sửa đơn
+            </td>
+            <td className="col-9 pl-2">
+              {NormalizeDate(donSelected.tgvietdon)}&nbsp;
+              {convertTime(donSelected.tgvietdon)}
+            </td>
           </tr>
           <tr className="d-flex">
             <td className="col-3 pl-2 font-weight-bold">Ngày xin nghỉ</td>

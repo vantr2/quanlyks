@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { AccountContext } from "../../../contexts/AccountContext";
 import XinNghiFinder from "../../../apis/XinNghiFinder";
 import { useHistory } from "react-router";
-import { NormalizeDate } from "../../../utils/DataHandler";
+import { convertTime, NormalizeDate } from "../../../utils/DataHandler";
 import XoaXinNghi from "./XoaXinNghi";
 import NhanVienFinder from "../../../apis/NhanVienFinder";
 
@@ -40,11 +40,6 @@ const DanhSachXinNghi = () => {
   const handleDonSelected = (e, id) => {
     e.stopPropagation();
     hi.push(`/quan-ly/nhan-vien/xin-nghi/${id}`);
-  };
-
-  const handleUpdate = (e, id) => {
-    e.stopPropagation();
-    hi.push(`/quan-ly/nhan-vien/xin-nghi/${id}/sua`);
   };
 
   const renderTrangThaiDon = (tt) => {
@@ -110,8 +105,8 @@ const DanhSachXinNghi = () => {
               <th>Ngày nghỉ</th>
               <th>Thời gian nghỉ</th>
               <th>Trạng thái</th>
+              <th>Thời gian viết/sửa đơn</th>
               <th>Xem</th>
-              <th>Sửa</th>
               <th>Xóa</th>
             </tr>
           </thead>
@@ -129,6 +124,10 @@ const DanhSachXinNghi = () => {
                   <td className="align-middle ">
                     {renderTrangThaiDon(don.trangthai)}
                   </td>
+                  <td>
+                    {NormalizeDate(don.tgvietdon)}&nbsp;
+                    {convertTime(don.tgvietdon)}
+                  </td>
                   <td
                     className="align-middle text-center"
                     style={{ cursor: "pointer" }}
@@ -141,17 +140,7 @@ const DanhSachXinNghi = () => {
                       &nbsp;Xem
                     </i>
                   </td>
-                  <td
-                    className="align-middle text-center"
-                    style={{ cursor: "pointer" }}
-                  >
-                    <i
-                      className="fas fa-pencil-alt text-warning"
-                      onClick={(e) => handleUpdate(e, don.id)}
-                    >
-                      &nbsp;Sửa
-                    </i>
-                  </td>
+
                   <td
                     className="align-middle text-center"
                     style={{ cursor: "pointer" }}

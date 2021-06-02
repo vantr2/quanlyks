@@ -28,7 +28,7 @@ const HanhDongDuyet = ({ hd, id }) => {
       await XinNghiFinder.put("ql-duyet", {
         id: id,
         trangthai: hd === "dy" ? 1 : 2,
-        nguoiduyet: tennv,
+        nguoiduyet: tennv ? tennv : "Admin / Giám đốc",
         ph_nguoiduyet: ghichu ? ghichu : "Không có lời nhắn",
       });
       if (hd === "dy") {
@@ -39,7 +39,7 @@ const HanhDongDuyet = ({ hd, id }) => {
             new: {
               id: id,
               trangthai: hd === "dy" ? 1 : 2,
-              nguoiduyet: tennv ? tennv : udisplayname,
+              nguoiduyet: tennv ? tennv : "Admin / Giám đốc",
               ph_nguoiduyet: ghichu ? ghichu : "Không có lời nhắn",
             },
           },

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import DateTimePicker from "react-datetime-picker";
+// import DateTimePicker from "react-datetime-picker";
 import CurrencyInput from "react-currency-input-field";
 import { AccountContext } from "../../../contexts/AccountContext";
 import PhongFinder from "../../../apis/PhongFinder";
@@ -112,11 +112,6 @@ const ThongTinDatPhong = () => {
       setTimeout(() => {
         setMsgError("");
       }, 4000);
-    } else if (checkin > checkout) {
-      setMsgError("Thời điểm check in phải trước thời điểm check out");
-      setTimeout(() => {
-        setMsgError("");
-      }, 4000);
     } else if (htthue === "") {
       setMsgError("Hình thức thuê không được để trống.");
       setTimeout(() => {
@@ -124,7 +119,10 @@ const ThongTinDatPhong = () => {
       }, 4000);
     } else if (
       htthue === "Thuê theo ngày" &&
-      sotgThue < Math.floor((checkout - checkin) / (1000 * 3600 * 24))
+      sotgThue <
+        Math.floor(
+          (new Date(checkout) - new Date(checkin)) / (1000 * 3600 * 24)
+        )
     ) {
       setMsgError("Số ngày thuê không hợp lệ. (trước khi checkout)");
       setTimeout(() => {
@@ -132,7 +130,8 @@ const ThongTinDatPhong = () => {
       }, 4000);
     } else if (
       htthue === "Thuê theo giờ" &&
-      sotgThue < Math.floor((checkout - checkin) / (1000 * 3600))
+      sotgThue <
+        Math.floor((new Date(checkout) - new Date(checkin)) / (1000 * 3600))
     ) {
       setMsgError("Số giờ thuê không hợp lệ. (trước khi checkout)");
       setTimeout(() => {
@@ -214,7 +213,7 @@ const ThongTinDatPhong = () => {
           <div className="col">
             <div className="form-group">
               <label htmlFor="checkin">Check In</label>
-              <DateTimePicker
+              {/* <DateTimePicker
                 className="form-control"
                 value={checkin}
                 onChange={setCheckIn}
@@ -222,13 +221,24 @@ const ThongTinDatPhong = () => {
                 format="dd-MM-y h:mm a"
                 id="checkin"
                 minDate={new Date()}
+              /> */}
+              <input
+                className="form-control"
+                type="datetime-local"
+                id="checkin"
+                value={checkin}
+                onChange={(e) => {
+                  const today = new Date();
+                  if (new Date(e.target.value) - today > 0)
+                    setCheckIn(e.target.value);
+                }}
               />
             </div>
           </div>
           <div className="col">
             <div className="form-group">
               <label htmlFor="checkout">Check Out</label>
-              <DateTimePicker
+              {/* <DateTimePicker
                 className="form-control"
                 value={checkout}
                 onChange={setCheckOut}
@@ -236,6 +246,34 @@ const ThongTinDatPhong = () => {
                 format="dd-MM-y h:mm a"
                 id="checkout"
                 minDate={new Date()}
+              /> */}
+              <input
+                className="form-control"
+                type="datetime-local"
+                id="chekout-date"
+                value={checkout}
+                onChange={(e) => {
+                  if (!checkin) {
+                    setMsgError("Bạn nên chọn thời gian nhận phòng trước.");
+                    setTimeout(() => {
+                      setMsgError("");
+                    }, 3000);
+                  } else {
+                    if (
+                      new Date(e.target.value) - new Date(checkin) >=
+                      2 * 3600 * 1000
+                    )
+                      setCheckOut(e.target.value);
+                    else {
+                      setMsgError(
+                        "Bạn nên chọn thời gian trả phòng sau 2 giờ kể từ thời điểm nhận phòng."
+                      );
+                      setTimeout(() => {
+                        setMsgError("");
+                      }, 3000);
+                    }
+                  }
+                }}
               />
             </div>
           </div>
