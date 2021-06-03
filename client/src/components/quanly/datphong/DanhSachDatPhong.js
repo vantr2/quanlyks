@@ -3,6 +3,7 @@ import { AccountContext } from "../../../contexts/AccountContext";
 import DatPhongFinder from "../../../apis/DatPhongFinder";
 import { NumberFormat } from "../../../utils/DataHandler";
 import { useHistory } from "react-router";
+import TimKiemPhieuThue from "./TimKiemPhieuThue";
 const DanhSachDatPhong = () => {
   const { msgDatPhongActionSuccess, dsDatPhong, setDsDatPhong } =
     useContext(AccountContext);
@@ -133,6 +134,7 @@ const DanhSachDatPhong = () => {
   return (
     <div>
       <div className="mt-5 mb-5">
+        <TimKiemPhieuThue />
         <p className="text-center text-success">{msgDatPhongActionSuccess}</p>
         <table className="table table-hover table-striped table-bordered ">
           <thead className="thead-dark text-center">

@@ -1,14 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import HoaDonFinder from "../../../apis/HoaDonFinder";
 import { useHistory } from "react-router";
 import { NormalizeDate, NumberFormat } from "../../../utils/DataHandler";
 import XoaHoaDon from "./XoaHoaDon";
 import SuaHoaDon from "./SuaHoaDon";
+import { AccountContext } from "../../../contexts/AccountContext";
+import TimKiemHoaDon from "./TimKiemHoaDon";
 
 const DanhSachHoaDon = () => {
   let hi = useHistory();
   const userrole = window.localStorage.getItem("user_role");
-  const [dsHoaDon, setDsHoaDon] = useState([]);
+  const { dsHoaDon, setDsHoaDon } = useContext(AccountContext);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -31,6 +33,7 @@ const DanhSachHoaDon = () => {
   return (
     <div>
       <div className="mt-5 mb-5">
+        <TimKiemHoaDon />
         <table className="table table-hover table-striped table-bordered ">
           <thead className="thead-dark text-center">
             <tr>

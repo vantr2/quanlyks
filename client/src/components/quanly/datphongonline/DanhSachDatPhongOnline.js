@@ -3,6 +3,7 @@ import { AccountContext } from "../../../contexts/AccountContext";
 import DatPhongOnlineFinder from "../../../apis/DatPhongOnlineFinder";
 import { useHistory } from "react-router";
 import { convertTime, NormalizeDate } from "../../../utils/DataHandler";
+import TimKiemDPOl from "./TimKiemDPOl";
 const DanhSachDatPhongOnline = () => {
   const { dsDpOnline, setDsDpOnline } = useContext(AccountContext);
   let hi = useHistory();
@@ -28,6 +29,7 @@ const DanhSachDatPhongOnline = () => {
   return (
     <div>
       <div className="mt-5 mb-5">
+        <TimKiemDPOl />
         <table className="table table-hover table-striped table-bordered ">
           <thead className="thead-dark text-center">
             <tr>

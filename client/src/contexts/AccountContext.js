@@ -4,7 +4,9 @@ export const AccountContext = createContext();
 export const AccountContextProvider = (props) => {
   //dang nhap
   const [signedIn, setSignedIn] = useState(
-    window.localStorage.getItem("dangnhap")
+    window.localStorage.getItem("dangnhap") === null
+      ? "false"
+      : window.localStorage.getItem("dangnhap")
   );
 
   const [tenDangNhap, setTenDangNhap] = useState(
