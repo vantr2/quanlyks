@@ -1,6 +1,6 @@
 import React from "react";
 import Sidebar from "../../components/sidebar/Sidebar";
-import { BrowserRouter as Switch, Route } from "react-router-dom";
+import { Route } from "react-router-dom";
 
 import TaiKhoanPage from "./admin/TaiKhoanPage";
 
@@ -63,282 +63,273 @@ const MenuQuanLy = () => {
   const userrole = window.localStorage.getItem("user_role");
   return (
     <div>
-      <Switch>
-        <Sidebar />
-        <div className="container pt-5">
-          {/* <Route path="/quan-ly/*" component={LichSuHoatDongPage} /> */}
-          {/* lich su hoat dong */}
-          {userrole !== "" ? (
-            <>
-              <Route path="/" exact component={LichSuHoatDongPage} />
-              <Route
-                path="/quan-ly/lich-su-hoat-dong/:id"
-                exact
-                component={ChiTietLichSuPage}
-              />
-            </>
-          ) : (
-            ""
-          )}
-          {/* Admin */}
-          {userrole === "Admin" ? (
+      <Sidebar />
+      <div className="container pt-5">
+        {/* <Route path="/quan-ly/*" component={LichSuHoatDongPage} /> */}
+        {/* lich su hoat dong */}
+        {userrole !== "" ? (
+          <>
+            <Route path="/" exact component={LichSuHoatDongPage} />
             <Route
-              path="/quan-ly/admin/tai-khoan"
+              path="/quan-ly/lich-su-hoat-dong/:id"
               exact
-              component={TaiKhoanPage}
+              component={ChiTietLichSuPage}
             />
-          ) : (
-            ""
-          )}
-          {/* Phong */}
-          {userrole === "Admin" || userrole === "QL" || userrole === "NVLT" ? (
-            <>
-              <Route
-                path="/quan-ly/phong/tinh-trang"
-                exact
-                component={TinhTrangPhongPage}
-              />
-              <Route
-                path="/quan-ly/phong/dat-phong"
-                exact
-                component={DanhSachDatPhongPage}
-              />
-              <Route
-                path="/quan-ly/phong/dat-phong/:id"
-                exact
-                component={ChiTietDatPhongPage}
-              />
-              <Route
-                path="/quan-ly/phong/tinh-trang/:phongid/mophong"
-                exact
-                component={DatPhongPage}
-              />
-              <Route
-                path="/quan-ly/phong/tinh-trang/:phongid/checkin"
-                exact
-                component={CheckInPage}
-              />
-              <Route
-                path="/quan-ly/phong/tinh-trang/:phongid/su-dung-dich-vu"
-                exact
-                component={SuDungDichVuPage}
-              />
-              <Route
-                path="/quan-ly/phong/phieu-xac-nhan"
-                exact
-                component={PhieuXacNhanPage}
-              />
-              <Route
-                path="/quan-ly/phong/dat-phong-online"
-                exact
-                component={DatPhongOnlinePage}
-              />
-              <Route
-                path="/quan-ly/phong/dat-phong-online/:id"
-                exact
-                component={DatPhongOnlineChiTietPage}
-              />
-              <Route
-                path="/quan-ly/phong/hoa-don"
-                exact
-                component={HoaDonPage}
-              />
-              <Route
-                path="/quan-ly/phong/hoa-don/:id"
-                exact
-                component={ChiTietHoaDonPage}
-              />
-              <Route
-                path="/quan-ly/phong/hoa-don/:id/in"
-                exact
-                component={InHoaDonPage}
-              />
-              {/* Ql khach hang */}
-              <Route
-                path="/quan-ly/khach-hang"
-                exact
-                component={ThongTinKHPage}
-              />
-              <Route
-                path="/quan-ly/khach-hang/:id"
-                exact
-                component={ChiTietKhachHangPage}
-              />
-            </>
-          ) : (
-            ""
-          )}
-          {userrole === "Admin" || userrole === "QL" ? (
-            <>
-              {/* Danh muc */}
-              <Route
-                path="/quan-ly/danh-muc/nha-cung-cap"
-                exact
-                component={NhaCungCapPage}
-              />
-              <Route
-                path="/quan-ly/danh-muc/nhan-vien"
-                exact
-                component={NhanVienPage}
-              />
-              <Route
-                exact
-                path="/quan-ly/danh-muc/nhan-vien/:id"
-                component={DetailPageNhanVien}
-              ></Route>
-              <Route
-                exact
-                path="/quan-ly/danh-muc/nhan-vien/:id/sua"
-                component={SuaPageNhanVien}
-              ></Route>
-              <Route
-                path="/quan-ly/danh-muc/dich-vu"
-                exact
-                component={DichVuPage}
-              />
-              <Route
-                path="/quan-ly/danh-muc/dich-vu/:id"
-                exact
-                component={ChiTietDichVuPage}
-              />
-              <Route
-                path="/quan-ly/danh-muc/dich-vu/:id/sua"
-                exact
-                component={SuaDichVuPage}
-              />
-              <Route
-                path="/quan-ly/danh-muc/phong"
-                exact
-                component={PhongPage}
-              />
-              <Route
-                path="/quan-ly/danh-muc/phong/:ten"
-                exact
-                component={ChiTietPhongPage}
-              />
-              <Route
-                path="/quan-ly/danh-muc/phong/:ten/sua"
-                exact
-                component={SuaPhongPage}
-              />
-              <Route path="/quan-ly/danh-muc/loai" exact component={LoaiPage} />
-            </>
-          ) : (
-            ""
-          )}
+          </>
+        ) : (
+          ""
+        )}
+        {/* Admin */}
+        {userrole === "Admin" ? (
+          <Route
+            path="/quan-ly/admin/tai-khoan"
+            exact
+            component={TaiKhoanPage}
+          />
+        ) : (
+          ""
+        )}
+        {/* Phong */}
+        {userrole === "Admin" || userrole === "QL" || userrole === "NVLT" ? (
+          <>
+            <Route
+              path="/quan-ly/phong/tinh-trang"
+              exact
+              component={TinhTrangPhongPage}
+            />
+            <Route
+              path="/quan-ly/phong/dat-phong"
+              exact
+              component={DanhSachDatPhongPage}
+            />
+            <Route
+              path="/quan-ly/phong/dat-phong/:id"
+              exact
+              component={ChiTietDatPhongPage}
+            />
+            <Route
+              path="/quan-ly/phong/tinh-trang/:phongid/mophong"
+              exact
+              component={DatPhongPage}
+            />
+            <Route
+              path="/quan-ly/phong/tinh-trang/:phongid/checkin"
+              exact
+              component={CheckInPage}
+            />
+            <Route
+              path="/quan-ly/phong/tinh-trang/:phongid/su-dung-dich-vu"
+              exact
+              component={SuDungDichVuPage}
+            />
+            <Route
+              path="/quan-ly/phong/phieu-xac-nhan"
+              exact
+              component={PhieuXacNhanPage}
+            />
+            <Route
+              path="/quan-ly/phong/dat-phong-online"
+              exact
+              component={DatPhongOnlinePage}
+            />
+            <Route
+              path="/quan-ly/phong/dat-phong-online/:id"
+              exact
+              component={DatPhongOnlineChiTietPage}
+            />
+            <Route path="/quan-ly/phong/hoa-don" exact component={HoaDonPage} />
+            <Route
+              path="/quan-ly/phong/hoa-don/:id"
+              exact
+              component={ChiTietHoaDonPage}
+            />
+            <Route
+              path="/quan-ly/phong/hoa-don/:id/in"
+              exact
+              component={InHoaDonPage}
+            />
+            {/* Ql khach hang */}
+            <Route
+              path="/quan-ly/khach-hang"
+              exact
+              component={ThongTinKHPage}
+            />
+            <Route
+              path="/quan-ly/khach-hang/:id"
+              exact
+              component={ChiTietKhachHangPage}
+            />
+          </>
+        ) : (
+          ""
+        )}
+        {userrole === "Admin" || userrole === "QL" ? (
+          <>
+            {/* Danh muc */}
+            <Route
+              path="/quan-ly/danh-muc/nha-cung-cap"
+              exact
+              component={NhaCungCapPage}
+            />
+            <Route
+              path="/quan-ly/danh-muc/nhan-vien"
+              exact
+              component={NhanVienPage}
+            />
+            <Route
+              exact
+              path="/quan-ly/danh-muc/nhan-vien/:id"
+              component={DetailPageNhanVien}
+            ></Route>
+            <Route
+              exact
+              path="/quan-ly/danh-muc/nhan-vien/:id/sua"
+              component={SuaPageNhanVien}
+            ></Route>
+            <Route
+              path="/quan-ly/danh-muc/dich-vu"
+              exact
+              component={DichVuPage}
+            />
+            <Route
+              path="/quan-ly/danh-muc/dich-vu/:id"
+              exact
+              component={ChiTietDichVuPage}
+            />
+            <Route
+              path="/quan-ly/danh-muc/dich-vu/:id/sua"
+              exact
+              component={SuaDichVuPage}
+            />
+            <Route path="/quan-ly/danh-muc/phong" exact component={PhongPage} />
+            <Route
+              path="/quan-ly/danh-muc/phong/:ten"
+              exact
+              component={ChiTietPhongPage}
+            />
+            <Route
+              path="/quan-ly/danh-muc/phong/:ten/sua"
+              exact
+              component={SuaPhongPage}
+            />
+            <Route path="/quan-ly/danh-muc/loai" exact component={LoaiPage} />
+          </>
+        ) : (
+          ""
+        )}
 
-          {userrole === "Admin" || userrole === "QL" || userrole === "NVK" ? (
-            <>
-              {" "}
-              {/* Ql tai san */}
-              <Route
-                path="/quan-ly/ql-tai-san/thong-tin"
-                exact
-                component={TaiSanPage}
-              />
-              <Route
-                path="/quan-ly/ql-tai-san/thong-tin/:id"
-                exact
-                component={ChiTietTaiSanPage}
-              />
-              <Route
-                path="/quan-ly/ql-tai-san/thong-tin/:id/sua"
-                exact
-                component={SuaTaiSanPage}
-              />
-              <Route
-                path="/quan-ly/ql-tai-san/bao-duong"
-                exact
-                component={BaoDuongPage}
-              />
-              <Route
-                path="/quan-ly/ql-tai-san/bao-duong/:id"
-                exact
-                component={ChiTietBaoDuongPage}
-              />
-              <Route
-                path="/quan-ly/ql-tai-san/bao-duong/:id/sua"
-                exact
-                component={SuaBaoDuongPage}
-              />
-              {/* ql Hanghoa */}
-              <Route
-                path="/quan-ly/ql-hang-hoa/phieu-mua"
-                exact
-                component={PhieuMuaPage}
-              />
-              <Route
-                path="/quan-ly/ql-hang-hoa/phieu-mua/:id"
-                exact
-                component={ChiTietPhieuMuaPage}
-              />
-              <Route
-                path="/quan-ly/ql-hang-hoa/phieu-mua/:id/sua"
-                exact
-                component={SuaPhieuMuaPage}
-              />
-            </>
-          ) : (
-            ""
-          )}
+        {userrole === "Admin" || userrole === "QL" || userrole === "NVK" ? (
+          <>
+            {" "}
+            {/* Ql tai san */}
+            <Route
+              path="/quan-ly/ql-tai-san/thong-tin"
+              exact
+              component={TaiSanPage}
+            />
+            <Route
+              path="/quan-ly/ql-tai-san/thong-tin/:id"
+              exact
+              component={ChiTietTaiSanPage}
+            />
+            <Route
+              path="/quan-ly/ql-tai-san/thong-tin/:id/sua"
+              exact
+              component={SuaTaiSanPage}
+            />
+            <Route
+              path="/quan-ly/ql-tai-san/bao-duong"
+              exact
+              component={BaoDuongPage}
+            />
+            <Route
+              path="/quan-ly/ql-tai-san/bao-duong/:id"
+              exact
+              component={ChiTietBaoDuongPage}
+            />
+            <Route
+              path="/quan-ly/ql-tai-san/bao-duong/:id/sua"
+              exact
+              component={SuaBaoDuongPage}
+            />
+            {/* ql Hanghoa */}
+            <Route
+              path="/quan-ly/ql-hang-hoa/phieu-mua"
+              exact
+              component={PhieuMuaPage}
+            />
+            <Route
+              path="/quan-ly/ql-hang-hoa/phieu-mua/:id"
+              exact
+              component={ChiTietPhieuMuaPage}
+            />
+            <Route
+              path="/quan-ly/ql-hang-hoa/phieu-mua/:id/sua"
+              exact
+              component={SuaPhieuMuaPage}
+            />
+          </>
+        ) : (
+          ""
+        )}
 
-          {userrole !== "Admin" && userrole !== "QL" ? (
-            <>
-              {" "}
-              {/* Ql nhan vien */}
-              <Route
-                path="/quan-ly/nhan-vien/thong-tin"
-                exact
-                component={ProfileNhanVienPage}
-              />
-              <Route
-                path="/quan-ly/nhan-vien/xin-nghi"
-                exact
-                component={XinNghiPage}
-              />
-              <Route
-                path="/quan-ly/nhan-vien/xin-nghi/:id"
-                exact
-                component={ChiTietDonXinNghiPage}
-              />
-              <Route
-                path="/quan-ly/nhan-vien/xin-nghi/:id/sua"
-                exact
-                component={SuaDonXinNghiPage}
-              />
-              <Route
-                path="/quan-ly/nhan-vien/bang-luong"
-                exact
-                component={BangLuongPage}
-              />
-            </>
-          ) : (
-            ""
-          )}
-          {userrole === "Admin" || userrole === "QL" ? (
-            <>
-              {/* Nv Quan ly */}
-              <Route
-                path="/quan-ly/nv-quan-ly/duyet-don"
-                exact
-                component={DuyetDonPage}
-              />
-              <Route
-                path="/quan-ly/nv-quan-ly/duyet-don/:id"
-                exact
-                component={DuyetDonChiTietPage}
-              />
-              <Route
-                path="/quan-ly/nv-quan-ly/cham-cong-nv"
-                exact
-                component={ChamCongPage}
-              />{" "}
-            </>
-          ) : (
-            ""
-          )}
-          {/* Thu chi */}
-          {/* <Route
+        {userrole !== "Admin" && userrole !== "QL" ? (
+          <>
+            {" "}
+            {/* Ql nhan vien */}
+            <Route
+              path="/quan-ly/nhan-vien/thong-tin"
+              exact
+              component={ProfileNhanVienPage}
+            />
+            <Route
+              path="/quan-ly/nhan-vien/xin-nghi"
+              exact
+              component={XinNghiPage}
+            />
+            <Route
+              path="/quan-ly/nhan-vien/xin-nghi/:id"
+              exact
+              component={ChiTietDonXinNghiPage}
+            />
+            <Route
+              path="/quan-ly/nhan-vien/xin-nghi/:id/sua"
+              exact
+              component={SuaDonXinNghiPage}
+            />
+            <Route
+              path="/quan-ly/nhan-vien/bang-luong"
+              exact
+              component={BangLuongPage}
+            />
+          </>
+        ) : (
+          ""
+        )}
+        {userrole === "Admin" || userrole === "QL" ? (
+          <>
+            {/* Nv Quan ly */}
+            <Route
+              path="/quan-ly/nv-quan-ly/duyet-don"
+              exact
+              component={DuyetDonPage}
+            />
+            <Route
+              path="/quan-ly/nv-quan-ly/duyet-don/:id"
+              exact
+              component={DuyetDonChiTietPage}
+            />
+            <Route
+              path="/quan-ly/nv-quan-ly/cham-cong-nv"
+              exact
+              component={ChamCongPage}
+            />{" "}
+          </>
+        ) : (
+          ""
+        )}
+        {/* Thu chi */}
+        {/* <Route
             path="/quan-ly/thu-chi/phieu-thu"
             exact
             component={PhieuThuPage}
@@ -353,8 +344,7 @@ const MenuQuanLy = () => {
             exact
             component={PhieuChiPage}
           /> */}
-        </div>
-      </Switch>
+      </div>
     </div>
   );
 };

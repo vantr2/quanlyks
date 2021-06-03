@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import KiemTraDangNhapBackEnd from "../../apis/KiemTraDangNhapBackEnd";
 import ReactIsCapsLockActive from "@matsun/reactiscapslockactive";
 import ThemLichSu from "../../utils/ThemLichSu";
-
 const LoginBackEnd = () => {
   const [ten, setTen] = useState("");
   const [mk, setMk] = useState("");
@@ -74,7 +73,7 @@ const LoginBackEnd = () => {
             tbl: "Người dùng",
           });
 
-          window.location.href = "/";
+          window.location.reload();
         }
       } catch (err) {
         console.error(err.message);

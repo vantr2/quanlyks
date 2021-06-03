@@ -1,2 +1,2 @@
-const Host = "http://localhost:3000/";
+const Host = "";
 export default Host;

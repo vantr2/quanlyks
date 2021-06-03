@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Switch } from "react-router-dom";
+import { HashRouter as Router } from "react-router-dom";
 import BackEnd from "./pages/BackEnd";
 import { AccountContextProvider } from "./contexts/AccountContext";
 
@@ -8,9 +8,7 @@ function App() {
     <AccountContextProvider>
       <div>
         <Router>
-          <Switch>
-            <BackEnd />
-          </Switch>
+          <BackEnd />
         </Router>
       </div>
     </AccountContextProvider>
