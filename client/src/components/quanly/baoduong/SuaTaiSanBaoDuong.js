@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import BaoDuongFinder from "../../../apis/BaoDuongFinder";
 import { useHistory } from "react-router";
 import CurrencyInput from "react-currency-input-field";
-import PhieuMuaFinder from "../../../apis/PhieuMuaFinder";
 import ThemLichSu from "../../../utils/ThemLichSu";
 
 const SuaTaiSanBaoDuong = ({ id, bdId }) => {
@@ -33,7 +32,8 @@ const SuaTaiSanBaoDuong = ({ id, bdId }) => {
     e.stopPropagation();
 
     try {
-      const res = await PhieuMuaFinder.put("/sua-chi-tiet", {
+      console.log(id, phibd, ghichu);
+      const res = await BaoDuongFinder.put("/sua-chi-tiet", {
         id: id,
         phibd: phibd,
         ghichu: ghichu,

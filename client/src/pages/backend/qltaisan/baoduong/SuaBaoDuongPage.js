@@ -4,7 +4,7 @@ import SuaBaoDuong from "../../../../components/quanly/baoduong/SuaBaoDuong";
 const SuaBaoDuongPage = () => {
   return (
     <div className="mt-5">
-      <h1 className="text-center">Chi tiết bảo dưỡng tài sản</h1>
+      <h1 className="text-center">Sửa phiếu bảo dưỡng </h1>
       <SuaBaoDuong />
     </div>
   );

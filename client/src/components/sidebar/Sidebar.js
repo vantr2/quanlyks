@@ -175,12 +175,21 @@ const Sidebar = () => {
             </NavIcon>
             {SidebarData.map((item, index) => {
               return item.role.includes(userrole) ? (
-                <SubMenu
-                  sidebar={showSidebar}
-                  status={sidebar}
-                  item={item}
-                  key={index}
-                />
+                <div
+                  onClick={() =>
+                    item.title === "Quản lý lương"
+                      ? (window.location.href =
+                          "http://103.127.207.24:81/quanlyluongnhanvien/")
+                      : ""
+                  }
+                >
+                  <SubMenu
+                    sidebar={showSidebar}
+                    status={sidebar}
+                    item={item}
+                    key={index}
+                  />
+                </div>
               ) : (
                 <div key={index}></div>
               );

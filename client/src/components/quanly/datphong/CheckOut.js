@@ -34,7 +34,7 @@ const CheckOut = ({ phongid }) => {
         trangthai: 3,
       });
 
-      hi.push("/quan-ly/phong/tinh-trang");
+      hi.push("/quan-ly/phong/hoa-don");
     } catch (err) {
       console.log(err.message);
     }

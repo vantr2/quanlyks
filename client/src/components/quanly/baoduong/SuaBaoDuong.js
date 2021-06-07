@@ -26,7 +26,7 @@ const SuaBaoDuong = () => {
   useEffect(() => {
     const filterNhanVien = async () => {
       try {
-        const res = await NhanVienFinder.get("/danh-sach-nhan-vien");
+        const res = await NhanVienFinder.get("/danh-sach-nhan-vien-kho");
         setNhanVienFilter(res.data.data.nhanvien);
       } catch (err) {
         console.log(err.message);

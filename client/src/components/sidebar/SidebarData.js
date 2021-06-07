@@ -221,6 +221,14 @@ export const SidebarData = [
       },
     ],
   },
+
+  //Quản lý lương
+  {
+    title: "Quản lý lương",
+    path: "",
+    icon: <MdIcons.MdPeople />,
+    role: ["Admin", "QL"],
+  },
   // Thu chi
   //   {
   //     title: "Thu chi",

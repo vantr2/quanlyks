@@ -81,7 +81,7 @@ const SubMenu = ({ item, sidebar, status }) => {
         item.subNav.map((item, index) => {
           return (
             <DropdownLink
-              to={item.path}
+              to={item.path} // to la link đến
               key={index}
               onClick={() => {
                 if (status) {

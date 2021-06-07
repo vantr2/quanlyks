@@ -176,7 +176,7 @@ const ThongTinDatPhong = () => {
               trangthai: 1,
             });
             if (r.data.status === "ok") {
-              hi.push("/quan-ly/phong/tinh-trang/");
+              hi.push(`/quan-ly/phong/tinh-trang/${phongid}/checkin`);
             }
           }
         }

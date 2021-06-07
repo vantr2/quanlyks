@@ -72,7 +72,6 @@ const LoginBackEnd = () => {
             newdata: {},
             tbl: "Người dùng",
           });
-
           window.location.reload();
         }
       } catch (err) {

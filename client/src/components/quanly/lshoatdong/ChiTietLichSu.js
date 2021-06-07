@@ -45,7 +45,7 @@ const ChiTietLichSu = () => {
           />
         </div>
       </div>
-      <div className="btn btn-secondary" onClick={() => hi.push("/quan-ly")}>
+      <div className="btn btn-secondary" onClick={() => hi.push("/")}>
         Quay lại
       </div>
     </div>

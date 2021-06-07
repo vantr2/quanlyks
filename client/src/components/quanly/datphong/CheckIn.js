@@ -191,7 +191,7 @@ const CheckIn = () => {
           trangthai: 2,
         });
 
-        hi.push("/quan-ly/phong/tinh-trang");
+        hi.push(`/quan-ly/phong/tinh-trang/${phongid}/su-dung-dich-vu`);
       } catch (err) {
         console.log(err.message);
       }
