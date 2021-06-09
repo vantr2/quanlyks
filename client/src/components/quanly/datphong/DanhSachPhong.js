@@ -10,12 +10,14 @@ import { AccountContext } from "../../../contexts/AccountContext";
 
 const DanhSachPhong = () => {
   const [dsPhong, setDsPhong] = useState([]);
+  const [lpSS, setLpSS] = useState([]);
   //   const [phieuthue, setPhieuThue] = useState([]);
   const [timkiem, setTimKiem] = useState({
     value: "%25%25",
     label: "-- Tất cả --",
     color: "#191919",
   });
+  const [loaiphongtk, setLoaiPhongTk] = useState("%25%25");
 
   const dot = (color = "#ccc") => ({
     alignItems: "center",
@@ -73,6 +75,7 @@ const DanhSachPhong = () => {
     { value: "2", label: "Đang sử dụng", color: "#2fed39" },
     { value: "3", label: "Đã trả phòng", color: "#b3e33b" },
     { value: "4", label: "Chưa thanh toán", color: "#f5c536" },
+    { value: "5", label: "Chưa dọn", color: "#f09e41" },
   ];
 
   let hi = useHistory();
@@ -82,6 +85,8 @@ const DanhSachPhong = () => {
         const res = await PhongFinder.get("/danh-sach-phong");
         setDsPhong(res.data.data.phong);
 
+        const res_lp = await PhongFinder.get("/so-loai-phong-san-sang");
+        setLpSS(res_lp.data.data.phong);
         // const res_pt = await DatPhongFinder.get("/danh-sach-dang-hoat-dong");
         // setPhieuThue(res_pt.data.data.datphong);
         // // console.log(res);
@@ -137,6 +142,14 @@ const DanhSachPhong = () => {
           backgroundColor: "#f09e41",
         };
         break;
+      case "6":
+        buttonStyle = {
+          height: "160px",
+          fontSize: "2rem",
+          backgroundColor: "#bd2130",
+          color: "white",
+        };
+        break;
       default:
         break;
     }
@@ -167,6 +180,11 @@ const DanhSachPhong = () => {
         // Cho thanh toán
         break;
       case "5":
+        hi.push(`/quan-ly/phong/tinh-trang/${phongid}/don-phong`);
+        // DOn phong
+        break;
+      case "6":
+        alert("Phòng đang trong quá trình sửa chữa");
         // DOn phong
         break;
       default:
@@ -177,7 +195,7 @@ const DanhSachPhong = () => {
   const { setViTriTk } = useContext(AccountContext);
   return (
     <div className="row mt-5">
-      <div className="col-12 mb-4">
+      <div className="col-6 mb-4">
         <Select
           className="font-werght-bold"
           options={optionsLocTTP}
@@ -186,13 +204,35 @@ const DanhSachPhong = () => {
             if (action.action === "select-option") {
               setTimKiem(value);
               const res = await PhongFinder.get(
-                `/loc-theo-trang-thai/${value.value}`
+                `/loc-theo-trang-thai/${value.value}/${loaiphongtk}`
               );
               setDsPhong(res.data.data.phong);
             }
           }}
           styles={colourStyles}
         />
+      </div>
+      <div className="col-6 mb-4">
+        <select
+          value={loaiphongtk}
+          onChange={async (e) => {
+            setLoaiPhongTk(e.target.value);
+            const res = await PhongFinder.get(
+              `/loc-theo-trang-thai/${timkiem.value}/${e.target.value}`
+            );
+            setDsPhong(res.data.data.phong);
+          }}
+          className="form-control"
+        >
+          <option value="%25%25">Loại phòng...</option>
+          {lpSS.map((lp) => {
+            return (
+              <option key={lp.loaiphong} value={lp.loaiphong}>
+                {lp.loaiphong} ({lp.count})
+              </option>
+            );
+          })}
+        </select>
       </div>
       {dsPhong.map((phong) => {
         return (
@@ -225,7 +265,7 @@ const DanhSachPhong = () => {
                 border: "1px solid #191919",
               }}
             >
-              {phong.trangthai === 0 ? (
+              {phong.trangthai === 0 || phong.trangthai === 6 ? (
                 ""
               ) : (
                 <MenuItem
@@ -244,16 +284,20 @@ const DanhSachPhong = () => {
                   Phiếu thuê phòng
                 </MenuItem>
               )}
-              <MenuItem
-                className="border border-dark border-top-0 border-left-0 border-right-0 p-1"
-                onClick={async () => {
-                  setViTriTk(phong.ten);
-                  hi.push(`/quan-ly/ql-tai-san/thong-tin/`);
-                }}
-              >
-                Tài sản
-              </MenuItem>
-              <MenuItem divider />
+
+              {phong.trangthai === 6 ? (
+                "Phòng đang bị hỏng"
+              ) : (
+                <MenuItem
+                  className="border border-dark border-top-0 border-left-0 border-right-0 p-1"
+                  onClick={async () => {
+                    setViTriTk(phong.ten);
+                    hi.push(`/quan-ly/ql-tai-san/thong-tin/`);
+                  }}
+                >
+                  Tài sản
+                </MenuItem>
+              )}
             </ContextMenu>
           </div>
         );

@@ -1,4 +1,5 @@
 import React from "react";
+import DanhSachDatPhong from "../../../components/quanly/datphong/DanhSachDatPhong";
 import DanhSachPhong from "../../../components/quanly/datphong/DanhSachPhong";
 
 const TinhTrangPhongPage = () => {
@@ -6,6 +7,7 @@ const TinhTrangPhongPage = () => {
     <div className="mt-5">
       <h1 className="text-center">Tình trạng phòng</h1>
       <DanhSachPhong />
+      <DanhSachDatPhong />
     </div>
   );
 };

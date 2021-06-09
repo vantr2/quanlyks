@@ -26,7 +26,7 @@ const ThanhToan = ({ id, dsdp }) => {
             });
             await PhongFinder.put("/update-tt", {
               ten: res_dp.data.data.datphong.phong_id,
-              trangthai: 0,
+              trangthai: 5,
             });
           }
         });

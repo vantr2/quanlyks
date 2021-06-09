@@ -244,9 +244,10 @@ const SuaPhong = () => {
                 value={loaiphong}
                 onChange={(e) => setLoaiPhong(e.target.value)}
               >
-                <option value="Phòng đơn">Phòng đơn</option>
-                <option value="Phòng đôi">Phòng đôi</option>
-                <option value="Gia đình">Gia đình</option>
+                <option value="Phòng thường">Phòng thường</option>
+                <option value="Phòng thường 2">Phòng thường 2</option>
+                <option value="Phòng VIP">Phòng VIP</option>
+                <option value="Phòng VIP 2">Phòng VIP 2</option>
               </select>
             </div>
           </div>

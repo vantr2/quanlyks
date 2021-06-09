@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router";
 import NhanVienFinder from "../../../apis/NhanVienFinder";
 import { AccountContext } from "../../../contexts/AccountContext";
+import QRCode from "react-qr-code";
 // import XoaNhanVien from "./XoaNhanVien";
 import {
   NormalizeDate,
@@ -75,6 +76,7 @@ const ChiTietNhanVien = () => {
         </div> */}
       </div>
       <p className="text-center text-success">{msgNhanVienActionSuccess}</p>
+      <QRCode value={nhanvienSelected.ma_nhan_vien + ""} />
       <h4 className="mt-3 mb-3">
         MÃ NHÂN VIÊN: {nhanvienSelected.ma_nhan_vien}
       </h4>

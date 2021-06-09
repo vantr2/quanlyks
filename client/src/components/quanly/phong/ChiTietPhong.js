@@ -46,7 +46,10 @@ const ChiTietPhong = () => {
         trangthai = "Chưa thanh toán.";
         break;
       case "5":
-        trangthai = "Chưa dọn.";
+        trangthai = "Đang dọn.";
+        break;
+      case "6":
+        trangthai = "Đang sửa chữa.";
         break;
       default:
         break;
@@ -56,6 +59,22 @@ const ChiTietPhong = () => {
 
   const handleUpdate = () => {
     hi.push(`/quan-ly/danh-muc/phong/${ten}/sua`);
+  };
+  const handleBroken = async () => {
+    await PhongFinder.put("/update-tt", {
+      ten: ten,
+      trangthai: 6,
+    });
+    hi.push("/quan-ly/danh-muc");
+    hi.push(`/quan-ly/danh-muc/phong/${ten}/`);
+  };
+  const handleRepair = async () => {
+    await PhongFinder.put("/update-tt", {
+      ten: ten,
+      trangthai: 0,
+    });
+    hi.push("/quan-ly/danh-muc");
+    hi.push(`/quan-ly/danh-muc/phong/${ten}/`);
   };
 
   return (
@@ -69,6 +88,19 @@ const ChiTietPhong = () => {
             Sửa
           </button>
         </div>
+        {phongSelected.trangthai === 6 ? (
+          <div className="mt-5 ml-2">
+            <button className="btn btn-info px-4" onClick={handleRepair}>
+              Đã sửa chữa
+            </button>
+          </div>
+        ) : (
+          <div className="mt-5 ml-2">
+            <button className="btn btn-danger px-4" onClick={handleBroken}>
+              Bị hỏng
+            </button>
+          </div>
+        )}
       </div>
       <p className="text-center text-success">{msgPhongActionSuccess}</p>
       <h4 className="mt-3 mb-3">{phongSelected.ten}</h4>

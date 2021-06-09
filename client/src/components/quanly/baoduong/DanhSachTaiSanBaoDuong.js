@@ -46,6 +46,7 @@ const DanhSachTaiSanBaoDuong = () => {
               </span>
             </div>
             <div className="card-body">
+              <p>Phòng: {bdchitiet.vitri}</p>
               <p>
                 Chi phí: <u>{NumberFormat(bdchitiet.phibd)}</u> VND
               </p>

@@ -225,9 +225,30 @@ export const SidebarData = [
   //Quản lý lương
   {
     title: "Quản lý lương",
-    path: "",
     icon: <MdIcons.MdPeople />,
-    role: ["Admin", "QL"],
+    role: ["Admin"],
+    iconClosed: <RiIcons.RiArrowDownSFill />,
+    iconOpened: <RiIcons.RiArrowUpSFill />,
+    subNav: [
+      {
+        title: "Vào ra nhân viên",
+        path: "/quan-ly/admin/check-ra-vao",
+        icon: <GiIcons.GiConfirmed />,
+        cName: "sub-nav",
+      },
+      {
+        title: "Chốt lương",
+        path: "/quan-ly/admin/chot-luong",
+        icon: <HiIcons.HiOutlineDocumentReport />,
+        cName: "sub-nav",
+      },
+      {
+        title: "Thiết lập lương",
+        path: "/quan-ly/admin/thiet-lap-luong",
+        icon: <HiIcons.HiOutlineDocumentReport />,
+        cName: "sub-nav",
+      },
+    ],
   },
   // Thu chi
   //   {

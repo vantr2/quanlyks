@@ -58,7 +58,10 @@ import ChiTietLichSuPage from "./lshoatdong/ChiTietLichSuPage";
 // import PhieuChiPage from "./thuchi/PhieuChiPage";
 // import PhieuThuChiTietPage from "./thuchi/PhieuThuChiTietPage";
 import InHoaDonPage from "./phong/hoadon/InHoaDonPage";
-
+import CheckVaoRaNhanVien from "./checkluongnhanvien/CheckVaoRaNhanVien";
+import ChotLuongNhanVien from "./chotluongnhanvien/ChotLuongNhanVien";
+import ThietLapLuongNhanVien from "./thietlapluongnhanvien/ThietLapLuongNhanVien";
+import DonPhongPage from "./phong/datphong/DonPhongPage";
 const MenuQuanLy = () => {
   const userrole = window.localStorage.getItem("user_role");
   return (
@@ -81,11 +84,28 @@ const MenuQuanLy = () => {
         )}
         {/* Admin */}
         {userrole === "Admin" ? (
-          <Route
-            path="/quan-ly/admin/tai-khoan"
-            exact
-            component={TaiKhoanPage}
-          />
+          <>
+            <Route
+              path="/quan-ly/admin/tai-khoan"
+              exact
+              component={TaiKhoanPage}
+            />
+            <Route
+              path="/quan-ly/admin/check-ra-vao"
+              exact
+              component={CheckVaoRaNhanVien}
+            />
+            <Route
+              path="/quan-ly/admin/chot-luong"
+              exact
+              component={ChotLuongNhanVien}
+            />
+            <Route
+              path="/quan-ly/admin/thiet-lap-luong"
+              exact
+              component={ThietLapLuongNhanVien}
+            />
+          </>
         ) : (
           ""
         )}
@@ -123,6 +143,11 @@ const MenuQuanLy = () => {
               component={SuDungDichVuPage}
             />
             <Route
+              path="/quan-ly/phong/tinh-trang/:phongid/don-phong"
+              exact
+              component={DonPhongPage}
+            />
+            <Route
               path="/quan-ly/phong/phieu-xac-nhan"
               exact
               component={PhieuXacNhanPage}
@@ -148,6 +173,7 @@ const MenuQuanLy = () => {
               exact
               component={InHoaDonPage}
             />
+
             {/* Ql khach hang */}
             <Route
               path="/quan-ly/khach-hang"

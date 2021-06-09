@@ -25,7 +25,8 @@ const ChiTietDatPhong = () => {
     fetchData();
   }, [setDPSelected, id]);
   const goBack = () => {
-    hi.push("/quan-ly/phong/dat-phong");
+    // hi.push("/quan-ly/phong/dat-phong");
+    hi.goBack();
   };
   const renderTrangThaiDP = (tt) => {
     let result;
