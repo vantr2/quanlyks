@@ -9,6 +9,7 @@ const SuaHoaDon = ({ id }) => {
   const [nvId, setNvId] = useState("");
   const [vat, setVat] = useState("10");
   const [hinhthuctt, setHinhThucTT] = useState("1");
+  const [chietkhautong, setChietKhauTong] = useState("");
   const [dsNhanVien, setDsNhanVien] = useState([]);
 
   const [old, setOld] = useState({});
@@ -22,11 +23,13 @@ const SuaHoaDon = ({ id }) => {
       setNvId(hdSelected.nv_id);
       setVat(hdSelected.vat);
       setHinhThucTT(hdSelected.hinhthuctt);
+      setChietKhauTong(hdSelected.chietkhautong);
       setOld({
         id: id,
         nv: hdSelected.nv_id,
         hinhthuctt: hdSelected.hinhthuctt,
         vat: hdSelected.vat,
+        chietkhautong: hdSelected.chietkhautong,
       });
     } catch (err) {
       console.log(err.message);
@@ -41,6 +44,7 @@ const SuaHoaDon = ({ id }) => {
           nv: nvId,
           hinhthuctt: hinhthuctt,
           vat: vat,
+          chietkhautong: chietkhautong,
         });
         if (res.data.status === "ok") {
           const newd = {
@@ -48,6 +52,7 @@ const SuaHoaDon = ({ id }) => {
             nv: nvId,
             hinhthuctt: hinhthuctt,
             vat: vat,
+            chietkhautong: chietkhautong,
           };
           if (JSON.stringify(old) !== JSON.stringify(newd)) {
             ThemLichSu({
@@ -110,24 +115,24 @@ const SuaHoaDon = ({ id }) => {
                   })}
                 </select>
               </div>
-              <div className="form-row">
-                <div className="col">
-                  <div className="form-group">
-                    <label htmlFor={`hinhthuctt${id}`}>
-                      Hình thức thanh toán
-                    </label>
-                    <select
-                      type="text"
-                      className="form-control"
-                      value={hinhthuctt}
-                      id={`hinhthuctt${id}`}
-                      onChange={(e) => setHinhThucTT(e.target.value)}
-                    >
-                      <option value="1">Tiền mặt</option>
-                      <option value="2">Chuyển khoản</option>
-                    </select>
-                  </div>
+              <div className="form-group">
+                <div className="form-group">
+                  <label htmlFor={`hinhthuctt${id}`}>
+                    Hình thức thanh toán
+                  </label>
+                  <select
+                    type="text"
+                    className="form-control"
+                    value={hinhthuctt}
+                    id={`hinhthuctt${id}`}
+                    onChange={(e) => setHinhThucTT(e.target.value)}
+                  >
+                    <option value="1">Tiền mặt</option>
+                    <option value="2">Chuyển khoản</option>
+                  </select>
                 </div>
+              </div>
+              <div className="form-row">
                 <div className="col">
                   <div className="form-group">
                     <label htmlFor={`vat${id}`} className="modal-text">
@@ -142,6 +147,24 @@ const SuaHoaDon = ({ id }) => {
                       suffix=" %"
                       onValueChange={(value) => {
                         setVat(value);
+                      }}
+                    />
+                  </div>
+                </div>
+                <div className="col">
+                  <div className="form-group">
+                    <label htmlFor={`chietkhau${id}`} className="modal-text">
+                      Chiết khấu
+                    </label>
+                    <CurrencyInput
+                      id={`chietkhau${id}`}
+                      value={chietkhautong}
+                      decimalSeparator=","
+                      precision="2"
+                      className="form-control text-right"
+                      suffix=" đ"
+                      onValueChange={(value) => {
+                        setChietKhauTong(value);
                       }}
                     />
                   </div>

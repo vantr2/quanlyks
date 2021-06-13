@@ -6,7 +6,11 @@ import PhongFinder from "../../../apis/PhongFinder";
 import DatPhongFinder from "../../../apis/DatPhongFinder";
 import NhanVienFinder from "../../../apis/NhanVienFinder";
 import { useParams, useHistory } from "react-router";
-import { convertDate, convertTime } from "../../../utils/DataHandler";
+import {
+  convertDate,
+  convertTime,
+  isWeekend,
+} from "../../../utils/DataHandler";
 import ThemLichSu from "../../../utils/ThemLichSu";
 
 const ThongTinDatPhong = () => {
@@ -28,9 +32,13 @@ const ThongTinDatPhong = () => {
   const { khID } = useContext(AccountContext);
   const [thuetheongay, setThueTheoNgay] = useState("d-none");
   const [thuetheogio, setThueTheoGio] = useState("d-none");
+  const [dngayle, setDNgayLe] = useState("d-none");
 
   const [phongSelected, setPhongSelected] = useState([]);
   const { phongid } = useParams();
+
+  const [disableSotgthue, setDisableSotgThue] = useState(false);
+  const [ngayle, setNgayLe] = useState(false);
 
   useEffect(() => {
     const getPhong = async () => {
@@ -65,30 +73,56 @@ const ThongTinDatPhong = () => {
   }, [phongid, setPhongSelected, user_name, setNV, user_displayname]);
 
   const handleChangeHtThue = (e) => {
-    setHtThue(e.target.value);
-    if (e.target.value === "Thuê theo ngày") {
-      setThueTheoNgay("");
-      setSoTgThue("1");
-
-      setThueTheoGio("d-none");
-      setGiaThue(phongSelected.giaphongtheongay);
-      let tc = parseInt(phongSelected.giaphongtheongay / 5);
-      setTienCoc(Math.round(tc / 1000) * 1000);
-    } else if (e.target.value === "Thuê theo giờ") {
-      setThueTheoGio("");
-      setSoTgThue("1");
-      setThueTheoNgay("d-none");
-
-      setGiaThue(phongSelected.giaphongtheogio);
-      let tc = parseInt(phongSelected.giaphongtheogio / 5);
-      setTienCoc(Math.round(tc / 1000) * 1000);
+    if (checkin && checkout) {
+      setHtThue(e.target.value);
+      const wk = isWeekend(checkin, checkout);
+      const wkgia = wk === 1 ? 1.4 : wk === 2 ? 1.55 : 1;
+      if (e.target.value === "Thuê theo ngày") {
+        setThueTheoNgay("");
+        setSoTgThue("1");
+        setDisableSotgThue(false);
+        setThueTheoGio("d-none");
+        setDNgayLe("");
+        let giaphong = phongSelected.giaphongtheongay * wkgia;
+        setGiaThue(giaphong);
+        let tc = parseInt(giaphong / 5);
+        setTienCoc(Math.round(tc / 1000) * 1000);
+      } else if (e.target.value === "Thuê theo đêm") {
+        setThueTheoNgay("");
+        setSoTgThue("1");
+        setDisableSotgThue(true);
+        setThueTheoGio("d-none");
+        setDNgayLe("");
+        let giaphong = phongSelected.giaphongtheongay * 0.65 * wkgia;
+        setGiaThue(giaphong);
+        let tc = parseInt(giaphong / 5);
+        setTienCoc(Math.round(tc / 1000) * 1000);
+      } else if (e.target.value === "Thuê theo giờ") {
+        setThueTheoGio("");
+        setSoTgThue("1");
+        setThueTheoNgay("d-none");
+        setDisableSotgThue(false);
+        setDNgayLe("");
+        let giaphong = phongSelected.giaphongtheogio * wkgia;
+        setGiaThue(giaphong);
+        let tc = parseInt(giaphong / 5);
+        setTienCoc(Math.round(tc / 1000) * 1000);
+      } else {
+        setDisableSotgThue(false);
+        setNgayLe(false);
+        setThueTheoNgay("d-none");
+        setThueTheoGio("d-none");
+        setDNgayLe("d-none");
+        setGiaThue("");
+        setSoTgThue("");
+        setTienCoc("");
+        setGiaThue("");
+      }
     } else {
-      setThueTheoNgay("d-none");
-      setThueTheoGio("d-none");
-      setGiaThue("");
-      setSoTgThue("");
-      setTienCoc("");
-      setGiaThue("");
+      setMsgError("Bạn nên chọn thời gian nhận, trả phòng trước.");
+      setTimeout(() => {
+        setMsgError("");
+      }, 4000);
     }
   };
 
@@ -129,6 +163,23 @@ const ThongTinDatPhong = () => {
         setMsgError("");
       }, 4000);
     } else if (
+      htthue === "Thuê theo đêm" &&
+      new Date(checkin).getHours() < 18
+    ) {
+      setMsgError("Sau 6h tối mới được tính vào thuê đêm. ");
+      setTimeout(() => {
+        setMsgError("");
+      }, 4000);
+    } else if (
+      htthue === "Thuê theo đêm" &&
+      sotgThue + "" !==
+        (new Date(checkout) - new Date(checkin)) / (1000 * 3600 * 12) + ""
+    ) {
+      setMsgError("Thời gian thuê theo đêm không hợp lệ, (12 tiếng)");
+      setTimeout(() => {
+        setMsgError("");
+      }, 4000);
+    } else if (
       htthue === "Thuê theo giờ" &&
       sotgThue <
         Math.floor((new Date(checkout) - new Date(checkin)) / (1000 * 3600))
@@ -149,6 +200,9 @@ const ThongTinDatPhong = () => {
       }, 4000);
     } else {
       try {
+        let giaquakiemduyet;
+        giaquakiemduyet = ngayle ? parseInt(giathue) * 1.6 + "" : giathue;
+
         const res = await DatPhongFinder.post("/them", {
           khachhang_id: khID,
           hinhthucdp: htdatphong,
@@ -156,7 +210,7 @@ const ThongTinDatPhong = () => {
           checkout: convertDate(checkout) + " " + convertTime(checkout) + "-07",
           phong_id: phongid,
           kieuthue: htthue,
-          giathue: giathue,
+          giathue: giaquakiemduyet,
           sotgthue: sotgThue,
           nv: nv,
           tongtien: 0,
@@ -213,21 +267,23 @@ const ThongTinDatPhong = () => {
           <div className="col">
             <div className="form-group">
               <label htmlFor="checkin">Check In</label>
-              {/* <DateTimePicker
-                className="form-control"
-                value={checkin}
-                onChange={setCheckIn}
-                locale="vi-VN"
-                format="dd-MM-y h:mm a"
-                id="checkin"
-                minDate={new Date()}
-              /> */}
+
               <input
                 className="form-control"
                 type="datetime-local"
                 id="checkin"
                 value={checkin}
                 onChange={(e) => {
+                  setHtThue("");
+                  setDNgayLe("d-none");
+                  setNgayLe(false);
+                  setDisableSotgThue(false);
+                  setThueTheoNgay("d-none");
+                  setThueTheoGio("d-none");
+                  setGiaThue("");
+                  setSoTgThue("");
+                  setTienCoc("");
+                  setGiaThue("");
                   const today = new Date();
                   if (new Date(e.target.value) - today > 0)
                     setCheckIn(e.target.value);
@@ -238,21 +294,23 @@ const ThongTinDatPhong = () => {
           <div className="col">
             <div className="form-group">
               <label htmlFor="checkout">Check Out</label>
-              {/* <DateTimePicker
-                className="form-control"
-                value={checkout}
-                onChange={setCheckOut}
-                locale="vi-VN"
-                format="dd-MM-y h:mm a"
-                id="checkout"
-                minDate={new Date()}
-              /> */}
+
               <input
                 className="form-control"
                 type="datetime-local"
                 id="chekout-date"
                 value={checkout}
                 onChange={(e) => {
+                  setHtThue("");
+                  setDNgayLe("d-none");
+                  setNgayLe(false);
+                  setDisableSotgThue(false);
+                  setThueTheoNgay("d-none");
+                  setThueTheoGio("d-none");
+                  setGiaThue("");
+                  setSoTgThue("");
+                  setTienCoc("");
+                  setGiaThue("");
                   if (!checkin) {
                     setMsgError("Bạn nên chọn thời gian nhận phòng trước.");
                     setTimeout(() => {
@@ -290,6 +348,7 @@ const ThongTinDatPhong = () => {
             <option value="">-- Chọn --</option>
             <option value="Thuê theo ngày">Theo ngày</option>
             <option value="Thuê theo giờ">Theo giờ</option>
+            <option value="Thuê theo đêm">Theo đêm</option>
           </select>
         </div>
 
@@ -317,6 +376,7 @@ const ThongTinDatPhong = () => {
               <input
                 type="number"
                 id="songaythue"
+                disabled={disableSotgthue}
                 className="form-control"
                 value={sotgThue}
                 min="1"
@@ -366,6 +426,18 @@ const ThongTinDatPhong = () => {
               />
             </div>
           </div>
+        </div>
+        <div className={`form-check ${dngayle} mb-3`}>
+          <input
+            type="checkbox"
+            className="form-check-input"
+            id="ngayle"
+            value={ngayle}
+            onChange={(e) => setNgayLe(e.target.checked)}
+          />
+          <label className="form-check-label" for="ngayle">
+            Ngày lễ
+          </label>
         </div>
         <div className="form-group">
           <label htmlFor="tiencoc">Tiền cọc (20% tiền phòng)</label>

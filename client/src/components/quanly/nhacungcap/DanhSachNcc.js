@@ -1,10 +1,12 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AccountContext } from "../../../contexts/AccountContext";
 import NhaCungCapFinder from "../../../apis/NhaCungCapFinder";
 import XoaNcc from "./XoaNcc";
 import SuaNcc from "./SuaNcc";
+import { CSVLink } from "react-csv";
 
 const DanhSachNcc = () => {
+  const [dataTable, setDataTable] = useState([]);
   const { dsNcc, setDsNcc, msgNccActionSuccess } = useContext(AccountContext);
 
   useEffect(() => {
@@ -13,6 +15,7 @@ const DanhSachNcc = () => {
         const res = await NhaCungCapFinder.get("/danh-sach-nha-cung-cap");
         if (res.data.status === "ok") {
           setDsNcc(res.data.data.nhacungcap);
+          setDataTable(res.data.data.nhacungcap);
         }
       } catch (err) {
         console.log(err.message);
@@ -20,6 +23,13 @@ const DanhSachNcc = () => {
     };
     fetchData();
   }, [setDsNcc]);
+
+  const headers = [
+    { label: "Mã nhà cung cấp", key: "id" },
+    { label: "Tên nhà cung cấp", key: "ten" },
+    { label: "Số điện thoại", key: "sdt" },
+    { label: "Địa chỉ", key: "diachi" },
+  ];
 
   return (
     <div>
@@ -64,6 +74,14 @@ const DanhSachNcc = () => {
           </tbody>
         </table>
       </div>
+      <CSVLink
+        data={dataTable}
+        headers={headers}
+        className="btn btn-primary"
+        filename={`nhacungcap-${new Date().toLocaleDateString("vi-VN")}.csv`}
+      >
+        Download me
+      </CSVLink>
     </div>
   );
 };

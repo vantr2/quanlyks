@@ -189,44 +189,20 @@ export const SidebarData = [
         icon: <BiIcons.BiPowerOff />,
         cName: "sub-nav",
       },
-      {
-        title: "Bảng lương",
-        path: "/quan-ly/nhan-vien/bang-luong",
-        icon: <FaIcons.FaMoneyBillAlt />,
-        cName: "sub-nav",
-      },
-    ],
-  },
-
-  //NV Quản lý
-  {
-    title: "Quản lý",
-    icon: <MdIcons.MdPeople />,
-    role: ["Admin", "QL"],
-    iconClosed: <RiIcons.RiArrowDownSFill />,
-    iconOpened: <RiIcons.RiArrowUpSFill />,
-
-    subNav: [
-      {
-        title: "Duyệt đơn",
-        path: "/quan-ly/nv-quan-ly/duyet-don",
-        icon: <GiIcons.GiConfirmed />,
-        cName: "sub-nav",
-      },
-      {
-        title: "Chấm công NV",
-        path: "/quan-ly/nv-quan-ly/cham-cong-nv",
-        icon: <HiIcons.HiOutlineDocumentReport />,
-        cName: "sub-nav",
-      },
+      //   {
+      //     title: "Bảng lương",
+      //     path: "/quan-ly/nhan-vien/bang-luong",
+      //     icon: <FaIcons.FaMoneyBillAlt />,
+      //     cName: "sub-nav",
+      //   },
     ],
   },
 
   //Quản lý lương
   {
-    title: "Quản lý lương",
+    title: "Quản lý nhân viên",
     icon: <MdIcons.MdPeople />,
-    role: ["Admin"],
+    role: ["Admin", "QL"],
     iconClosed: <RiIcons.RiArrowDownSFill />,
     iconOpened: <RiIcons.RiArrowUpSFill />,
     subNav: [
@@ -245,7 +221,13 @@ export const SidebarData = [
       {
         title: "Thiết lập lương",
         path: "/quan-ly/admin/thiet-lap-luong",
-        icon: <HiIcons.HiOutlineDocumentReport />,
+        icon: <GiIcons.GiAutoRepair />,
+        cName: "sub-nav",
+      },
+      {
+        title: "Duyệt đơn",
+        path: "/quan-ly/nv-quan-ly/duyet-don",
+        icon: <GiIcons.GiConfirmed />,
         cName: "sub-nav",
       },
     ],

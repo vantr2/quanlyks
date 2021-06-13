@@ -33,10 +33,10 @@ import PhieuMuaPage from "./qlhanghoa/PhieuMuaPage";
 import XinNghiPage from "./qlnhanvien/XinNghiPage";
 import ChiTietDonXinNghiPage from "./qlnhanvien/xinnghi/ChiTietDonXinNghiPage";
 import SuaDonXinNghiPage from "./qlnhanvien/xinnghi/SuaDonXinNghiPage";
-import BangLuongPage from "./qlnhanvien/BangLuongPage";
+// import BangLuongPage from "./qlnhanvien/BangLuongPage";
 import ProfileNhanVienPage from "./qlnhanvien/ProfileNhanVienPage";
 
-import ChamCongPage from "./nvquanly/ChamCongPage";
+// import ChamCongPage from "./nvquanly/ChamCongPage";
 import DuyetDonPage from "./nvquanly/DonXinNghiPage";
 import DuyetDonChiTietPage from "./nvquanly/duyetdon/DuyetDonChiTietPage";
 import ChiTietPhongPage from "./danhmuc/phong/ChiTietPhongPage";
@@ -323,11 +323,11 @@ const MenuQuanLy = () => {
               exact
               component={SuaDonXinNghiPage}
             />
-            <Route
+            {/* <Route
               path="/quan-ly/nhan-vien/bang-luong"
               exact
               component={BangLuongPage}
-            />
+            /> */}
           </>
         ) : (
           ""
@@ -345,11 +345,11 @@ const MenuQuanLy = () => {
               exact
               component={DuyetDonChiTietPage}
             />
-            <Route
+            {/* <Route
               path="/quan-ly/nv-quan-ly/cham-cong-nv"
               exact
               component={ChamCongPage}
-            />{" "}
+            />{" "} */}
           </>
         ) : (
           ""

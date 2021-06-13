@@ -35,7 +35,7 @@ const DanhSachBaoDuong = () => {
   };
 
   const handlePrint = async (e, bd) => {
-    console.log(bd);
+    // console.log(bd);
 
     const title = "PHIẾU BẢO DƯỠNG";
     const benA = `
@@ -70,7 +70,7 @@ const DanhSachBaoDuong = () => {
     <td class="text-center font-weight-bold" style="border-right:2px solid #191919">Phòng</td>
     <td class="text-center font-weight-bold" style="border-right:2px solid #191919">Tài sản</td>
     <td class="text-center font-weight-bold" style="border-right:2px solid #191919">Phí bảo dưỡng</td>
-    <td class="text-center font-weight-bold" style="border-right:2px solid #191919">Ghi chú</td>
+    <td class="text-center font-weight-bold" style="border-right:2px solid #191919;max-width:50%">Nội dung bảo dưỡng</td>
     `;
 
     let bdct = [];

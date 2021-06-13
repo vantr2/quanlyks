@@ -145,7 +145,11 @@ const ChiTietDatPhong = () => {
           <tr className="d-flex">
             <td className="col-3 pl-2 font-weight-bold">
               Giá thuê theo{" "}
-              {dpSelected.kieuthue === "Thuê theo ngày" ? "ngày" : "giờ"}
+              {dpSelected.kieuthue === "Thuê theo ngày"
+                ? "ngày"
+                : dpSelected.kieuthue === "Thuê theo giờ"
+                ? "giờ"
+                : "đêm"}
             </td>
             <td className="col-9 pl-2">
               {NumberFormat(dpSelected.giathue)}&nbsp;<b>VND</b>
@@ -154,12 +158,21 @@ const ChiTietDatPhong = () => {
 
           <tr className="d-flex">
             <td className="col-3 pl-2 font-weight-bold">
-              Số {dpSelected.kieuthue === "Thuê theo ngày" ? "ngày" : "giờ"}{" "}
+              Số{" "}
+              {dpSelected.kieuthue === "Thuê theo ngày"
+                ? "ngày"
+                : dpSelected.kieuthue === "Thuê theo giờ"
+                ? "giờ"
+                : "đêm"}{" "}
               thuê
             </td>
             <td className="col-9 pl-2">
               {dpSelected.sotgthue} &nbsp;
-              {dpSelected.kieuthue === "Thuê theo ngày" ? "ngày" : "giờ"}
+              {dpSelected.kieuthue === "Thuê theo ngày"
+                ? "ngày"
+                : dpSelected.kieuthue === "Thuê theo giờ"
+                ? "giờ"
+                : "đêm"}
             </td>
           </tr>
 

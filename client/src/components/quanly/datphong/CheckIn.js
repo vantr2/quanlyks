@@ -303,18 +303,31 @@ const CheckIn = () => {
             <td className="col-3 pl-2 font-weight-bold">Giá thuê </td>
             <td className="col-9 pl-2">
               {NumberFormat(dpSelected.giathue)} VND /{" "}
-              {dpSelected.kieuthue === "Thuê theo ngày" ? "ngày" : "giờ"}
+              {dpSelected.kieuthue === "Thuê theo ngày"
+                ? "ngày"
+                : dpSelected.kieuthue === "Thuê theo ngày"
+                ? "giờ"
+                : "đêm"}
             </td>
           </tr>
 
           <tr className="d-flex">
             <td className="col-3 pl-2 font-weight-bold">
-              Số {dpSelected.kieuthue === "Thuê theo ngày" ? "ngày" : "giờ"}{" "}
+              Số{" "}
+              {dpSelected.kieuthue === "Thuê theo ngày"
+                ? "ngày"
+                : dpSelected.kieuthue === "Thuê theo ngày"
+                ? "giờ"
+                : "đêm"}{" "}
               thuê{" "}
             </td>
             <td className="col-9 pl-2">
               {dpSelected.sotgthue}&nbsp;
-              {dpSelected.kieuthue === "Thuê theo ngày" ? "ngày" : "giờ"}
+              {dpSelected.kieuthue === "Thuê theo ngày"
+                ? "ngày"
+                : dpSelected.kieuthue === "Thuê theo ngày"
+                ? "giờ"
+                : "đêm"}
             </td>
           </tr>
 
@@ -325,7 +338,9 @@ const CheckIn = () => {
 
           <tr className="d-flex">
             <td className="col-3 pl-2 font-weight-bold">Tiền cọc</td>
-            <td className="col-9 pl-2">{NumberFormat(dpSelected.tiencoc)}</td>
+            <td className="col-9 pl-2">
+              {NumberFormat(dpSelected.tiencoc)} VND
+            </td>
           </tr>
         </tbody>
       </table>

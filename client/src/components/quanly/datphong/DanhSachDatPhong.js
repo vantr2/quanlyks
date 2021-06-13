@@ -140,7 +140,7 @@ const DanhSachDatPhong = () => {
 
   const handlePrintPT = async (e, datphong) => {
     // PrintWindow();
-    console.log(datphong);
+    // console.log(datphong);
     const title = "PHIẾU THUÊ PHÒNG";
     const benA = `
     <p><b>Khách Hàng:</b> ${datphong.kh_name}
@@ -230,7 +230,7 @@ const DanhSachDatPhong = () => {
         parseInt(datphong.giathue) * parseInt(datphong.sotgthue) +
         ""
     );
-    tbody += `  <tr style="border-bottome:2px solid #212121">
+    tbody += `  <tr style="border-bottom:2px solid #212121">
     <td class="text-center" style="border-right:2px solid #212121" colspan="5">Tổng cộng:</td>
     <td class="text-center" style="border-right:2px solid #212121">${tongcong}</td>
   </tr>
@@ -253,7 +253,7 @@ const DanhSachDatPhong = () => {
               <th>SDT</th>
               <th>Trạng thái DP</th>
               <th>Trạng thái phòng</th>
-              <th>Tiền dịch vụ</th>
+              <th>Ngày đặt</th>
               <th>Xem</th>
               <th>In</th>
             </tr>
@@ -307,7 +307,8 @@ const DanhSachDatPhong = () => {
                       : renderTrangThaiPhong(datphong.tt_phong)}
                   </td>
                   <td className="text-right align-middle">
-                    {NumberFormat(datphong.tongtien)} <b>VND</b>
+                    {NormalizeDate(datphong.ngaydat)}{" "}
+                    {convertTime(datphong.ngaydat)}
                   </td>
 
                   <td

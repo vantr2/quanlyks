@@ -77,6 +77,23 @@ const convertDataTocreatableSelect = (arr) => {
 const dateInPast = (firstDate, secondDate) =>
   firstDate.setHours(0, 0, 0, 0) <= secondDate.setHours(0, 0, 0, 0);
 
+const isWeekend = (date1, date2) => {
+  var d1 = new Date(date1),
+    d2 = new Date(date2),
+    isWeekend = false,
+    count = 0;
+
+  while (d1 < d2) {
+    var day = d1.getDay();
+    isWeekend = day === 6 || day === 0;
+    if (isWeekend) {
+      count++;
+    } // return immediately if weekend found
+    d1.setDate(d1.getDate() + 1);
+  }
+  return count;
+};
+
 module.exports = {
   NormalizeDate,
   RenderGioiTinh,
@@ -89,4 +106,5 @@ module.exports = {
   dateInPast,
   convertDate,
   convertTime,
+  isWeekend,
 };

@@ -33,6 +33,8 @@ const DanhSachPhieuMua = () => {
     e.stopPropagation();
     hi.push(`/quan-ly/ql-hang-hoa/phieu-mua/${id}/sua`);
   };
+
+  const handlePrint = (e, pm) => {};
   return (
     <div>
       <div className="mt-5 mb-5">
@@ -48,6 +50,7 @@ const DanhSachPhieuMua = () => {
               <th>Xem</th>
               <th>Sửa</th>
               <th>Xóa</th>
+              {/* <th>In</th> */}
             </tr>
           </thead>
           <tbody>
@@ -91,6 +94,17 @@ const DanhSachPhieuMua = () => {
                     style={{ cursor: "pointer" }}
                   >
                     <XoaPhieuMua id={phieumua.id} pm={phieumua} />
+                  </td>
+                  <td
+                    className="align-middle text-center"
+                    style={{ cursor: "pointer" }}
+                  >
+                    <i
+                      className="fas fa-print text-info"
+                      onClick={(e) => handlePrint(e, phieumua)}
+                    >
+                      &nbsp;In
+                    </i>
                   </td>
                 </tr>
               );
