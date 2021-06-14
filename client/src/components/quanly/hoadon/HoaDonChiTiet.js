@@ -185,7 +185,13 @@ const HoaDonChiTiet = () => {
             <td class="text-right" style="border-right:2px solid #212121">${tongcoc}</td>
         </tr>
         `;
-
+    const chietkhautong = NumberFormat(hd.chietkhautong);
+    tbody += `  
+            <tr style="border-bottom:2px solid #212121">
+                <td class="text-center" style="border-right:2px solid #212121" colspan="5">Chiết khấu tổng:</td>
+                <td class="text-right" style="border-right:2px solid #212121">${chietkhautong}</td>
+            </tr>
+            `;
     const tientt = NumberFormat(hd.tongtien);
     tbody += `  
         <tr style="border-bottom:2px solid #212121">

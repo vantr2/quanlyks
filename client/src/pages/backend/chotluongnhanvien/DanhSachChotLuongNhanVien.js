@@ -80,6 +80,14 @@ function DachSachChotLuongNhanVien({ DSChotLuongNhanVien }) {
         sort: true,
       },
     },
+    // {
+    //   name: "gio_cong",
+    //   label: "Giờ công",
+    //   options: {
+    //     filter: true,
+    //     sort: true,
+    //   },
+    // },
   ];
   return (
     <React.Fragment>
